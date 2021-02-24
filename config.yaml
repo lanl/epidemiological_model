@@ -1,23 +1,23 @@
 DENGUE:
   PARAMETERS:
-    psi: 0.9
-    nu_h: 2.0e-08
-    nu_v: 100000
-    gamma_h: 1000000.0
-    mu_v: 0.2
-    b_h: 2
-    b_v: 2
-    beta_h: 0.14285714285714285
-    beta_v: 0.14285714285714285
-    N_h: 100
-    N_v: 100
+    psi: 0.5
+    nu_h: 5
+    nu_v: 9
+    gamma_h: 7
+    mu_v: 12
+    b_h: 0.5
+    b_v: 0.5
+    beta_h: 0.5
+    beta_v: 0.75
+    # N_h: 100000
+    # N_v: 1000000
   INITIAL_STATES:
-    Sh: 8
+    Sh: 60
     Eh: 0
-    Iha: 1
-    Ihs: 0
+    Iha: 20
+    Ihs: 20
     Rh: 0
-    Sv: 0
+    Sv: 1000000
     Ev: 0
     Iv: 0
 WNV:
