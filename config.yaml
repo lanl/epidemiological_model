@@ -5,10 +5,12 @@ DENGUE:
     nu_v: 9
     gamma_h: 7
     mu_v: 12
-    b_h: 0.5
-    b_v: 0.5
+    #b_h: 0.5
+    #b_v: 0.5
     beta_h: 0.5
     beta_v: 0.75
+    sigma_h: 19
+    sigma_v: 0.5
     # N_h: 100000
     # N_v: 1000000
   INITIAL_STATES:
