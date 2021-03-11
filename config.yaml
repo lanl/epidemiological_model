@@ -1,3 +1,9 @@
+############################################
+# Vector Borne Disease Model Configuration # (add more specific info in this later)
+############################################
+
+# add logfile paths
+
 DENGUE:
   PARAMETERS:
     psi: 0.5
