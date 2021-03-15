@@ -1,20 +1,27 @@
 import numpy as np
 import pandas as pd
+#from abc import *
 from scipy.integrate import odeint
 import matplotlib.pyplot as plt
 import yaml
 
-class DengueSEIRModel:
-    def __init__(self, config_file, days):
-        self._read_config(config_file)
+#DiseaseModel(ABC):
+
+class VectorBorneDiseaseModel():
+    def __init__(self, config_file, config_name, days):
+        self._read_config(config_file, config_name)
         self.t = np.linspace(0, days, days*500)
-    
-    def _read_config(self, config_file):
+        
+    def _read_config(self, config_file, config_name):
         with open(config_file, 'r') as in_file:
-            config_dict = yaml.load(in_file, Loader=yaml.FullLoader)['DENGUE']
+            config_dict = yaml.safe_load(in_file)[config_name]
             self.params = config_dict['PARAMETERS']
             self.initial_states = config_dict["INITIAL_STATES"]
-            
+
+class DengueSEIRModel(VectorBorneDiseaseModel):
+    def __init__(self, config_file, days):
+        super().__init__(config_file, 'DENGUE', days)
+        
     def run_model(self):
         y0 = self.initial_states['Sh'], self.initial_states['Eh'], self.initial_states['Iha'],\
              self.initial_states['Ihs'], self.initial_states['Rh'], self.initial_states['Sv'], \
