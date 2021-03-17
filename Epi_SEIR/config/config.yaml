@@ -1,0 +1,50 @@
+#------------------------------------------#
+# Vector Borne Disease Model Configuration # (add more specific info in this later)
+#------------------------------------------#
+
+# add logfile paths
+
+DENGUE:
+  PARAMETERS:
+    psi: 0.5
+    nu_h: 5
+    nu_v: 9
+    gamma_h: 7
+    mu_v: 12
+    #b_h: 0.5
+    #b_v: 0.5
+    beta_h: 0.5
+    beta_v: 0.75
+    sigma_h: 19
+    sigma_v: 0.5
+    # N_h: 100000
+    # N_v: 1000000
+  INITIAL_STATES:
+    Sh: 60
+    Eh: 0
+    Iha: 20
+    Ihs: 20
+    Rh: 0
+    Sv: 1000000
+    Ev: 0
+    Iv: 0
+WNV:
+  PARAMETERS:
+    psi: 0.5
+    nu_h: 5
+    nu_v: 9
+    gamma_h: 7
+    mu_v: 12
+    beta_h: 0.5
+    beta_v: 0.75
+    sigma_h: 19
+    sigma_v: 0.5
+  INITIAL_STATES:
+    Sh: 60
+    Eh: 0
+    Iha: 20
+    Ihs: 20
+    Rh: 0
+    Sv: 1000000
+    Ev: 0
+    Iv: 0
