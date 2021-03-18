@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import yaml
 import logging
 import os
+from datetime import datetime
 
 #DiseaseModel(ABC):
 
@@ -23,7 +24,9 @@ def create_logger(name, config_file):
 
     formatter = logging.Formatter('[%(asctime)s] %(name)s %(levelname)s: %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
 
-    file_handler = logging.FileHandler(os.path.join(project_dir, 'logs', f'{name}.log'), mode='w')
+    file_handler = logging.FileHandler(os.path.join(project_dir, 'logs', datetime.now().strftime(f'{name}_%Y-%m-%d.log')))
+#    f'{name}_{datetime.now().strftime('%Y-%m-%d')}.log'))
+#    file_handler = logging.FileHandler(os.path.join(project_dir, 'logs', f'{name}_{datetime.now().strftime('%Y-%m-%d')}.log'))
     file_handler.setLevel(logging.DEBUG)
     file_handler.setFormatter(formatter)
 
