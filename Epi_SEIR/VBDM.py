@@ -6,12 +6,13 @@ import matplotlib.pyplot as plt
 import yaml
 import logging
 import os
+import sys
 from datetime import datetime
 
 #DiseaseModel(ABC):
 
 def create_logger(name, config_file):
-    print(f'\ncreating logger {name}\n')
+    print(f'creating logger {name}\n')
     # CONFIG ------------
 
     # TODO open more efficiently (in dedicated configuration class?)
@@ -25,8 +26,6 @@ def create_logger(name, config_file):
     formatter = logging.Formatter('[%(asctime)s] %(name)s %(levelname)s: %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
 
     file_handler = logging.FileHandler(os.path.join(project_dir, 'logs', datetime.now().strftime(f'{name}_%Y-%m-%d.log')))
-#    f'{name}_{datetime.now().strftime('%Y-%m-%d')}.log'))
-#    file_handler = logging.FileHandler(os.path.join(project_dir, 'logs', f'{name}_{datetime.now().strftime('%Y-%m-%d')}.log'))
     file_handler.setLevel(logging.DEBUG)
     file_handler.setFormatter(formatter)
 
@@ -124,4 +123,10 @@ class DengueSEIRModel(VectorBorneDiseaseModel):
         plt.show()
 
 # Create module logger
-logger = create_logger(__name__, 'config/config.yaml')
+
+if len(sys.argv) < 2:
+    print("Please provide absolute path to root configuration directory")
+    exit()
+
+config_dir = sys.argv[1]
+logger = create_logger(__name__, config_dir + 'config.yaml')
