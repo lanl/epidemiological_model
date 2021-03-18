@@ -5,20 +5,37 @@ from scipy.integrate import odeint
 import matplotlib.pyplot as plt
 import yaml
 import logging
-
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
-
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(message)s')
-
-file_handler = logging.FileHandler('logs/VBDM.log', mode='w')
-file_handler.setFormatter(formatter)
-
-logger.addHandler(file_handler)
-
-logger.info('testing')
+import os
 
 #DiseaseModel(ABC):
+
+def create_logger(name, config_file):
+    print(f'\ncreating logger {name}\n')
+    # CONFIG ------------
+    #project_dir = '/Users/jkeithley/Documents/training/python_tutorials/logging_python_corey_schafer'
+
+    # TODO open more efficiently (in dedicated configuration class?)
+    with open(config_file, 'r') as in_file:
+        project_dir = yaml.safe_load(in_file)['PROJECT_ROOT']
+    # -------------------
+
+    logger = logging.getLogger(name)
+    logger.setLevel(logging.DEBUG)
+
+    formatter = logging.Formatter('[%(asctime)s] %(name)s %(levelname)s: %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+
+    file_handler = logging.FileHandler(os.path.join(project_dir, 'logs', f'{name}.log'), mode='w')
+    file_handler.setLevel(logging.DEBUG)
+    file_handler.setFormatter(formatter)
+
+    stream_handler = logging.StreamHandler()
+    stream_handler.setLevel(logging.ERROR)
+    stream_handler.setFormatter(formatter)
+
+    logger.addHandler(file_handler)
+    logger.addHandler(stream_handler)
+
+    return logger
 
 class VectorBorneDiseaseModel():
     def __init__(self, config_file, config_name, days):
@@ -93,3 +110,6 @@ class DengueSEIRModel(VectorBorneDiseaseModel):
         plt.title("Dengue Incidence")
 
         plt.show()
+
+# Create module logger
+logger = create_logger(__name__, 'config/config.yaml')

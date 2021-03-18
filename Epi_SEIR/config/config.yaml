@@ -2,7 +2,9 @@
 # Vector Borne Disease Model Configuration # (add more specific info in this later)
 #------------------------------------------#
 
-# add logfile paths
+PROJECT_ROOT: '/Users/jkeithley/Documents/CIMMID/human/dengue_model/Epi_SEIR'
+
+# Add unit test specification?
 
 DENGUE:
   PARAMETERS:
