@@ -12,7 +12,6 @@ import os
 def create_logger(name, config_file):
     print(f'\ncreating logger {name}\n')
     # CONFIG ------------
-    #project_dir = '/Users/jkeithley/Documents/training/python_tutorials/logging_python_corey_schafer'
 
     # TODO open more efficiently (in dedicated configuration class?)
     with open(config_file, 'r') as in_file:
@@ -39,7 +38,12 @@ def create_logger(name, config_file):
 
 class VectorBorneDiseaseModel():
     def __init__(self, config_file, config_name, days):
-        self._read_config(config_file, config_name)
+        try:
+            self._read_config(config_file, config_name)
+        except:
+            logger.exception('Exception occured opening config file')
+        else:
+            logger.info('Config file read in')
         self.t = np.linspace(0, days, days*500)
         
     def _read_config(self, config_file, config_name):
