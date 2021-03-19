@@ -1,3 +1,15 @@
+"""Vector Borne Disease Model Class.
+
+Contains class for specific diseases that inherit from the
+class VectorBorneDiseaseModel. Also contains methods to read
+in root configuration file and instantiate loggers.
+
+    Typical usage example:
+
+    logger = VBDM.create_logger(logger_name, config_file_name)
+    disease = VBDM.DengueSEIRModel(config_file_name, simulation_duration)
+"""
+
 import numpy as np
 import pandas as pd
 #from abc import *
@@ -12,6 +24,20 @@ from datetime import datetime
 #DiseaseModel(ABC):
 
 def create_logger(name, config_file):
+    """Configures and instantiates logger object.
+
+    Creates logger that prints DEBUG statements and more
+    serious statements to log files. Prints ERROR statements
+    to console.
+
+    Args:
+        name: Name of logger to be created. Typically module name. String.
+        config_file: Absolute path to root config file. String.
+
+    Returns:
+        logging object.
+    """
+
     print(f'creating logger {name}\n')
     # CONFIG ------------
 
@@ -39,6 +65,16 @@ def create_logger(name, config_file):
     return logger
 
 class VectorBorneDiseaseModel():
+    """Defines a general vector borne disease model.
+
+    Reads root config file and sets parameters.
+
+    Attributes:
+        params: ODE system parameters.
+        initial_states: initial states for population sizes.
+    
+    """
+
     def __init__(self, config_file, config_name, days):
         try:
             self._read_config(config_file, config_name)
@@ -49,16 +85,26 @@ class VectorBorneDiseaseModel():
         self.t = np.linspace(0, days, days*500)
         
     def _read_config(self, config_file, config_name):
+        """Reads root configuration file"""
         with open(config_file, 'r') as in_file:
             config_dict = yaml.safe_load(in_file)[config_name]
             self.params = config_dict['PARAMETERS']
             self.initial_states = config_dict["INITIAL_STATES"]
 
 class DengueSEIRModel(VectorBorneDiseaseModel):
+    """Models the spread of dengue.
+
+    Inherits from the VectorBorneDiseaseModel class. Solves ODE system
+    of equations and plots the resulting curves.
+
+    Attributes:
+    """
+
     def __init__(self, config_file, days):
         super().__init__(config_file, 'DENGUE', days)
         
     def run_model(self):
+        """Runs ODE solver to generate model output"""
         y0 = self.initial_states['Sh'], self.initial_states['Eh'], self.initial_states['Iha'],\
              self.initial_states['Ihs'], self.initial_states['Rh'], self.initial_states['Sv'], \
              self.initial_states['Ev'], self.initial_states['Iv']
@@ -71,7 +117,7 @@ class DengueSEIRModel(VectorBorneDiseaseModel):
             logger.info('dengue model run complete')
             
     def _model_dengue(self, y, t, p):
-
+        """Defines system of ODEs for dengue model"""
         # States and population
         Sh, Eh, Iha, Ihs, Rh, Sv, Ev, Iv = y
         N_h = sum([Sh, Eh, Iha, Ihs, Rh])
@@ -100,6 +146,7 @@ class DengueSEIRModel(VectorBorneDiseaseModel):
         return dSh, dEh, dIha, dIhs, dRh, dSv, dEv, dIv
     
     def graph_model(self):
+        """Plots output of dengue model"""
         Sh, Eh, Iha, Ihs, Rh, Sv, Ev, Iv = self.model_output.T
         
         fig = plt.figure(facecolor='w', figsize=[2*6.4, 2*4.8])
