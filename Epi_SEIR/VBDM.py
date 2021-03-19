@@ -97,7 +97,6 @@ class DengueSEIRModel(VectorBorneDiseaseModel):
     Inherits from the VectorBorneDiseaseModel class. Solves ODE system
     of equations and plots the resulting curves.
 
-    Attributes:
     """
 
     def __init__(self, config_file, days):
@@ -171,9 +170,9 @@ class DengueSEIRModel(VectorBorneDiseaseModel):
 
 # Create module logger
 
-if len(sys.argv) < 2:
-    print("Please provide absolute path to root configuration directory")
-    exit()
+#if len(sys.argv) < 2:
+#    print("Please provide absolute path to root configuration directory")
+#    exit()
 
-config_dir = sys.argv[1]
+config_dir = "/Users/jkeithley/Documents/CIMMID/human/dengue_model/Epi_SEIR/config/"#sys.argv[1]
 logger = create_logger(__name__, config_dir + 'config.yaml')
