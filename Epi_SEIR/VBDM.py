@@ -21,6 +21,8 @@ import os
 import sys
 from datetime import datetime
 
+#path = os.environ['PATH']
+
 #DiseaseModel(ABC):
 
 def create_logger(name, config_file):
@@ -170,9 +172,10 @@ class DengueSEIRModel(VectorBorneDiseaseModel):
 
 # Create module logger
 
-#if len(sys.argv) < 2:
-#    print("Please provide absolute path to root configuration directory")
-#    exit()
+# TODO figure out better method to handle config directory
+if len(sys.argv) < 2:
+    config_dir = "/Users/jkeithley/Documents/CIMMID/human/dengue_model/Epi_SEIR/config/"
+else:
+    config_dir = sys.argv[1]
 
-config_dir = "/Users/jkeithley/Documents/CIMMID/human/dengue_model/Epi_SEIR/config/"#sys.argv[1]
 logger = create_logger(__name__, config_dir + 'config.yaml')

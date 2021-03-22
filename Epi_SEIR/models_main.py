@@ -13,12 +13,15 @@ import os
 import sys
 import VBDM
 
+#path = os.environ['PATH']
+
 def main():
-#    if len(sys.argv) < 2:
-#        print("Please provide absolute path to root configuration file")
-#        exit()
+    if len(sys.argv) < 2:
+        config_dir = "/Users/jkeithley/Documents/CIMMID/human/dengue_model/Epi_SEIR/config/"
+        print("Hardcoded path to root config file used")
+    else:
+        config_dir = sys.argv[1]
     
-    config_dir = "/Users/jkeithley/Documents/CIMMID/human/dengue_model/Epi_SEIR/config/"#sys.argv[1]
     config_file = config_dir + 'config.yaml'
 
     logger = VBDM.create_logger('main', config_file)
