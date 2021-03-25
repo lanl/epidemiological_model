@@ -12,17 +12,12 @@ import logging
 import os
 import sys
 import VBDM
+import argparse
 
 #path = os.environ['PATH']
 
 def main():
-    if len(sys.argv) < 2:
-        config_dir = "/Users/jkeithley/Documents/CIMMID/human/dengue_model/Epi_SEIR/config/"
-        print("Hardcoded path to root config file used")
-    else:
-        config_dir = sys.argv[1]
-    
-    config_file = config_dir + 'config.yaml'
+    config_file = VBDM.args.config_file
 
     logger = VBDM.create_logger('main', config_file)
 

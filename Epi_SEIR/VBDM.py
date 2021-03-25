@@ -20,10 +20,16 @@ import logging
 import os
 import sys
 from datetime import datetime
+import argparse
 
 #path = os.environ['PATH']
 
 #DiseaseModel(ABC):
+def create_arg_parser():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-f', '--config_file', action='store', type=str)
+
+    return parser
 
 def create_logger(name, config_file):
     """Configures and instantiates logger object.
@@ -40,20 +46,20 @@ def create_logger(name, config_file):
         logging object.
     """
 
-    print(f'creating logger {name}\n')
     # CONFIG ------------
 
     # TODO open more efficiently (in dedicated configuration class?)
     with open(config_file, 'r') as in_file:
-        project_dir = yaml.safe_load(in_file)['PROJECT_ROOT']
+        logfile_path = yaml.safe_load(in_file)['LOGFILE_PATH']
     # -------------------
 
     logger = logging.getLogger(name)
     logger.setLevel(logging.DEBUG)
 
-    formatter = logging.Formatter('[%(asctime)s] %(name)s %(levelname)s: %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+    formatter = logging.Formatter('[%(asctime)s] %(name)s \
+                %(levelname)s: %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
 
-    file_handler = logging.FileHandler(os.path.join(project_dir, 'logs', datetime.now().strftime(f'{name}_%Y-%m-%d.log')))
+    file_handler = logging.FileHandler(os.path.join(logfile_path, datetime.now().strftime(f'{name}_%Y-%m-%d.log')))
     file_handler.setLevel(logging.DEBUG)
     file_handler.setFormatter(formatter)
 
@@ -170,12 +176,6 @@ class DengueSEIRModel(VectorBorneDiseaseModel):
 
         plt.show()
 
-# Create module logger
-
-# TODO figure out better method to handle config directory
-if len(sys.argv) < 2:
-    config_dir = "/Users/jkeithley/Documents/CIMMID/human/dengue_model/Epi_SEIR/config/"
-else:
-    config_dir = sys.argv[1]
-
-logger = create_logger(__name__, config_dir + 'config.yaml')
+parser = create_arg_parser()
+args = parser.parse_args()
+logger = create_logger(__name__, args.config_file)

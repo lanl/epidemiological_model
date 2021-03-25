@@ -3,6 +3,7 @@
 #------------------------------------------#
 
 PROJECT_ROOT: '/Users/jkeithley/Documents/CIMMID/human/dengue_model/Epi_SEIR'
+LOGFILE_PATH: '/Users/jkeithley/Documents/CIMMID/human/dengue_model/Epi_SEIR/logs'
 
 # Add unit test specification?
 
