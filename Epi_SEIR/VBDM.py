@@ -22,12 +22,15 @@ import sys
 from datetime import datetime
 import argparse
 
-#path = os.environ['PATH']
-
-#DiseaseModel(ABC):
 def create_arg_parser():
+    def is_valid_file(parser, arg):
+        if not os.path.isfile(arg):
+            parser.error(f'File {arg} not found.')
+        else:
+            return arg
+
     parser = argparse.ArgumentParser()
-    parser.add_argument('-f', '--config_file', action='store', type=str)
+    parser.add_argument('-f', '--config_file', action='store', type=lambda x: is_valid_file(parser, x))
 
     return parser
 
