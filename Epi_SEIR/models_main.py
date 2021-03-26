@@ -14,8 +14,6 @@ import sys
 import VBDM
 import argparse
 
-#path = os.environ['PATH']
-
 def main():
     config_file = VBDM.args.config_file
 

@@ -23,6 +23,13 @@ from datetime import datetime
 import argparse
 
 def create_arg_parser():
+    """Configures command line argument parser.
+
+    Checks if the argument is a valid file.
+
+    Returns:
+        parser object.
+    """
     def is_valid_file(parser, arg):
         if not os.path.isfile(arg):
             parser.error(f'File {arg} not found.')
