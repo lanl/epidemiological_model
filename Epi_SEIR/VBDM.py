@@ -37,14 +37,15 @@ def create_arg_parser():
             return arg
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('-f', '--config_file', action='store', type=lambda x: is_valid_file(parser, x))
+    parser.add_argument('-f', '--config_file', action='store', type=lambda x: is_valid_file(parser, x), \
+                        default='/Users/jkeithley/Documents/CIMMID/human/dengue_model/Epi_SEIR/config/config.yaml')
 
     return parser
 
 def create_logger(name, config_file):
     """Configures and instantiates logger object.
 
-    Creates logger that prints DEBUG statements and more
+    Creates logger that prints DE<F9>BUG statements and more
     serious statements to log files. Prints ERROR statements
     to console.
 
@@ -186,6 +187,9 @@ class DengueSEIRModel(VectorBorneDiseaseModel):
 
         plt.show()
 
-parser = create_arg_parser()
-args = parser.parse_args()
-logger = create_logger(__name__, args.config_file)
+if 'sphinx-build' in sys.argv[0]:
+    logger = create_logger(__name__, '_default_config.yaml')
+else:
+    parser = create_arg_parser()
+    args = parser.parse_args()
+    logger = create_logger(__name__, args.config_file)
