@@ -11,8 +11,7 @@ in root configuration file and instantiate loggers.
 """
 
 import numpy as np
-import pandas as pd
-#from abc import *
+# from abc import *
 from scipy.integrate import odeint
 import matplotlib.pyplot as plt
 import yaml
@@ -21,6 +20,7 @@ import os
 import sys
 from datetime import datetime
 import argparse
+
 
 def create_arg_parser():
     """Configures command line argument parser.
@@ -37,15 +37,17 @@ def create_arg_parser():
             return arg
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('-f', '--config_file', action='store', type=lambda x: is_valid_file(parser, x), \
-                        default='/Users/jkeithley/Documents/CIMMID/human/dengue_model/Epi_SEIR/config/config.yaml')
+    parser.add_argument('-f', '--config_file', action='store',
+                        type=lambda x: is_valid_file(parser, x),
+                        default='config/config.yaml')
 
     return parser
+
 
 def create_logger(name, config_file):
     """Configures and instantiates logger object.
 
-    Creates logger that prints DE<F9>BUG statements and more
+    Creates logger that prints DEBUG statements and more
     serious statements to log files. Prints ERROR statements
     to console.
 
@@ -70,7 +72,8 @@ def create_logger(name, config_file):
     formatter = logging.Formatter('[%(asctime)s] %(name)s \
                 %(levelname)s: %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
 
-    file_handler = logging.FileHandler(os.path.join(logfile_path, datetime.now().strftime(f'{name}_%Y-%m-%d.log')))
+    file_handler = logging.FileHandler(os.path.join(logfile_path,
+                                                    datetime.now().strftime(f'{name}_%Y-%m-%d.log')))
     file_handler.setLevel(logging.DEBUG)
     file_handler.setFormatter(formatter)
 
@@ -83,6 +86,7 @@ def create_logger(name, config_file):
 
     return logger
 
+
 class VectorBorneDiseaseModel():
     """Defines a general vector borne disease model.
 
@@ -91,7 +95,7 @@ class VectorBorneDiseaseModel():
     Attributes:
         params: ODE system parameters.
         initial_states: initial states for population sizes.
-    
+
     """
 
     def __init__(self, config_file, config_name, days):
@@ -102,7 +106,7 @@ class VectorBorneDiseaseModel():
         else:
             logger.info('Config file read in')
         self.t = np.linspace(0, days, days*500)
-        
+
     def _read_config(self, config_file, config_name):
         """Reads root configuration file"""
         with open(config_file, 'r') as in_file:
@@ -110,7 +114,9 @@ class VectorBorneDiseaseModel():
             self.params = config_dict['PARAMETERS']
             self.initial_states = config_dict["INITIAL_STATES"]
 
+
 class DengueSEIRModel(VectorBorneDiseaseModel):
+
     """Models the spread of dengue.
 
     Inherits from the VectorBorneDiseaseModel class. Solves ODE system
@@ -120,20 +126,21 @@ class DengueSEIRModel(VectorBorneDiseaseModel):
 
     def __init__(self, config_file, days):
         super().__init__(config_file, 'DENGUE', days)
-        
+
     def run_model(self):
         """Runs ODE solver to generate model output"""
-        y0 = self.initial_states['Sh'], self.initial_states['Eh'], self.initial_states['Iha'],\
-             self.initial_states['Ihs'], self.initial_states['Rh'], self.initial_states['Sv'], \
-             self.initial_states['Ev'], self.initial_states['Iv']
-        
-        try: 
-            self.model_output = odeint(self._model_dengue, y0, self.t, args = (self,))
+        y0 = self.initial_states['Sh'], self.initial_states['Eh'], \
+            self.initial_states['Iha'], self.initial_states['Ihs'], \
+            self.initial_states['Rh'], self.initial_states['Sv'], \
+            self.initial_states['Ev'], self.initial_states['Iv']
+
+        try:
+            self.model_output = odeint(self._model_dengue, y0, self.t, args=(self,))
         except:
             logger.exception('Exception occured running dengue model')
         else:
             logger.info('dengue model run complete')
-            
+
     def _model_dengue(self, y, t, p):
         """Defines system of ODEs for dengue model"""
         # States and population
@@ -143,10 +150,10 @@ class DengueSEIRModel(VectorBorneDiseaseModel):
 
         # Biting rate
         b = self.params['sigma_h'] * self.params['sigma_v'] / \
-              (self.params['sigma_h'] * N_h + self.params['sigma_v'] * N_v)
+            (self.params['sigma_h'] * N_h + self.params['sigma_v'] * N_v)
         b_h = b * N_v
         b_v = b * N_h
-        
+
         # Force of infecton
         lambda_h = b_h * self.params['beta_h'] * Iv / N_v
         lambda_v = b_v * self.params['beta_v'] * (Iha + Ihs) / N_h
@@ -154,19 +161,21 @@ class DengueSEIRModel(VectorBorneDiseaseModel):
         # System of equations
         dSh = -lambda_h * Sh
         dEh = lambda_h * Sh - self.params['nu_h'] * Eh
-        dIha = self.params['psi'] * self.params['nu_h'] * Eh - self.params['gamma_h'] * Iha
-        dIhs = (1 - self.params['psi']) * self.params['nu_h'] * Eh - self.params['gamma_h'] * Ihs
+        dIha = self.params['psi'] * self.params['nu_h'] * Eh - \
+            self.params['gamma_h'] * Iha
+        dIhs = (1 - self.params['psi']) * self.params['nu_h'] * \
+            Eh - self.params['gamma_h'] * Ihs
         dRh = self.params['gamma_h'] * (Iha + Ihs)
         dSv = -lambda_v * Sh
         dEv = lambda_v * Sh - self.params['nu_v'] * Ev
         dIv = self.params['nu_v'] * Ev - self.params['mu_v'] * Iv
 
         return dSh, dEh, dIha, dIhs, dRh, dSv, dEv, dIv
-    
+
     def graph_model(self):
         """Plots output of dengue model"""
         Sh, Eh, Iha, Ihs, Rh, Sv, Ev, Iv = self.model_output.T
-        
+
         fig = plt.figure(facecolor='w', figsize=[2*6.4, 2*4.8])
         ax = fig.add_subplot(111, facecolor='#dddddd', axisbelow=True)
         ax.set_xlabel('Time (days)')
@@ -174,10 +183,10 @@ class DengueSEIRModel(VectorBorneDiseaseModel):
         ax.yaxis.set_tick_params(length=0)
         ax.xaxis.set_tick_params(length=0)
         ax.grid(b=True, which='major', c='w', lw=2, ls='-')
-        
+
         for spine in ('top', 'right', 'bottom', 'left'):
-           ax.spines[spine].set_visible(False)
-        
+            ax.spines[spine].set_visible(False)
+
         ax.plot(self.t, Sh, 'b', alpha=0.5, lw=2, label='Susceptible Humans')
         ax.plot(self.t, Iha+Ihs, 'r', alpha=0.5, lw=2, label='Infected Humans')
         ax.plot(self.t, Iv, 'k', alpha=0.5, lw=2, label='Infected Vectors')
@@ -186,6 +195,7 @@ class DengueSEIRModel(VectorBorneDiseaseModel):
         plt.title("Dengue Incidence")
 
         plt.show()
+
 
 if 'sphinx-build' in sys.argv[0]:
     logger = create_logger(__name__, '_default_config.yaml')

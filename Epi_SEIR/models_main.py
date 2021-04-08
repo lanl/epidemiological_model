@@ -2,17 +2,14 @@
 
 Run from run_main.sh script. Instantiates VBDM (Vector Borne Disease Model)
 given paramters from config.yaml configuration file.
-    
+
     Typical usage example:
 
     python models_main.py <absolute path to config.yaml>
-""" 
+"""
 
-import logging
-import os
-import sys
 import VBDM
-import argparse
+
 
 def main():
     config_file = VBDM.args.config_file
@@ -21,7 +18,8 @@ def main():
 
     den = VBDM.DengueSEIRModel(config_file, days=14)
     den.run_model()
-    #den.graph_model()
+    # den.graph_model()
+
 
 if __name__ == "__main__":
     main()
