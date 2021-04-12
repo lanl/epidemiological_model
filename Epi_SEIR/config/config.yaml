@@ -4,6 +4,7 @@
 
 PROJECT_ROOT: '/Users/jkeithley/Documents/CIMMID/human/dengue_model/Epi_SEIR'
 LOGFILE_PATH: '/Users/jkeithley/Documents/CIMMID/human/dengue_model/Epi_SEIR/logs'
+# NUMBER_MOSQUITOS_FILE_PATH = '...'
 
 # Add unit test specification?
 
@@ -28,7 +29,7 @@ DENGUE:
     Iha: 20
     Ihs: 20
     Rh: 0
-    Sv: 1000000
+    Sv: 1000000 # Have as vector (number per day)
     Ev: 0
     Iv: 0
 WNV:

@@ -206,6 +206,27 @@ initial_states: initial states for population sizes.</p>
 </dl>
 </dd></dl>
 
+<dl class="py class">
+<dt id="VBDM.WNVSEIRModel">
+<em class="property">class </em><code class="sig-prename descclassname">VBDM.</code><code class="sig-name descname">WNVSEIRModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">config_file</span></em>, <em class="sig-param"><span class="n">days</span></em><span class="sig-paren">)</span><a class="headerlink" href="#VBDM.WNVSEIRModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#VBDM.VectorBorneDiseaseModel" title="VBDM.VectorBorneDiseaseModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">VBDM.VectorBorneDiseaseModel</span></code></a></p>
+<p>Models the spread of WNV.</p>
+<p>Inherits from the VectorBorneDiseaseModel class. Solves ODE system
+of equations and plots the resulting curves.</p>
+<dl class="py method">
+<dt id="VBDM.WNVSEIRModel.graph_model">
+<code class="sig-name descname">graph_model</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#VBDM.WNVSEIRModel.graph_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots output of WNV model</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="VBDM.WNVSEIRModel.run_model">
+<code class="sig-name descname">run_model</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#VBDM.WNVSEIRModel.run_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs ODE solver to generate model output</p>
+</dd></dl>
+
+</dd></dl>
+
 <dl class="py function">
 <dt id="VBDM.create_arg_parser">
 <code class="sig-prename descclassname">VBDM.</code><code class="sig-name descname">create_arg_parser</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#VBDM.create_arg_parser" title="Permalink to this definition">¶</a></dt>

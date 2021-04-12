@@ -1,1 +1,1 @@
-Basic toy model for dengue transmission, including development of configuration file.
+Basic toy model for dengue and wnv transmission, including development of configuration file.
