@@ -35,7 +35,10 @@ mos.data = function(end, target, p1, p2, od){
 }
 #-------------------Human cases
 agg = 52
-human.cases = function(end, mean, od)rnbinom(end/agg, mu=mean, size=od)
+human.cases = function(end, mean, od){
+  #inf.m = bd*zeta
+  rnbinom(end/agg, mu=mean, size=od)
+}
 #============================CONTROL PARAMS
 lam1 = 1.5 # effective weekly biting, bird
 lam2 = 2 # effective weekly biting, human
@@ -55,6 +58,7 @@ dat = list(Np=52*10,
            lam2=lam2,  # biting humans
            pop=pop.size,
            md=md[,2],
+           bd=bd,
            hd=hd)
 
 init.fun = function(){list(zeta=rep(1e-8, 10))}
