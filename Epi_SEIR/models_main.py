@@ -1,5 +1,4 @@
 """Main script to execute vector borne disease models simulation
-
 Run from run_main.sh script. Instantiates VBDM (Vector Borne Disease Model)
 given paramters from config.yaml configuration file.
 
@@ -20,17 +19,17 @@ def main():
     wnv = VBDM.WNVSEIRModel(config_file, days=14)
 
     den.run_model()
-    print("DENGUE SUCCESS IS:", den.success)
+    #print("DENGUE SUCCESS IS:", den.success)
 
     wnv.run_model()
     wnv.save_model()
-    print("WNV SUCCESS IS:", wnv.success)
+    #print("WNV SUCCESS IS:", wnv.success)
     # den.graph_model()
 
-    if den.success and wnv.success:
-        print("SUCCESS")
-    else:
-        print("FAILURE")
+    #if den.success and wnv.success:
+    #    print("SUCCESS")
+    #else:
+    #    print("FAILURE")
 
 
 if __name__ == "__main__":

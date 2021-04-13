@@ -60,12 +60,8 @@ def create_logger(name, config_file):
         logging object.
     """
 
-    # CONFIG ------------
-
-    # TODO open more efficiently (in dedicated configuration class?)
     with open(config_file, 'r') as in_file:
         logfile_path = yaml.safe_load(in_file)['LOGFILE_PATH']
-    # -------------------
 
     logger = logging.getLogger(name)
     logger.setLevel(logging.DEBUG)
@@ -100,29 +96,32 @@ class VectorBorneDiseaseModel():
     """
 
     def __init__(self, config_file, config_name, days):
-        self.success = True
+        # self.success = True
         try:
             self._read_config(config_file, config_name)
-            self.mosq = pd.read_csv("mosq.csv")
-            print(self.mosq)
-        except:
+        except Exception:
             logger.exception(f'Exception occured opening config file for \
                              {config_name}')
-            self.success = False
+            # self.success = False
+            sys.exit(1)
         else:
             logger.info('Config file read in')
+
         self.t = np.linspace(0, days, days*500)
 
     def _read_config(self, config_file, config_name):
         """Reads root configuration file"""
         with open(config_file, 'r') as in_file:
-            config_dict = yaml.safe_load(in_file)[config_name]
-            self.params = config_dict['PARAMETERS']
-            self.initial_states = config_dict["INITIAL_STATES"]
+            # self.config_dict = yaml.safe_load(in_file)[config_name]
+            self.config_dict = yaml.safe_load(in_file)
+            self.mosq = np.array(pd.read_csv(self.config_dict['MOSQUITOES_FILE_PATH'])['mosq'])
+            self.params = self.config_dict[config_name]['PARAMETERS']
+            self.initial_states = self.config_dict[config_name]['INITIAL_STATES']
 
     def save_model(self):
-        pd.DataFrame(self.model_output).to_csv("human_cases.csv")
-        print(self.model_output)
+        pd.DataFrame(self.model_output).to_csv(os.path.join(self.config_dict['OUTPUT_DIR'],
+                                                            'human_cases.csv'))
+        # print(self.model_output)
 
 
 class DengueSEIRModel(VectorBorneDiseaseModel):
@@ -136,9 +135,8 @@ class DengueSEIRModel(VectorBorneDiseaseModel):
 
     def __init__(self, config_file, days):
         super().__init__(config_file, 'DENGUE', days)
-        self.initial_states['Sv'] = self.mosq.iloc[1][0]
+        self.initial_states['Sv'] = self.mosq[0]
         print("DENGUE INITIAL", self.initial_states)
-
 
     def run_model(self):
         """Runs ODE solver to generate model output"""
@@ -150,9 +148,10 @@ class DengueSEIRModel(VectorBorneDiseaseModel):
         try:
             self.model_output = odeint(self._model_dengue, y0,
                                        self.t, args=(self,))
-        except:
+        except Exception:
             logger.exception('Exception occured running dengue model')
-            self.success = False
+            # self.success = False
+            sys.exit(1)
         else:
             logger.info('dengue model run complete')
 
@@ -223,7 +222,7 @@ class WNVSEIRModel(VectorBorneDiseaseModel):
 
     def __init__(self, config_file, days):
         super().__init__(config_file, 'WNV', days)
-        self.initial_states['Sv'] = self.mosq.iloc[1][0]
+        self.initial_states['Sv'] = self.mosq[0]
         print("WNV initial", self.initial_states)
 
     def run_model(self):
@@ -236,9 +235,10 @@ class WNVSEIRModel(VectorBorneDiseaseModel):
         try:
             self.model_output = odeint(self._model_WNV, y0,
                                        self.t, args=(self,))
-        except:
+        except Exception:
             logger.exception('Exception occured running WNV model')
-            self.success = False
+            sys.exit(1)
+            # self.success = False
         else:
             logger.info('WNV model run complete')
 
