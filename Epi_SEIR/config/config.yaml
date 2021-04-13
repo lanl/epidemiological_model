@@ -46,10 +46,10 @@ WNV:
     sigma_v: 0.5
   INITIAL_STATES:
     Sh: 60
-    Eh: 0
-    Iha: 20
+    Eh: 1
+    Iha: 21
     Ihs: 20
-    Rh: 0
+    Rh: 3
     #Sv: 1000000
-    Ev: 0
-    Iv: 0
+    Ev: 2
+    Iv: 5

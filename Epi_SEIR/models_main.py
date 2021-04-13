@@ -15,8 +15,8 @@ def main():
 
     logger = VBDM.create_logger('main', config_file)
 
-    den = VBDM.DengueSEIRModel(config_file, days=14)
-    wnv = VBDM.WNVSEIRModel(config_file, days=14)
+    den = VBDM.DengueSEIRModel(config_file, days=3)
+    wnv = VBDM.WNVSEIRModel(config_file, days=3)
 
     den.run_model()
     #print("DENGUE SUCCESS IS:", den.success)

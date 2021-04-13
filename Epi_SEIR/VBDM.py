@@ -114,13 +114,27 @@ class VectorBorneDiseaseModel():
         with open(config_file, 'r') as in_file:
             # self.config_dict = yaml.safe_load(in_file)[config_name]
             self.config_dict = yaml.safe_load(in_file)
-            self.mosq = np.array(pd.read_csv(self.config_dict['MOSQUITOES_FILE_PATH'])['mosq'])
             self.params = self.config_dict[config_name]['PARAMETERS']
+            if not all(_ >= 0 for _ in self.params.values()):
+                logger.error("Model parameters must be positive")
+                sys.exit(1)
+
             self.initial_states = self.config_dict[config_name]['INITIAL_STATES']
+            if not all(_ >= 0 for _ in self.initial_states.values()):
+                logger.error("Model initial states must be positive")
+                sys.exit(1)
+
+            self.mosq = np.array(pd.read_csv(self.config_dict['MOSQUITOES_FILE_PATH'])['mosq'])
+            if not all(i >= 0 for i in self.mosq):
+                logger.error("Mosquito data must be positive")
+                sys.exit(1)
 
     def save_model(self):
-        pd.DataFrame(self.model_output).to_csv(os.path.join(self.config_dict['OUTPUT_DIR'],
+        Sh, Eh, Iha, Ihs, Rh, Sv, Ev, Iv = self.model_output.T
+        pd.DataFrame({'Sh': Sh, 'Eh': Eh, 'Iha': Iha, 'Ihs': Ihs, 'Rh': Rh,
+                      'Sv': Sv, 'Ev': Ev, 'Iv': Iv}).to_csv(os.path.join(self.config_dict['OUTPUT_DIR'],
                                                             'human_cases.csv'))
+
         # print(self.model_output)
 
 
