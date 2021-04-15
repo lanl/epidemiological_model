@@ -1,3 +1,6 @@
+"""Utilities script to create argument parser and loggers
+"""
+
 import logging
 import os
 import argparse
@@ -38,7 +41,7 @@ def create_logger(name, config_file):
         name: Name of logger to be created. Typically module name. String.
         config_file: Absolute path to root config file. String.
 
-    Returns:
+    Return${#files[@]} -gt 0s:
         logging object.
     """
 
