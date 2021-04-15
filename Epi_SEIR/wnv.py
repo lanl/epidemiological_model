@@ -69,9 +69,5 @@ class WNVSEIRModel(VBDM.VectorBorneDiseaseModel):
 
 if sys.argv[0].endswith('sphinx-build'):
     logger = create_logger(__name__, '_default_config.yaml')
-    # TODO phase out usage of sys.argv. Problem now is if program is run with
-    # sys.argv = ['/Users/jkeithley/opt/anaconda3/bin/sphinx-build', '-M', 'html', '.', '_build']
 else:
-    # parser = create_arg_parser()
-    # args = parser.parse_args()
     logger = create_logger(__name__, VBDM.args.config_file)

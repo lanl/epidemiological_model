@@ -14,17 +14,20 @@ import VBDM
 
 def main():
     config_file = VBDM.args.config_file
+    disease = VBDM.args.disease.lower()
 
     # logger = VBDM.create_logger('main', config_file)
 
-    den = DengueSEIRModel(config_file, days=3)
-    wnv = WNVSEIRModel(config_file, days=3)
-
-    den.run_model()
     # print("DENGUE SUCCESS IS:", den.success)
 
-    wnv.run_model()
-    wnv.save_model()
+    if disease == 'dengue':
+        den = DengueSEIRModel(config_file, days=3)
+        den.run_model()
+    elif disease == 'wnv':
+        wnv = WNVSEIRModel(config_file, days=3)
+        wnv.run_model()
+
+    # wnv.save_model()
     # print("WNV SUCCESS IS:", wnv.success)
     # den.graph_model()
 

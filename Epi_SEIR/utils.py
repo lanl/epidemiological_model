@@ -22,10 +22,18 @@ def create_arg_parser():
         else:
             return arg
 
+    def is_disease(parser, arg):
+        if arg.lower() not in ['wnv', 'dengue']:
+            parser.error('Specify [wnv] or [dengue]')
+        else:
+            return arg
+
     parser = argparse.ArgumentParser()
     parser.add_argument('-f', '--config_file', action='store',
                         type=lambda x: is_valid_file(parser, x),
                         default='config/config.yaml')
+    parser.add_argument('-d', '--disease', action='store',
+                        type=lambda x: is_disease(parser, x))
 
     return parser
 

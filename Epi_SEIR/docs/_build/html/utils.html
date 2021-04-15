@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>VBDM module &mdash; Epi-SEIR  documentation</title>
+  <title>utils module &mdash; Epi-SEIR  documentation</title>
   
 
   
@@ -38,9 +38,7 @@
 
     
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="models_main module" href="models_main.html" />
-    <link rel="prev" title="Epi_SEIR" href="modules.html" /> 
+    <link rel="search" title="Search" href="search.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -89,12 +87,8 @@
             
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Epi_SEIR</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">VBDM module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="models_main.html">models_main module</a></li>
-</ul>
-</li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Epi_SEIR</a></li>
 </ul>
 
             
@@ -143,15 +137,13 @@
     
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
-          <li><a href="modules.html">Epi_SEIR</a> &raquo;</li>
-        
-      <li>VBDM module</li>
+      <li>utils module</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
           
-            <a href="_sources/VBDM.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/utils.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -164,33 +156,34 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-VBDM">
-<span id="vbdm-module"></span><h1>VBDM module<a class="headerlink" href="#module-VBDM" title="Permalink to this headline">¶</a></h1>
-<p>Vector Borne Disease Model Class.</p>
-<p>Contains class for specific diseases that inherit from the
-class VectorBorneDiseaseModel. Also contains methods to read
-in root configuration file and instantiate loggers.</p>
-<blockquote>
-<div><p>Typical usage example:</p>
-<p>logger = VBDM.create_logger(logger_name, config_file_name)
-disease = VBDM.DengueSEIRModel(config_file_name, simulation_duration)</p>
-</div></blockquote>
-<dl class="py class">
-<dt id="VBDM.VectorBorneDiseaseModel">
-<em class="property">class </em><code class="sig-prename descclassname">VBDM.</code><code class="sig-name descname">VectorBorneDiseaseModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">config_file</span></em>, <em class="sig-param"><span class="n">config_name</span></em>, <em class="sig-param"><span class="n">days</span></em><span class="sig-paren">)</span><a class="headerlink" href="#VBDM.VectorBorneDiseaseModel" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Defines a general vector borne disease model.</p>
-<p>Reads root config file and sets parameters.</p>
+  <div class="section" id="module-utils">
+<span id="utils-module"></span><h1>utils module<a class="headerlink" href="#module-utils" title="Permalink to this headline">¶</a></h1>
+<p>Utilities script to create argument parser and loggers</p>
+<dl class="py function">
+<dt id="utils.create_arg_parser">
+<code class="sig-prename descclassname">utils.</code><code class="sig-name descname">create_arg_parser</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#utils.create_arg_parser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Configures command line argument parser.</p>
+<p>Checks if the argument is a valid file.</p>
 <dl class="simple">
-<dt>Attributes:</dt><dd><p>params: ODE system parameters.
-initial_states: initial states for population sizes.</p>
+<dt>Returns:</dt><dd><p>parser object.</p>
 </dd>
 </dl>
-<dl class="py method">
-<dt id="VBDM.VectorBorneDiseaseModel.save_model">
-<code class="sig-name descname">save_model</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#VBDM.VectorBorneDiseaseModel.save_model" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+</dd></dl>
 
+<dl class="py function">
+<dt id="utils.create_logger">
+<code class="sig-prename descclassname">utils.</code><code class="sig-name descname">create_logger</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">config_file</span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.create_logger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Configures and instantiates logger object.</p>
+<p>Creates logger that prints DEBUG statements and more
+serious statements to log files. Prints ERROR statements
+to console.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>name: Name of logger to be created. Typically module name. String.
+config_file: Absolute path to root config file. String.</p>
+</dd>
+<dt>Return${#files[&#64;]} -gt 0s:</dt><dd><p>logging object.</p>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -200,10 +193,6 @@ initial_states: initial states for population sizes.</p>
            
           </div>
           <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="models_main.html" class="btn btn-neutral float-right" title="models_main module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-        <a href="modules.html" class="btn btn-neutral float-left" title="Epi_SEIR" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-    </div>
 
   <hr/>
 
