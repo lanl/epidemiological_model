@@ -1,10 +1,10 @@
-from VBDM import VectorBorneDiseaseModel
+import VBDM
 from scipy.integrate import odeint
-import matplotlib.pyplot as plt
 import sys
+from utils import create_logger
 
 
-class DengueSEIRModel(VectorBorneDiseaseModel):
+class DengueSEIRModel(VBDM.VectorBorneDiseaseModel):
 
     """Models the spread of dengue.
 
@@ -66,26 +66,12 @@ class DengueSEIRModel(VectorBorneDiseaseModel):
 
         return dSh, dEh, dIha, dIhs, dRh, dSv, dEv, dIv
 
-    def graph_model(self):
-        """Plots output of dengue model"""
-        Sh, Eh, Iha, Ihs, Rh, Sv, Ev, Iv = self.model_output.T
 
-        fig = plt.figure(facecolor='w', figsize=[2*6.4, 2*4.8])
-        ax = fig.add_subplot(111, facecolor='#dddddd', axisbelow=True)
-        ax.set_xlabel('Time (days)')
-        ax.set_ylabel('Cases')
-        ax.yaxis.set_tick_params(length=0)
-        ax.xaxis.set_tick_params(length=0)
-        ax.grid(b=True, which='major', c='w', lw=2, ls='-')
-
-        for spine in ('top', 'right', 'bottom', 'left'):
-            ax.spines[spine].set_visible(False)
-
-        ax.plot(self.t, Sh, 'b', alpha=0.5, lw=2, label='Susceptible Humans')
-        ax.plot(self.t, Iha+Ihs, 'r', alpha=0.5, lw=2, label='Infected Humans')
-        ax.plot(self.t, Iv, 'k', alpha=0.5, lw=2, label='Infected Vectors')
-        legend = ax.legend()
-        legend.get_frame().set_alpha(0.5)
-        plt.title("Dengue Incidence")
-
-        plt.show()
+if sys.argv[0].endswith('sphinx-build'):
+    logger = create_logger(__name__, '_default_config.yaml')
+    # TODO phase out usage of sys.argv. Problem now is if program is run with
+    # sys.argv = ['/Users/jkeithley/opt/anaconda3/bin/sphinx-build', '-M', 'html', '.', '_build']
+else:
+    # parser = create_arg_parser()
+    # args = parser.parse_args()
+    logger = create_logger(__name__, VBDM.args.config_file)
