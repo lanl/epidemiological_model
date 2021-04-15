@@ -97,7 +97,7 @@ class VectorBorneDiseaseModel():
 
     def __init__(self, config_file, config_name, days):
         # self.success = True
-        try:
+        try:  # TODO get rid  of this try except block
             self._read_config(config_file, config_name)
         except Exception:
             logger.exception(f'Exception occured opening config file for \
@@ -117,6 +117,7 @@ class VectorBorneDiseaseModel():
             self.params = self.config_dict[config_name]['PARAMETERS']
             if not all(_ >= 0 for _ in self.params.values()):
                 logger.error("Model parameters must be positive")
+                # TODO raise exception for these
                 sys.exit(1)
 
             self.initial_states = self.config_dict[config_name]['INITIAL_STATES']
@@ -312,7 +313,7 @@ class WNVSEIRModel(VectorBorneDiseaseModel):
         plt.show()
 
 
-if 'sphinx-build' in sys.argv[0]:
+if sys.argv[0].endswith('sphinx-build'):
     logger = create_logger(__name__, '_default_config.yaml')
     # TODO phase out usage of sys.argv. Problem now is if program is run with
     # sys.argv = ['/Users/jkeithley/opt/anaconda3/bin/sphinx-build', '-M', 'html', '.', '_build']
