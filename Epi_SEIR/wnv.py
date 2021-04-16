@@ -1,7 +1,18 @@
-import VBDM
-from scipy.integrate import odeint
+
+"""West Nile Virus SEIR Model Class
+
+Contains class for West Nile Virus disease model. Inherits from
+Vector Borne Disease Model class.
+
+    Typical usage example:
+
+    wnv = WNVSEIRModel(<config_file_path>, <duration_in_days>)
+"""
+
 import sys
+from scipy.integrate import odeint
 from utils import create_logger
+import VBDM
 
 
 class WNVSEIRModel(VBDM.VectorBorneDiseaseModel):

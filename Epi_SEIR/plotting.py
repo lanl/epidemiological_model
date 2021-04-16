@@ -1,3 +1,7 @@
+"""Plotting function for disease model output.
+
+"""
+
 import matplotlib.pyplot as plt
 
 

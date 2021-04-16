@@ -1,7 +1,17 @@
-import VBDM
-from scipy.integrate import odeint
+"""Dengue SEIR Model Class
+
+Contains class for dengue disease model. Inherits from
+Vector Borne Disease Model class.
+
+    Typical usage example:
+
+    den = DengueSEIRModel(<config_file_path>, <duration_in_days>)
+"""
+
 import sys
+from scipy.integrate import odeint
 from utils import create_logger
+import VBDM
 
 
 class DengueSEIRModel(VBDM.VectorBorneDiseaseModel):

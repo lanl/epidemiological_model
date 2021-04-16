@@ -4,10 +4,6 @@ Contains class for specific diseases that inherit from the
 class VectorBorneDiseaseModel. Also contains methods to read
 in root configuration file and instantiate loggers.
 
-    Typical usage example:
-
-    logger = VBDM.create_logger(logger_name, config_file_name)
-    disease = VBDM.DengueSEIRModel(config_file_name, simulation_duration)
 """
 
 import numpy as np
@@ -65,6 +61,7 @@ class VectorBorneDiseaseModel():
                 sys.exit(1)
 
     def save_model(self):
+        """Save output to file"""
         Sh, Eh, Iha, Ihs, Rh, Sv, Ev, Iv = self.model_output.T
         pd.DataFrame({'Sh': Sh, 'Eh': Eh, 'Iha': Iha, 'Ihs': Ihs, 'Rh': Rh,
                       'Sv': Sv, 'Ev': Ev, 'Iv': Iv}).to_csv(os.path.join(self.config_dict['OUTPUT_DIR'],

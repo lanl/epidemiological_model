@@ -1,4 +1,10 @@
 """Utilities script to create argument parser and loggers
+
+    Typical usage example:
+
+    logger = VBDM.create_logger(logger_name, config_file_name)
+    disease = VBDM.DengueSEIRModel(config_file_name, simulation_duration)
+
 """
 
 import logging
@@ -49,7 +55,7 @@ def create_logger(name, config_file):
         name: Name of logger to be created. Typically module name. String.
         config_file: Absolute path to root config file. String.
 
-    Return${#files[@]} -gt 0s:
+    Return:
         logging object.
     """
 
