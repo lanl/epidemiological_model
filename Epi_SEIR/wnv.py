@@ -25,6 +25,8 @@ class WNVSEIRModel(VBDM.VectorBorneDiseaseModel):
     """
 
     def __init__(self, config_file, days):
+        self.logger = create_logger(__name__, VBDM.args.config_file)
+
         super().__init__(config_file, 'WNV', days)
         self.initial_states['Sv'] = self.mosq[0]
         print("WNV initial", self.initial_states)
@@ -40,11 +42,11 @@ class WNVSEIRModel(VBDM.VectorBorneDiseaseModel):
             self.model_output = odeint(self._model_WNV, y0,
                                        self.t, args=(self,))
         except Exception:
-            logger.exception('Exception occured running WNV model')
+            self.logger.exception('Exception occured running WNV model')
             sys.exit(1)
             # self.success = False
         else:
-            logger.info('WNV model run complete')
+            self.logger.info('WNV model run complete')
 
     def _model_WNV(self, y, t, p):
         """Defines system of ODEs for WNV model"""
@@ -76,9 +78,3 @@ class WNVSEIRModel(VBDM.VectorBorneDiseaseModel):
         dIv = self.params['nu_v'] * Ev - self.params['mu_v'] * Iv
 
         return dSh, dEh, dIha, dIhs, dRh, dSv, dEv, dIv
-
-
-if sys.argv[0].endswith('sphinx-build'):
-    logger = create_logger(__name__, '_default_config.yaml')
-else:
-    logger = create_logger(__name__, VBDM.args.config_file)

@@ -36,7 +36,7 @@ class VectorBorneDiseaseModel():
             if not all(_ >= 0 for _ in self.params.values()):
                 raise ValueError("Model parameters must be positive")
         except ValueError:
-            logger.exception("Model parameters must be positive")
+            self.logger.exception("Model parameters must be positive")
 
         # Read initial states
         self.initial_states = self.config_dict[disease_name]['INITIAL_STATES']
@@ -44,7 +44,7 @@ class VectorBorneDiseaseModel():
             if not all(_ >= 0 for _ in self.initial_states.values()):
                 raise ValueError("Model initial states must be positive")
         except ValueError:
-            logger.exception("Model initial states must be positive")
+            self.logger.exception("Model initial states must be positive")
 
         # Read mosquito initial states
         self.mosq = np.array(pd.read_csv(self.config_dict['MOSQUITOES_FILE_PATH'])['mosq'])
@@ -52,12 +52,9 @@ class VectorBorneDiseaseModel():
             if not all(i >= 0 for i in self.mosq):
                 raise ValueError("Mosquito initial states must be positive")
         except ValueError:
-            logger.exception("Mosquito initial states must be positive")
+            self.logger.exception("Mosquito initial states must be positive")
 
         self.t = np.linspace(0, days, days*500)
-
-        # TODO add output_type to config file (specify .lower() method)
-        self.output_type = 'parquet'
 
     def _read_config(self, config_file, disease_name):
         """Reads root configuration file"""
@@ -65,9 +62,9 @@ class VectorBorneDiseaseModel():
             with open(config_file, 'r') as in_file:
                 self.config_dict = yaml.safe_load(in_file)
         except OSError:
-            logger.exception('Exception occured opening configuration file')
+            self.logger.exception('Exception occured opening configuration file')
         else:
-            logger.info("Configuration file successfully opened")
+            self.logger.info("Configuration file successfully opened")
 
     def save_model(self, disease_name):
         """Save output to file"""
@@ -79,9 +76,8 @@ class VectorBorneDiseaseModel():
                                        f'{disease_name}_model_output.csv')
             df.to_csv(output_path)
         else:
-            logger.error(f'Output file type \
-                         {self.config_dict["OUTPUT_TYPE"].lower()} not \
-                         recognized. Output will be .parquet file')
+            if self.config_dict['OUTPUT_TYPE'].lower() != 'parquet':
+                self.logger.error(f'Output file type {self.config_dict["OUTPUT_TYPE"].lower()} not recognized. Output will be .parquet file')
 
             output_path = os.path.join(self.config_dict['OUTPUT_DIR'],
                                        f'{disease_name}_model_output.parquet')
@@ -90,11 +86,12 @@ class VectorBorneDiseaseModel():
         # print(self.model_output)
 
 
-if sys.argv[0].endswith('sphinx-build'):
-    logger = create_logger(__name__, '_default_config.yaml')
+if not sys.argv[0].endswith('sphinx-build'):
+    # print("FLAG----------------- entered docsys VBDM module")
+    # logger = create_logger(__name__, '_default_config.yaml')
     # TODO phase out usage of sys.argv. Problem now is if program is run with
     # sys.argv = ['/Users/jkeithley/opt/anaconda3/bin/sphinx-build', '-M', 'html', '.', '_build']
-else:
+    # else:
     parser = create_arg_parser()
     args = parser.parse_args()
-    logger = create_logger(__name__, args.config_file)
+    # logger = create_logger(__name__, args.config_file)

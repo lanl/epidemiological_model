@@ -24,6 +24,8 @@ class DengueSEIRModel(VBDM.VectorBorneDiseaseModel):
     """
 
     def __init__(self, config_file, days):
+        self.logger = create_logger(__name__, VBDM.args.config_file)
+
         super().__init__(config_file, 'DENGUE', days)
         self.initial_states['Sv'] = self.mosq[0]
         print("DENGUE INITIAL", self.initial_states)
@@ -39,11 +41,11 @@ class DengueSEIRModel(VBDM.VectorBorneDiseaseModel):
             self.model_output = odeint(self._model_dengue, y0,
                                        self.t, args=(self,))
         except Exception:
-            logger.exception('Exception occured running dengue model')
+            self.logger.exception('Exception occured running dengue model')
             # self.success = False
             sys.exit(1)
         else:
-            logger.info('dengue model run complete')
+            self.logger.info('dengue model run complete')
 
     def _model_dengue(self, y, t, p):
         """Defines system of ODEs for dengue model"""
@@ -75,9 +77,3 @@ class DengueSEIRModel(VBDM.VectorBorneDiseaseModel):
         dIv = self.params['nu_v'] * Ev - self.params['mu_v'] * Iv
 
         return dSh, dEh, dIha, dIhs, dRh, dSv, dEv, dIv
-
-
-if sys.argv[0].endswith('sphinx-build'):
-    logger = create_logger(__name__, '_default_config.yaml')
-else:
-    logger = create_logger(__name__, VBDM.args.config_file)
