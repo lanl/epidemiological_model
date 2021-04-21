@@ -38,7 +38,7 @@ def create_arg_parser():
     parser.add_argument('-f', '--config_file', action='store',
                         type=lambda x: is_valid_file(parser, x),
                         default='config/config.yaml')
-    parser.add_argument('-d', '--disease', action='store',
+    parser.add_argument('-d', '--disease_name', action='store',
                         type=lambda x: is_disease(parser, x))
 
     return parser

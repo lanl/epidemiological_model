@@ -11,6 +11,8 @@ import yaml
 import os
 import sys
 import pandas as pd
+import pyarrow as pa
+import pyarrow.parquet as pq
 from utils import create_arg_parser, create_logger
 
 
@@ -26,23 +28,7 @@ class VectorBorneDiseaseModel():
     """
 
     def __init__(self, config_file, disease_name, days):
-        # self.success = True
-        try:  # TODO get rid  of this try except block
-            self._read_config(config_file, disease_name)
-        except Exception:
-            logger.exception(f'Exception occured opening config file for \
-                             {disease_name}')
-            # self.success = False
-            sys.exit(1)
-        else:
-            logger.info('Config file read in')
-
-        self.t = np.linspace(0, days, days*500)
-
-    def _read_config(self, config_file, disease_name):
-        """Reads root configuration file"""
-        with open(config_file, 'r') as in_file:
-            self.config_dict = yaml.safe_load(in_file)
+        self._read_config(config_file, disease_name)
 
         # Read parameters
         self.params = self.config_dict[disease_name]['PARAMETERS']
@@ -68,12 +54,36 @@ class VectorBorneDiseaseModel():
         except ValueError:
             logger.exception("Mosquito initial states must be positive")
 
-    def save_model(self):
+        self.t = np.linspace(0, days, days*500)
+
+        # TODO add output_type to config file (specify .lower() method)
+        self.output_type = 'parquet'
+
+    def _read_config(self, config_file, disease_name):
+        """Reads root configuration file"""
+        try:
+            with open(config_file, 'r') as in_file:
+                self.config_dict = yaml.safe_load(in_file)
+        except OSError:
+            logger.exception('Exception occured opening configuration file')
+        else:
+            logger.info("Configuration file successfully opened")
+
+    def save_model(self, disease_name):
         """Save output to file"""
-        Sh, Eh, Iha, Ihs, Rh, Sv, Ev, Iv = self.model_output.T
-        pd.DataFrame({'Sh': Sh, 'Eh': Eh, 'Iha': Iha, 'Ihs': Ihs, 'Rh': Rh,
-                      'Sv': Sv, 'Ev': Ev, 'Iv': Iv}).to_csv(os.path.join(self.config_dict['OUTPUT_DIR'],
-                                                            'human_cases.csv'))
+        keys = ['Sh', 'Eh', 'Iha', 'Ihs', 'Rh', 'Sv', 'Ev', 'Iv']
+        df = pd.DataFrame(dict(zip(keys, self.model_output.T)))
+
+        if self.output_type == 'csv':
+            output_path = os.path.join(self.config_dict['OUTPUT_DIR'],
+                                       f'{disease_name}_model_output.csv')
+            df.to_csv(output_path)
+        elif self.output_type == 'parquet':
+            output_path = os.path.join(self.config_dict['OUTPUT_DIR'],
+                                       f'{disease_name}_model_output.parquet')
+            pq.write_table(pa.Table.from_pandas(df), output_path)
+        else:
+            logger.error('Output file type not recognized')
 
         # print(self.model_output)
 
