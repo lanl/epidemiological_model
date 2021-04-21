@@ -13,7 +13,7 @@ import sys
 import pandas as pd
 import pyarrow as pa
 import pyarrow.parquet as pq
-from utils import create_arg_parser, create_logger
+from utils import create_arg_parser
 
 
 class VectorBorneDiseaseModel():
@@ -27,7 +27,7 @@ class VectorBorneDiseaseModel():
 
     """
 
-    def __init__(self, config_file, disease_name, days):
+    def __init__(self, config_file, disease_name):
         self._read_config(config_file, disease_name)
 
         # Read parameters
@@ -54,7 +54,8 @@ class VectorBorneDiseaseModel():
         except ValueError:
             self.logger.exception("Mosquito initial states must be positive")
 
-        self.t = np.linspace(0, days, days*500)
+        self.t = np.linspace(0, self.config_dict['DURATION'],
+                             self.config_dict['DURATION']*self.config_dict['RESOLUTION'])
 
     def _read_config(self, config_file, disease_name):
         """Reads root configuration file"""

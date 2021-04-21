@@ -6,7 +6,7 @@ Vector Borne Disease Model class.
 
     Typical usage example:
 
-    wnv = WNVSEIRModel(<config_file_path>, <duration_in_days>)
+    wnv = WNVSEIRModel(<config_file_path>)
 """
 
 import sys
@@ -24,10 +24,10 @@ class WNVSEIRModel(VBDM.VectorBorneDiseaseModel):
 
     """
 
-    def __init__(self, config_file, days):
+    def __init__(self, config_file):
         self.logger = create_logger(__name__, VBDM.args.config_file)
 
-        super().__init__(config_file, 'WNV', days)
+        super().__init__(config_file, 'WNV')
         self.initial_states['Sv'] = self.mosq[0]
         print("WNV initial", self.initial_states)
 
@@ -44,7 +44,6 @@ class WNVSEIRModel(VBDM.VectorBorneDiseaseModel):
         except Exception:
             self.logger.exception('Exception occured running WNV model')
             sys.exit(1)
-            # self.success = False
         else:
             self.logger.info('WNV model run complete')
 

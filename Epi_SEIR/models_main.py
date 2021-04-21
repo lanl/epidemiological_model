@@ -21,11 +21,11 @@ def main():
     # print("DENGUE SUCCESS IS:", den.success)
 
     if disease_name == 'dengue':
-        den = DengueSEIRModel(config_file, days=3)
+        den = DengueSEIRModel(config_file)
         den.run_model()
         den.save_model(disease_name)
     elif disease_name == 'wnv':
-        wnv = WNVSEIRModel(config_file, days=3)
+        wnv = WNVSEIRModel(config_file)
         wnv.run_model()
         wnv.save_model(disease_name)
 

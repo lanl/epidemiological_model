@@ -5,7 +5,7 @@ Vector Borne Disease Model class.
 
     Typical usage example:
 
-    den = DengueSEIRModel(<config_file_path>, <duration_in_days>)
+    den = DengueSEIRModel(<config_file_path>)
 """
 
 import sys
@@ -23,10 +23,10 @@ class DengueSEIRModel(VBDM.VectorBorneDiseaseModel):
 
     """
 
-    def __init__(self, config_file, days):
+    def __init__(self, config_file):
         self.logger = create_logger(__name__, VBDM.args.config_file)
 
-        super().__init__(config_file, 'DENGUE', days)
+        super().__init__(config_file, 'DENGUE')
         self.initial_states['Sv'] = self.mosq[0]
         print("DENGUE INITIAL", self.initial_states)
 
@@ -42,7 +42,6 @@ class DengueSEIRModel(VBDM.VectorBorneDiseaseModel):
                                        self.t, args=(self,))
         except Exception:
             self.logger.exception('Exception occured running dengue model')
-            # self.success = False
             sys.exit(1)
         else:
             self.logger.info('dengue model run complete')

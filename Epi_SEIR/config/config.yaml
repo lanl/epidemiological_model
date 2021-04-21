@@ -10,6 +10,9 @@ OUTPUT_DIR: '/Users/jkeithley/Documents/CIMMID/human/dengue_model/Epi_SEIR/human
 # Add unit test specification?
 OUTPUT_TYPE: 'parquet' # default is .parquet
 
+DURATION: 3 # number of days to run the model
+RESOLUTION: 500 # how many points to run per day
+
 DENGUE:
   PARAMETERS:
     psi: 0.5
