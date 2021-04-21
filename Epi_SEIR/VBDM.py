@@ -42,23 +42,31 @@ class VectorBorneDiseaseModel():
     def _read_config(self, config_file, config_name):
         """Reads root configuration file"""
         with open(config_file, 'r') as in_file:
-            # self.config_dict = yaml.safe_load(in_file)[config_name]
             self.config_dict = yaml.safe_load(in_file)
-            self.params = self.config_dict[config_name]['PARAMETERS']
+
+        # Read parameters
+        self.params = self.config_dict[config_name]['PARAMETERS']
+        try:
             if not all(_ >= 0 for _ in self.params.values()):
-                logger.error("Model parameters must be positive")
-                # TODO raise exception for these
-                sys.exit(1)
+                raise ValueError("Model parameters must be positive")
+        except ValueError:
+            logger.exception("Model parameters must be positive")
 
-            self.initial_states = self.config_dict[config_name]['INITIAL_STATES']
+        # Read initial states
+        self.initial_states = self.config_dict[config_name]['INITIAL_STATES']
+        try:
             if not all(_ >= 0 for _ in self.initial_states.values()):
-                logger.error("Model initial states must be positive")
-                sys.exit(1)
+                raise ValueError("Model initial states must be positive")
+        except ValueError:
+            logger.exception("Model initial states must be positive")
 
-            self.mosq = np.array(pd.read_csv(self.config_dict['MOSQUITOES_FILE_PATH'])['mosq'])
+        # Read mosquito initial states
+        self.mosq = np.array(pd.read_csv(self.config_dict['MOSQUITOES_FILE_PATH'])['mosq'])
+        try:
             if not all(i >= 0 for i in self.mosq):
-                logger.error("Mosquito data must be positive")
-                sys.exit(1)
+                raise ValueError("Mosquito initial states must be positive")
+        except ValueError:
+            logger.exception("Mosquito initial states must be positive")
 
     def save_model(self):
         """Save output to file"""
