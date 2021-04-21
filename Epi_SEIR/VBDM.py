@@ -25,13 +25,13 @@ class VectorBorneDiseaseModel():
 
     """
 
-    def __init__(self, config_file, config_name, days):
+    def __init__(self, config_file, disease_name, days):
         # self.success = True
         try:  # TODO get rid  of this try except block
-            self._read_config(config_file, config_name)
+            self._read_config(config_file, disease_name)
         except Exception:
             logger.exception(f'Exception occured opening config file for \
-                             {config_name}')
+                             {disease_name}')
             # self.success = False
             sys.exit(1)
         else:
@@ -39,13 +39,13 @@ class VectorBorneDiseaseModel():
 
         self.t = np.linspace(0, days, days*500)
 
-    def _read_config(self, config_file, config_name):
+    def _read_config(self, config_file, disease_name):
         """Reads root configuration file"""
         with open(config_file, 'r') as in_file:
             self.config_dict = yaml.safe_load(in_file)
 
         # Read parameters
-        self.params = self.config_dict[config_name]['PARAMETERS']
+        self.params = self.config_dict[disease_name]['PARAMETERS']
         try:
             if not all(_ >= 0 for _ in self.params.values()):
                 raise ValueError("Model parameters must be positive")
@@ -53,7 +53,7 @@ class VectorBorneDiseaseModel():
             logger.exception("Model parameters must be positive")
 
         # Read initial states
-        self.initial_states = self.config_dict[config_name]['INITIAL_STATES']
+        self.initial_states = self.config_dict[disease_name]['INITIAL_STATES']
         try:
             if not all(_ >= 0 for _ in self.initial_states.values()):
                 raise ValueError("Model initial states must be positive")
