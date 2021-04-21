@@ -74,16 +74,18 @@ class VectorBorneDiseaseModel():
         keys = ['Sh', 'Eh', 'Iha', 'Ihs', 'Rh', 'Sv', 'Ev', 'Iv']
         df = pd.DataFrame(dict(zip(keys, self.model_output.T)))
 
-        if self.output_type == 'csv':
+        if self.config_dict['OUTPUT_TYPE'].lower() == 'csv':
             output_path = os.path.join(self.config_dict['OUTPUT_DIR'],
                                        f'{disease_name}_model_output.csv')
             df.to_csv(output_path)
-        elif self.output_type == 'parquet':
+        else:
+            logger.error(f'Output file type \
+                         {self.config_dict["OUTPUT_TYPE"].lower()} not \
+                         recognized. Output will be .parquet file')
+
             output_path = os.path.join(self.config_dict['OUTPUT_DIR'],
                                        f'{disease_name}_model_output.parquet')
             pq.write_table(pa.Table.from_pandas(df), output_path)
-        else:
-            logger.error('Output file type not recognized')
 
         # print(self.model_output)
 

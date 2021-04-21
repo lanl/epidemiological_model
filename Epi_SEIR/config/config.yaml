@@ -8,6 +8,7 @@ MOSQUITOES_FILE_PATH: '/Users/jkeithley/Documents/CIMMID/human/dengue_model/Epi_
 OUTPUT_DIR: '/Users/jkeithley/Documents/CIMMID/human/dengue_model/Epi_SEIR/human_model_output'
 
 # Add unit test specification?
+OUTPUT_TYPE: 'test_err' # DEFAULT IS .parquet
 
 DENGUE:
   PARAMETERS:
