@@ -8,10 +8,10 @@ MOSQUITOES_FILE_PATH: '/Users/jkeithley/Documents/CIMMID/human/dengue_model/Epi_
 OUTPUT_DIR: '/Users/jkeithley/Documents/CIMMID/human/dengue_model/Epi_SEIR/human_model_output'
 
 # Add unit test specification?
-OUTPUT_TYPE: 'parquet' # default is .parquet
+OUTPUT_TYPE: 'csv' # default is .parquet
 
 DURATION: 3 # number of days to run the model
-RESOLUTION: 500 # how many points to run per day
+RESOLUTION: 20 # how many points to run per day
 
 DENGUE:
   PARAMETERS:

@@ -54,8 +54,8 @@ class VectorBorneDiseaseModel():
         except ValueError:
             self.logger.exception("Mosquito initial states must be positive")
 
-        self.t = np.linspace(0, self.config_dict['DURATION'],
-                             self.config_dict['DURATION']*self.config_dict['RESOLUTION'])
+        # TODO error check duration and resolution
+
 
     def _read_config(self, config_file, disease_name):
         """Reads root configuration file"""
