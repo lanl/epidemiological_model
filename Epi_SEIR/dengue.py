@@ -8,11 +8,8 @@ Vector Borne Disease Model class.
     den = DengueSEIRModel(<config_file_path>)
 """
 
-import sys
-from scipy.integrate import odeint
 from utils import create_logger
 import VBDM
-import numpy as np
 
 
 class DengueSEIRModel(VBDM.VectorBorneDiseaseModel):
@@ -28,40 +25,21 @@ class DengueSEIRModel(VBDM.VectorBorneDiseaseModel):
         self.logger = create_logger(__name__, VBDM.args.config_file)
 
         super().__init__(config_file, 'DENGUE')
+        # self.model_func = self.model_dengue
         self.initial_states['Sv'] = self.mosq[0]
         # print("DENGUE INITIAL", self.initial_states)
 
-    def run_model(self):
-        """Runs ODE solver to generate model output"""
+    def set_y0(self):
+        print("FLAG ------------- setting y0 in dengue module")
+        # TODO remove print
         y0 = self.initial_states['Sh'], self.initial_states['Eh'], \
             self.initial_states['Iha'], self.initial_states['Ihs'], \
             self.initial_states['Rh'], self.initial_states['Sv'], \
             self.initial_states['Ev'], self.initial_states['Iv']
 
-        t = np.linspace(0, 1, self.config_dict['RESOLUTION'] + 1)
+        return y0
 
-        try:
-            self.model_output = odeint(self._model_dengue, y0,
-                                       t, args=(self,))
-        except Exception:
-            self.logger.exception('Exception occured running dengue model')
-            sys.exit(1)
-
-        for i in range(1, self.config_dict['DURATION']):
-            self.initial_states['Sv'] = self.mosq[i]
-            y0 = tuple(self.model_output[-1])
-            self.model_output = self.model_output[:-1]
-
-            try:
-                out = odeint(self._model_dengue, y0,
-                             t, args=(self,))
-            except Exception:
-                self.logger.exception('Exception occured running dengue model')
-                sys.exit(1)
-
-            self.model_output = np.concatenate((self.model_output, out))
-
-    def _model_dengue(self, y, t, p):
+    def model_func(self, y, t, p):
         """Defines system of ODEs for dengue model"""
         # States and population
         Sh, Eh, Iha, Ihs, Rh, Sv, Ev, Iv = y

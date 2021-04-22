@@ -14,6 +14,8 @@ import pandas as pd
 import pyarrow as pa
 import pyarrow.parquet as pq
 from utils import create_arg_parser
+from scipy.integrate import odeint
+import abc
 
 
 class VectorBorneDiseaseModel():
@@ -56,7 +58,6 @@ class VectorBorneDiseaseModel():
 
         # TODO error check duration and resolution
 
-
     def _read_config(self, config_file, disease_name):
         """Reads root configuration file"""
         try:
@@ -66,6 +67,49 @@ class VectorBorneDiseaseModel():
             self.logger.exception('Exception occured opening configuration file')
         else:
             self.logger.info("Configuration file successfully opened")
+
+    @abc.abstractmethod
+    def set_y0(self):
+        pass
+        # TODO raise exception if not set?
+
+    @abc.abstractmethod
+    def model_func(self, y, t, p):
+        pass
+
+    def run_model(self):
+        # TODO move to VBDM module
+        """Runs ODE solver to generate model output"""
+        # TODO run_model STILL UNDER CONSTRUCTION FOR TIME DEPENDENT MOSQUITO
+        y0 = self.set_y0()
+
+        t = np.linspace(0, 1, self.config_dict['RESOLUTION'] + 1)
+
+        try:
+            self.model_output = odeint(self.model_func, y0,
+                                       t, args=(self,))
+        # TODO work on reraising exceptions
+        except Exception as e:
+            self.logger.exception('Exception occured running dengue model')
+            raise e
+
+        y0 = tuple(self.model_output[-1])
+        self.model_output = self.model_output[:-1]
+
+        for i in range(1, self.config_dict['DURATION']):
+            self.initial_states['Sv'] = self.mosq[i]
+
+            try:
+                out = odeint(self.model_func, y0,
+                             t, args=(self,))
+            except Exception:
+                self.logger.exception('Exception occured running dengue model')
+                sys.exit(1)
+
+            y0 = tuple(out[-1])
+            out = out[:-1]
+
+            self.model_output = np.concatenate((self.model_output, out))
 
     def save_model(self, disease_name):
         """Save output to file"""

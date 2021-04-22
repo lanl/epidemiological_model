@@ -9,8 +9,6 @@ Vector Borne Disease Model class.
     wnv = WNVSEIRModel(<config_file_path>)
 """
 
-import sys
-from scipy.integrate import odeint
 from utils import create_logger
 import VBDM
 
@@ -29,25 +27,19 @@ class WNVSEIRModel(VBDM.VectorBorneDiseaseModel):
 
         super().__init__(config_file, 'WNV')
         self.initial_states['Sv'] = self.mosq[0]
-        print("WNV initial", self.initial_states)
+        # print("WNV initial", self.initial_states)
 
-    def run_model(self):
-        """Runs ODE solver to generate model output"""
+    def set_y0(self):
+        print("FLAG ------------- setting y0 in wnv module")
+        # TODO remove print
         y0 = self.initial_states['Sh'], self.initial_states['Eh'], \
             self.initial_states['Iha'], self.initial_states['Ihs'], \
             self.initial_states['Rh'], self.initial_states['Sv'], \
             self.initial_states['Ev'], self.initial_states['Iv']
 
-        try:
-            self.model_output = odeint(self._model_WNV, y0,
-                                       self.t, args=(self,))
-        except Exception:
-            self.logger.exception('Exception occured running WNV model')
-            sys.exit(1)
-        else:
-            self.logger.info('WNV model run complete')
+        return y0
 
-    def _model_WNV(self, y, t, p):
+    def model_func(self, y, t, p):
         """Defines system of ODEs for WNV model"""
         # States and population
         Sh, Eh, Iha, Ihs, Rh, Sv, Ev, Iv = y
