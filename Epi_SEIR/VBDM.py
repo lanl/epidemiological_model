@@ -56,7 +56,19 @@ class VectorBorneDiseaseModel():
         except ValueError:
             self.logger.exception("Mosquito initial states must be positive")
 
-        # TODO error check duration and resolution
+        # Check duration
+        try:
+            if not self.config_dict['DURATION'] > 0:
+                raise ValueError("Simulation duration must be positive")
+        except ValueError:
+            self.logger.exception("Simulation duration must be positive")
+
+        # Check resolution
+        try:
+            if not self.config_dict['RESOLUTION'] > 0:
+                raise ValueError("Simulation resolution must be positive")
+        except ValueError:
+            self.logger.exception("Simulation resolution must be positive")
 
     def _read_config(self, config_file, disease_name):
         """Reads root configuration file"""
