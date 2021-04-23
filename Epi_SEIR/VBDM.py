@@ -106,7 +106,6 @@ class VectorBorneDiseaseModel():
         try:
             self.model_output = odeint(self.model_func, y0,
                                        t, args=(self,))
-        # TODO work on reraising exceptions
         except Exception as e:
             self.logger.exception('Exception occured running dengue model')
             raise e
@@ -129,7 +128,7 @@ class VectorBorneDiseaseModel():
 
             self.model_output = np.concatenate((self.model_output, out))
 
-    def save_model(self, disease_name):
+    def save_output(self, disease_name):
         """Save output to file"""
         keys = ['Sh', 'Eh', 'Iha', 'Ihs', 'Rh', 'Sv', 'Ev', 'Iv']
         df = pd.DataFrame(dict(zip(keys, self.model_output.T)))
@@ -146,15 +145,7 @@ class VectorBorneDiseaseModel():
                                        f'{disease_name}_model_output.parquet')
             pq.write_table(pa.Table.from_pandas(df), output_path)
 
-        # print(self.model_output)
-
 
 if not sys.argv[0].endswith('sphinx-build'):
-    # print("FLAG----------------- entered docsys VBDM module")
-    # logger = create_logger(__name__, '_default_config.yaml')
-    # TODO phase out usage of sys.argv. Problem now is if program is run with
-    # sys.argv = ['/Users/jkeithley/opt/anaconda3/bin/sphinx-build', '-M', 'html', '.', '_build']
-    # else:
     parser = create_arg_parser()
     args = parser.parse_args()
-    # logger = create_logger(__name__, args.config_file)
