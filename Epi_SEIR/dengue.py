@@ -25,13 +25,9 @@ class DengueSEIRModel(VBDM.VectorBorneDiseaseModel):
         self.logger = create_logger(__name__, VBDM.args.config_file)
 
         super().__init__(config_file, 'DENGUE')
-        # self.model_func = self.model_dengue
         self.initial_states['Sv'] = self.mosq[0]
-        # print("DENGUE INITIAL", self.initial_states)
 
     def set_y0(self):
-        print("FLAG ------------- setting y0 in dengue module")
-        # TODO remove print
         y0 = self.initial_states['Sh'], self.initial_states['Eh'], \
             self.initial_states['Iha'], self.initial_states['Ihs'], \
             self.initial_states['Rh'], self.initial_states['Sv'], \

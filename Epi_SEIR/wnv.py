@@ -27,11 +27,8 @@ class WNVSEIRModel(VBDM.VectorBorneDiseaseModel):
 
         super().__init__(config_file, 'WNV')
         self.initial_states['Sv'] = self.mosq[0]
-        # print("WNV initial", self.initial_states)
 
     def set_y0(self):
-        print("FLAG ------------- setting y0 in wnv module")
-        # TODO remove print
         y0 = self.initial_states['Sh'], self.initial_states['Eh'], \
             self.initial_states['Iha'], self.initial_states['Ihs'], \
             self.initial_states['Rh'], self.initial_states['Sv'], \

@@ -4,7 +4,8 @@ given paramters from config.yaml configuration file.
 
     Typical usage example:
 
-    python models_main.py <absolute path to config.yaml>
+    python models_main.py -f <absolute path to config.yaml> -d <disease name
+    [dengue][wnv]>
 """
 
 from dengue import DengueSEIRModel
@@ -16,27 +17,16 @@ def main():
     config_file = VBDM.args.config_file
     disease_name = VBDM.args.disease_name.lower()
 
-    # logger = VBDM.create_logger('main', config_file)
-
-    # print("DENGUE SUCCESS IS:", den.success)
-
     if disease_name == 'dengue':
         den = DengueSEIRModel(config_file)
         den.run_model()
         den.save_output(disease_name)
+        print("SUCCESS")
     elif disease_name == 'wnv':
         wnv = WNVSEIRModel(config_file)
         wnv.run_model()
         wnv.save_output(disease_name)
-
-    # wnv.save_model()
-    # print("WNV SUCCESS IS:", wnv.success)
-    # den.graph_model()
-
-    # if den.success and wnv.success:
-    #    print("SUCCESS")
-    # else:
-    #    print("FAILURE")
+        print("SUCCESS")
 
 
 if __name__ == "__main__":
