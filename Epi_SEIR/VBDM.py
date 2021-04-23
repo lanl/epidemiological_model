@@ -37,46 +37,52 @@ class VectorBorneDiseaseModel():
         try:
             if not all(_ >= 0 for _ in self.params.values()):
                 raise ValueError("Model parameters must be positive")
-        except ValueError:
+        except ValueError as e:
             self.logger.exception("Model parameters must be positive")
+            raise e
 
         # Read initial states
         self.initial_states = self.config_dict[disease_name]['INITIAL_STATES']
         try:
             if not all(_ >= 0 for _ in self.initial_states.values()):
                 raise ValueError("Model initial states must be positive")
-        except ValueError:
+        except ValueError as e:
             self.logger.exception("Model initial states must be positive")
+            raise e
 
         # Read mosquito initial states
         self.mosq = np.array(pd.read_csv(self.config_dict['MOSQUITOES_FILE_PATH'])['mosq'])
         try:
             if not all(i >= 0 for i in self.mosq):
                 raise ValueError("Mosquito initial states must be positive")
-        except ValueError:
+        except ValueError as e:
             self.logger.exception("Mosquito initial states must be positive")
+            raise e
 
         # Check duration
         try:
             if not self.config_dict['DURATION'] > 0:
                 raise ValueError("Simulation duration must be positive")
-        except ValueError:
+        except ValueError as e:
             self.logger.exception("Simulation duration must be positive")
+            raise e
 
         # Check resolution
         try:
             if not self.config_dict['RESOLUTION'] > 0:
                 raise ValueError("Simulation resolution must be positive")
-        except ValueError:
+        except ValueError as e:
             self.logger.exception("Simulation resolution must be positive")
+            raise e
 
     def _read_config(self, config_file, disease_name):
         """Reads root configuration file"""
         try:
             with open(config_file, 'r') as in_file:
                 self.config_dict = yaml.safe_load(in_file)
-        except OSError:
+        except OSError as e:
             self.logger.exception('Exception occured opening configuration file')
+            raise e
         else:
             self.logger.info("Configuration file successfully opened")
 
@@ -114,9 +120,9 @@ class VectorBorneDiseaseModel():
             try:
                 out = odeint(self.model_func, y0,
                              t, args=(self,))
-            except Exception:
+            except Exception as e:
                 self.logger.exception('Exception occured running dengue model')
-                sys.exit(1)
+                raise e
 
             y0 = tuple(out[-1])
             out = out[:-1]
