@@ -2,7 +2,7 @@
 
 Contains class for specific diseases that inherit from the
 class VectorBorneDiseaseModel. Also contains methods to read
-in root configuration file and instantiate loggers.
+in root configuration file.
 
 """
 
@@ -82,15 +82,15 @@ class VectorBorneDiseaseModel():
 
     @abc.abstractmethod
     def set_y0(self):
-        pass
-        # TODO raise exception if not set?
+        raise NotImplementedError("Initial conditions not set")
+        self.logger.error("Initial conditions not set")
 
     @abc.abstractmethod
     def model_func(self, y, t, p):
-        pass
+        raise NotImplementedError("Model function not set")
+        self.logger.error("Model function not set")
 
     def run_model(self):
-        # TODO move to VBDM module
         """Runs ODE solver to generate model output"""
         # TODO run_model STILL UNDER CONSTRUCTION FOR TIME DEPENDENT MOSQUITO
         y0 = self.set_y0()
