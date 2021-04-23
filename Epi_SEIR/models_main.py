@@ -14,6 +14,10 @@ import VBDM
 
 
 def main():
+    """Runs vector borne disease simulations.
+
+    Instaniates each disease from configuration file
+    """
     config_file = VBDM.args.config_file
     disease_name = VBDM.args.disease_name.lower()
 

@@ -173,10 +173,10 @@
 <p>Vector Borne Disease Model Class.</p>
 <p>Contains class for specific diseases that inherit from the
 class VectorBorneDiseaseModel. Also contains methods to read
-in root configuration file and instantiate loggers.</p>
+in root configuration file.</p>
 <dl class="py class">
 <dt id="VBDM.VectorBorneDiseaseModel">
-<em class="property">class </em><code class="sig-prename descclassname">VBDM.</code><code class="sig-name descname">VectorBorneDiseaseModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">config_file</span></em>, <em class="sig-param"><span class="n">disease_name</span></em>, <em class="sig-param"><span class="n">days</span></em><span class="sig-paren">)</span><a class="headerlink" href="#VBDM.VectorBorneDiseaseModel" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">VBDM.</code><code class="sig-name descname">VectorBorneDiseaseModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">config_file</span></em>, <em class="sig-param"><span class="n">disease_name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#VBDM.VectorBorneDiseaseModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Defines a general vector borne disease model.</p>
 <p>Reads root config file and sets parameters.</p>
@@ -186,10 +186,26 @@ initial_states: initial states for population sizes.</p>
 </dd>
 </dl>
 <dl class="py method">
-<dt id="VBDM.VectorBorneDiseaseModel.save_model">
-<code class="sig-name descname">save_model</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">disease_name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#VBDM.VectorBorneDiseaseModel.save_model" title="Permalink to this definition">¶</a></dt>
+<dt id="VBDM.VectorBorneDiseaseModel.model_func">
+<em class="property">abstract </em><code class="sig-name descname">model_func</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">t</span></em>, <em class="sig-param"><span class="n">p</span></em><span class="sig-paren">)</span><a class="headerlink" href="#VBDM.VectorBorneDiseaseModel.model_func" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="VBDM.VectorBorneDiseaseModel.run_model">
+<code class="sig-name descname">run_model</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#VBDM.VectorBorneDiseaseModel.run_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs ODE solver to generate model output</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="VBDM.VectorBorneDiseaseModel.save_output">
+<code class="sig-name descname">save_output</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">disease_name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#VBDM.VectorBorneDiseaseModel.save_output" title="Permalink to this definition">¶</a></dt>
 <dd><p>Save output to file</p>
 </dd></dl>
+
+<dl class="py method">
+<dt id="VBDM.VectorBorneDiseaseModel.set_y0">
+<em class="property">abstract </em><code class="sig-name descname">set_y0</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#VBDM.VectorBorneDiseaseModel.set_y0" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
@@ -209,7 +225,7 @@ initial_states: initial states for population sizes.</p>
 
   <div role="contentinfo">
     <p>
-        &#169; Copyright 2021, jkeithley.
+        &#169; Copyright 2021, Los Alamos National Laboratory.
 
     </p>
   </div>

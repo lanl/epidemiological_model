@@ -174,20 +174,25 @@
 Vector Borne Disease Model class.</p>
 <blockquote>
 <div><p>Typical usage example:</p>
-<p>wnv = WNVSEIRModel(&lt;config_file_path&gt;, &lt;duration_in_days&gt;)</p>
+<p>wnv = WNVSEIRModel(&lt;config_file_path&gt;)</p>
 </div></blockquote>
 <dl class="py class">
 <dt id="wnv.WNVSEIRModel">
-<em class="property">class </em><code class="sig-prename descclassname">wnv.</code><code class="sig-name descname">WNVSEIRModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">config_file</span></em>, <em class="sig-param"><span class="n">days</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wnv.WNVSEIRModel" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">wnv.</code><code class="sig-name descname">WNVSEIRModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">config_file</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wnv.WNVSEIRModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="VBDM.html#VBDM.VectorBorneDiseaseModel" title="VBDM.VectorBorneDiseaseModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">VBDM.VectorBorneDiseaseModel</span></code></a></p>
 <p>Models the spread of WNV.</p>
 <p>Inherits from the VectorBorneDiseaseModel class. Solves ODE system
 of equations and plots the resulting curves.</p>
 <dl class="py method">
-<dt id="wnv.WNVSEIRModel.run_model">
-<code class="sig-name descname">run_model</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wnv.WNVSEIRModel.run_model" title="Permalink to this definition">¶</a></dt>
-<dd><p>Runs ODE solver to generate model output</p>
+<dt id="wnv.WNVSEIRModel.model_func">
+<code class="sig-name descname">model_func</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">t</span></em>, <em class="sig-param"><span class="n">p</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wnv.WNVSEIRModel.model_func" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines system of ODEs for WNV model</p>
 </dd></dl>
+
+<dl class="py method">
+<dt id="wnv.WNVSEIRModel.set_y0">
+<code class="sig-name descname">set_y0</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wnv.WNVSEIRModel.set_y0" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
@@ -206,7 +211,7 @@ of equations and plots the resulting curves.</p>
 
   <div role="contentinfo">
     <p>
-        &#169; Copyright 2021, jkeithley.
+        &#169; Copyright 2021, Los Alamos National Laboratory.
 
     </p>
   </div>

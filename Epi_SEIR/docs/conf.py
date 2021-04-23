@@ -18,7 +18,7 @@ sys.path.insert(0, os.path.abspath('/Users/jkeithley/Documents/CIMMID/human/deng
 # -- Project information -----------------------------------------------------
 
 project = 'Epi-SEIR'
-copyright = '2021, jkeithley'
+copyright = '2021, Los Alamos National Laboratory'
 author = 'jkeithley'
 
 
