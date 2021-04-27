@@ -125,6 +125,7 @@ class VectorBorneDiseaseModel():
 
             y0 = tuple(out[-1])
             out = out[:-1]
+            # TODO SET Sv HERE? (check if Sv is currently overwritten)
 
             self.model_output = np.concatenate((self.model_output, out))
 

@@ -25,12 +25,12 @@ def main():
         den = DengueSEIRModel(config_file)
         den.run_model()
         den.save_output(disease_name)
-        print("SUCCESS")
+        den.logger.info("SUCCESS")
     elif disease_name == 'wnv':
         wnv = WNVSEIRModel(config_file)
         wnv.run_model()
         wnv.save_output(disease_name)
-        print("SUCCESS")
+        wnv.logger.info("SUCCESS")
 
 
 if __name__ == "__main__":

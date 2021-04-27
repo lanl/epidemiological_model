@@ -22,6 +22,7 @@ def create_arg_parser():
     Returns:
         parser object.
     """
+
     def is_valid_file(parser, arg):
         if not os.path.isfile(arg):
             parser.error(f'File {arg} not found.')
@@ -35,7 +36,7 @@ def create_arg_parser():
             return arg
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('-f', '--config_file', action='store',
+    parser.add_argument('-c', '--config_file', action='store',
                         type=lambda x: is_valid_file(parser, x),
                         default='config/config.yaml')
     parser.add_argument('-d', '--disease_name', action='store',
