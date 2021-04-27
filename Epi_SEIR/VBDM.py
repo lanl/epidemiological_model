@@ -131,7 +131,7 @@ class VectorBorneDiseaseModel():
 
     def save_output(self, disease_name):
         """Save output to file"""
-        keys = ['Sh', 'Eh', 'Iha', 'Ihs', 'Rh', 'Sv', 'Ev', 'Iv']
+        keys = ['Susceptible Humans', 'Exposed Humans', 'Asymptomatic Infected Humans', 'Symptomatic Infected Humans', 'Recovered Humans', 'Susceptible Vectors', 'Exposed Vectors', 'Infected Vectors']
         df = pd.DataFrame(dict(zip(keys, self.model_output.T)))
 
         if self.config_dict['OUTPUT_TYPE'].lower() == 'csv':
