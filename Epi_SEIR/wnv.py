@@ -10,10 +10,10 @@ Vector Borne Disease Model class.
 """
 
 from utils import create_logger
-import VBDM
+import vbdm
 
 
-class WNVSEIRModel(VBDM.VectorBorneDiseaseModel):
+class WNVSEIRModel(vbdm.VectorBorneDiseaseModel):
 
     """Models the spread of WNV.
 
@@ -23,7 +23,7 @@ class WNVSEIRModel(VBDM.VectorBorneDiseaseModel):
     """
 
     def __init__(self, config_file):
-        self.logger = create_logger(__name__, VBDM.args.config_file)
+        self.logger = create_logger(__name__, vbdm.args.config_file)
 
         super().__init__(config_file, 'WNV')
         self.initial_states['Sv'] = self.mosq[0]

@@ -10,7 +10,7 @@ given paramters from config.yaml configuration file.
 
 from dengue import DengueSEIRModel
 from wnv import WNVSEIRModel
-import VBDM
+import vbdm
 
 
 def main():
@@ -18,8 +18,8 @@ def main():
 
     Instaniates each disease from configuration file
     """
-    config_file = VBDM.args.config_file
-    disease_name = VBDM.args.disease_name.lower()
+    config_file = vbdm.args.config_file
+    disease_name = vbdm.args.disease_name.lower()
 
     if disease_name == 'dengue':
         den = DengueSEIRModel(config_file)

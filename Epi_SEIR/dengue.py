@@ -9,10 +9,10 @@ Vector Borne Disease Model class.
 """
 
 from utils import create_logger
-import VBDM
+import vbdm
 
 
-class DengueSEIRModel(VBDM.VectorBorneDiseaseModel):
+class DengueSEIRModel(vbdm.VectorBorneDiseaseModel):
 
     """Models the spread of dengue.
 
@@ -22,7 +22,7 @@ class DengueSEIRModel(VBDM.VectorBorneDiseaseModel):
     """
 
     def __init__(self, config_file):
-        self.logger = create_logger(__name__, VBDM.args.config_file)
+        self.logger = create_logger(__name__, vbdm.args.config_file)
 
         super().__init__(config_file, 'DENGUE')
         self.initial_states['Sv'] = self.mosq[0]
