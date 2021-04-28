@@ -15,10 +15,10 @@ import pyarrow as pa
 import pyarrow.parquet as pq
 from utils import create_arg_parser
 from scipy.integrate import odeint
-import abc
+from abc import ABC, abstractmethod
 
 
-class VectorBorneDiseaseModel():
+class VectorBorneDiseaseModel(ABC):
     """Defines a general vector borne disease model.
 
     Reads root config file and sets parameters.
@@ -93,15 +93,13 @@ class VectorBorneDiseaseModel():
         else:
             self.logger.info("Configuration file successfully opened")
 
-    @abc.abstractmethod
+    @abstractmethod
     def set_y0(self):
-        raise NotImplementedError("Initial conditions not set")
-        self.logger.error("Initial conditions not set")
+        pass
 
-    @abc.abstractmethod
+    @abstractmethod
     def model_func(self, y, t, p):
-        raise NotImplementedError("Model function not set")
-        self.logger.error("Model function not set")
+        pass
 
     def run_model(self):
         """Runs ODE solver to generate model output"""
