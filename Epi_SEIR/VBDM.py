@@ -67,6 +67,13 @@ class VectorBorneDiseaseModel():
             self.logger.exception("Simulation duration must be positive")
             raise e
 
+        try:
+            if self.config_dict['DURATION'] > len(self.mosq):
+                raise ValueError("Simulation duration exceeds days of available mosquito population data.")
+        except ValueError as e:
+            self.logger.exception("Simulation duration exceeds days of available mosquito population data.")
+            raise e
+
         # Check resolution
         try:
             if not self.config_dict['RESOLUTION'] > 0:
