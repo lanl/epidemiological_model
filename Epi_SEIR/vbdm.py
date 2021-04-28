@@ -36,50 +36,52 @@ class VectorBorneDiseaseModel(ABC):
         self.params = self.config_dict[disease_name]['PARAMETERS']
         try:
             if not all(_ >= 0 for _ in self.params.values()):
-                raise ValueError("Model parameters must be positive")
+                raise ValueError('Model parameters must be positive')
         except ValueError as e:
-            self.logger.exception("Model parameters must be positive")
+            self.logger.exception('Model parameters must be positive')
             raise e
 
         # Read initial states
         self.initial_states = self.config_dict[disease_name]['INITIAL_STATES']
         try:
             if not all(_ >= 0 for _ in self.initial_states.values()):
-                raise ValueError("Model initial states must be positive")
+                raise ValueError('Model initial states must be positive')
         except ValueError as e:
-            self.logger.exception("Model initial states must be positive")
+            self.logger.exception('Model initial states must be positive')
             raise e
 
         # Read mosquito initial states
         self.mosq = np.array(pd.read_csv(self.config_dict['MOSQUITOES_FILE_PATH'])['mosq'])
         try:
             if not all(i >= 0 for i in self.mosq):
-                raise ValueError("Mosquito initial states must be positive")
+                raise ValueError('Mosquito initial states must be positive')
         except ValueError as e:
-            self.logger.exception("Mosquito initial states must be positive")
+            self.logger.exception('Mosquito initial states must be positive')
             raise e
 
         # Check duration
         try:
             if not self.config_dict['DURATION'] > 0:
-                raise ValueError("Simulation duration must be positive")
+                raise ValueError('Simulation duration must be positive')
         except ValueError as e:
-            self.logger.exception("Simulation duration must be positive")
+            self.logger.exception('Simulation duration must be positive')
             raise e
 
         try:
             if self.config_dict['DURATION'] > len(self.mosq):
-                raise ValueError("Simulation duration exceeds days of available mosquito population data.")
+                raise ValueError('Simulation duration exceeds days of'
+                                 ' available mosquito population data.')
         except ValueError as e:
-            self.logger.exception("Simulation duration exceeds days of available mosquito population data.")
+            self.logger.exception('Simulation duration exceeds days of'
+                                  ' available mosquito population data.')
             raise e
 
         # Check resolution
         try:
             if not self.config_dict['RESOLUTION'] > 0:
-                raise ValueError("Simulation resolution must be positive")
+                raise ValueError('Simulation resolution must be positive')
         except ValueError as e:
-            self.logger.exception("Simulation resolution must be positive")
+            self.logger.exception('Simulation resolution must be positive')
             raise e
 
     def _read_config(self, config_file, disease_name):
@@ -91,7 +93,7 @@ class VectorBorneDiseaseModel(ABC):
             self.logger.exception('Exception occured opening configuration file')
             raise e
         else:
-            self.logger.info("Configuration file successfully opened")
+            self.logger.info('Configuration file successfully opened')
 
     @abstractmethod
     def set_y0(self):
@@ -136,7 +138,10 @@ class VectorBorneDiseaseModel(ABC):
 
     def save_output(self, disease_name):
         """Save output to file"""
-        keys = ['Susceptible Humans', 'Exposed Humans', 'Asymptomatic Infected Humans', 'Symptomatic Infected Humans', 'Recovered Humans', 'Susceptible Vectors', 'Exposed Vectors', 'Infected Vectors']
+        keys = ['Susceptible Humans', 'Exposed Humans',
+                'Asymptomatic Infected Humans', 'Symptomatic Infected Humans',
+                'Recovered Humans', 'Susceptible Vectors',
+                'Exposed Vectors', 'Infected Vectors']
         df = pd.DataFrame(dict(zip(keys, self.model_output.T)))
 
         if self.config_dict['OUTPUT_TYPE'].lower() == 'csv':
@@ -145,7 +150,9 @@ class VectorBorneDiseaseModel(ABC):
             df.to_csv(output_path)
         else:
             if self.config_dict['OUTPUT_TYPE'].lower() != 'parquet':
-                self.logger.error(f'Output file type {self.config_dict["OUTPUT_TYPE"].lower()} not recognized. Output will be .parquet file')
+                self.logger.error(f'Output file type'
+                                  ' {self.config_dict["OUTPUT_TYPE"].lower()}'
+                                  ' not recognized. Output will be .parquet file')
 
             output_path = os.path.join(self.config_dict['OUTPUT_DIR'],
                                        f'{disease_name}_model_output.parquet')
