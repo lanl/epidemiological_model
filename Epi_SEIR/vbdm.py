@@ -51,7 +51,6 @@ class VectorBorneDiseaseModel(ABC):
             raise e
 
         # Read mosquito initial states
-        # TODO add FileNotFoundError for opening mosq.csv
         try:
             self.mosq = np.array(pd.read_csv(self.config_dict['MOSQUITOES_FILE_PATH'])['Sv'])
         except FileNotFoundError as e:
@@ -113,22 +112,14 @@ class VectorBorneDiseaseModel(ABC):
     def run_model(self):
         """Runs ODE solver to generate model output"""
         # TODO run_model STILL UNDER CONSTRUCTION FOR TIME DEPENDENT MOSQUITO
-        y0 = self.set_y0()
+        keys = ['Sh', 'Eh', 'Iha', 'Ihs', 'Rh', 'Sv', 'Ev', 'Iv']
+        self.model_output = np.empty([0, len(keys)])
 
         t = np.linspace(0, 1, self.config_dict['RESOLUTION'] + 1)
 
-        try:
-            self.model_output = odeint(self.model_func, y0,
-                                       t, args=(self,))
-        except Exception as e:
-            self.logger.exception('Exception occured running dengue model')
-            raise e
-
-        y0 = tuple(self.model_output[-1])
-        self.model_output = self.model_output[:-1]
-
-        for i in range(1, self.config_dict['DURATION']):
+        for i in range(0, self.config_dict['DURATION']):
             self.initial_states['Sv'] = self.mosq[i]
+            y0 = self.set_y0()
 
             try:
                 out = odeint(self.model_func, y0,
@@ -137,9 +128,9 @@ class VectorBorneDiseaseModel(ABC):
                 self.logger.exception('Exception occured running dengue model')
                 raise e
 
-            y0 = tuple(out[-1])
+            self.initial_states = dict(zip(keys, out[-1]))
+
             out = out[:-1]
-            # TODO SET Sv HERE? (check if Sv is currently overwritten)
 
             self.model_output = np.concatenate((self.model_output, out))
 

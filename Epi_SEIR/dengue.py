@@ -19,13 +19,16 @@ class DengueSEIRModel(vbdm.VectorBorneDiseaseModel):
     Inherits from the VectorBorneDiseaseModel class. Solves ODE system
     of equations and plots the resulting curves.
 
+    Attributes:
+        logger: python logging object
+
     """
 
     def __init__(self, config_file):
         self.logger = create_logger(__name__, vbdm.args.config_file)
 
+        #self.initial_states['Sv'] = 69
         super().__init__(config_file, 'DENGUE')
-        self.initial_states['Sv'] = self.mosq[0]
 
     def set_y0(self):
         y0 = self.initial_states['Sh'], self.initial_states['Eh'], \
