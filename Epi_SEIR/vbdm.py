@@ -13,7 +13,7 @@ import sys
 import pandas as pd
 import pyarrow as pa
 import pyarrow.parquet as pq
-from utils import create_arg_parser
+from utils import create_arg_parser, timer
 from scipy.integrate import odeint
 from abc import ABC, abstractmethod
 
@@ -51,7 +51,13 @@ class VectorBorneDiseaseModel(ABC):
             raise e
 
         # Read mosquito initial states
-        self.mosq = np.array(pd.read_csv(self.config_dict['MOSQUITOES_FILE_PATH'])['mosq'])
+        # TODO add FileNotFoundError for opening mosq.csv
+        try:
+            self.mosq = np.array(pd.read_csv(self.config_dict['MOSQUITOES_FILE_PATH'])['Sv'])
+        except FileNotFoundError as e:
+            self.logger.exception('Mosquito population input file not found.')
+            raise e
+
         try:
             if not all(i >= 0 for i in self.mosq):
                 raise ValueError('Mosquito initial states must be positive')
@@ -103,6 +109,7 @@ class VectorBorneDiseaseModel(ABC):
     def model_func(self, y, t, p):
         pass
 
+    @timer
     def run_model(self):
         """Runs ODE solver to generate model output"""
         # TODO run_model STILL UNDER CONSTRUCTION FOR TIME DEPENDENT MOSQUITO

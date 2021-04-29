@@ -12,6 +12,8 @@ import os
 import argparse
 import yaml
 from datetime import datetime
+from functools import wraps
+import time
 
 
 def create_arg_parser():
@@ -82,3 +84,14 @@ def create_logger(name, config_file):
     logger.addHandler(stream_handler)
 
     return logger
+
+def timer(func):
+    """Print the runtime of the decorated function"""
+    @wraps(func)
+    def wrapper_timer(self, *args, **kwargs):
+        start_time = time.perf_counter()
+        value = func(self, *args, **kwargs)
+        run_time = time.perf_counter() - start_time
+        self.logger.info(f"Finished {func.__name__!r} in {run_time:.4f} secs")
+        return value
+    return wrapper_timer
