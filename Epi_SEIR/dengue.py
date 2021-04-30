@@ -27,7 +27,6 @@ class DengueSEIRModel(vbdm.VectorBorneDiseaseModel):
     def __init__(self, config_file):
         self.logger = create_logger(__name__, vbdm.args.config_file)
 
-        #self.initial_states['Sv'] = 69
         super().__init__(config_file, 'DENGUE')
 
     def set_y0(self):

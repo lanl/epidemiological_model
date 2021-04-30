@@ -26,7 +26,6 @@ class WNVSEIRModel(vbdm.VectorBorneDiseaseModel):
         self.logger = create_logger(__name__, vbdm.args.config_file)
 
         super().__init__(config_file, 'WNV')
-        self.initial_states['Sv'] = self.mosq[0]
 
     def set_y0(self):
         y0 = self.initial_states['Sh'], self.initial_states['Eh'], \

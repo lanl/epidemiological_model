@@ -92,6 +92,6 @@ def timer(func):
         start_time = time.perf_counter()
         value = func(self, *args, **kwargs)
         run_time = time.perf_counter() - start_time
-        self.logger.info(f"Finished {func.__name__!r} in {run_time:.4f} secs")
+        self.logger.info(f'Finished {func.__name__!r} in {run_time:.4f} seconds')
         return value
     return wrapper_timer
