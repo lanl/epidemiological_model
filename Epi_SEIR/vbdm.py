@@ -44,7 +44,13 @@ class VectorBorneDiseaseModel(ABC):
             raise e
 
         # Read initial states
-        self.initial_states = self.config_dict[disease_name]['INITIAL_STATES']
+        try:
+            with open(self.config_dict['INITIAL_STATES_FILE_PATH'], 'r') as in_file:
+                self.initial_states = yaml.safe_load(in_file)[disease_name]['INITIAL_STATES']
+        except FileNotFoundError as e:
+            self.logger.exception('Initial states input file not found.')
+            raise e
+
         try:
             if not all(_ >= 0 for _ in self.initial_states.values()):
                 raise ValueError('Model initial states must be positive')
@@ -113,7 +119,6 @@ class VectorBorneDiseaseModel(ABC):
     @timer
     def run_model(self):
         """Runs ODE solver to generate model output"""
-        # TODO run_model STILL UNDER CONSTRUCTION FOR TIME DEPENDENT MOSQUITO
         keys = ['Sh', 'Eh', 'Iha', 'Ihs', 'Rh', 'Sv', 'Ev', 'Iv']
         self.model_output = np.empty([0, len(keys)])
 

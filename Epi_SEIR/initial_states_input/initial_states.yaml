@@ -1,0 +1,20 @@
+DENGUE:
+  INITIAL_STATES:
+    Sh: 60
+    Eh: 0
+    Iha: 20
+    Ihs: 20
+    Rh: 0
+    #Sv: 1000000 # Have as vector (number per day)
+    Ev: 0
+    Iv: 0
+WNV:
+  INITIAL_STATES:
+    Sh: 60
+    Eh: 1
+    Iha: 21
+    Ihs: 20
+    Rh: 3
+    #Sv: 1000000
+    Ev: 2
+    Iv: 5
