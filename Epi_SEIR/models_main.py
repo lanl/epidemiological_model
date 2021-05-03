@@ -23,6 +23,7 @@ def main():
 
     if disease_name == 'dengue':
         den = DengueSEIRModel(config_file)
+        den.logger.info(den)
         den.run_model()
         den.save_output(disease_name)
         den.logger.info('SUCCESS')

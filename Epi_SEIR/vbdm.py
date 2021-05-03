@@ -50,6 +50,7 @@ class VectorBorneDiseaseModel(ABC):
         except FileNotFoundError as e:
             self.logger.exception('Initial states input file not found.')
             raise e
+        self.logger.info('Initial states data successfully opened')
 
         try:
             if not all(_ >= 0 for _ in self.initial_states.values()):
@@ -64,6 +65,9 @@ class VectorBorneDiseaseModel(ABC):
         except FileNotFoundError as e:
             self.logger.exception('Mosquito population input file not found.')
             raise e
+        else:
+            self.logger.info('Mosquito population data successfully opened'
+                            f' with {len(self.mosq)} days available')
 
         try:
             if not all(i >= 0 for i in self.mosq):
@@ -107,6 +111,10 @@ class VectorBorneDiseaseModel(ABC):
             raise e
         else:
             self.logger.info('Configuration file successfully opened')
+
+    def __str__(self):
+        return f"Running model for {self.config_dict['DURATION']} days at" \
+               f" {self.config_dict['RESOLUTION']} points per day"
 
     @abstractmethod
     def set_y0(self):
