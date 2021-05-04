@@ -121,7 +121,7 @@ class VectorBorneDiseaseModel(ABC):
         pass
 
     @abstractmethod
-    def model_func(self, y, t, p):
+    def model_func(self, y, t):
         pass
 
     @timer
@@ -137,8 +137,7 @@ class VectorBorneDiseaseModel(ABC):
             y0 = self.set_y0()
 
             try:
-                out = odeint(self.model_func, y0,
-                             t, args=(self,))
+                out = odeint(self.model_func, y0, t)
             except Exception as e:
                 self.logger.exception('Exception occured running dengue model')
                 raise e
@@ -170,6 +169,8 @@ class VectorBorneDiseaseModel(ABC):
             output_path = os.path.join(self.config_dict['OUTPUT_DIR'],
                                        f'{disease_name}_model_output.parquet')
             pq.write_table(pa.Table.from_pandas(df), output_path)
+
+        self.logger.info(f'Output saved to {output_path}')
 
 
 if not sys.argv[0].endswith('sphinx-build'):

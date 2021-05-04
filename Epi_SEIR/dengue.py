@@ -30,6 +30,7 @@ class DengueSEIRModel(vbdm.VectorBorneDiseaseModel):
         super().__init__(config_file, 'DENGUE')
 
     def set_y0(self):
+        """Sets initial states to be passed into model_func"""
         y0 = self.initial_states['Sh'], self.initial_states['Eh'], \
             self.initial_states['Iha'], self.initial_states['Ihs'], \
             self.initial_states['Rh'], self.initial_states['Sv'], \
@@ -37,7 +38,7 @@ class DengueSEIRModel(vbdm.VectorBorneDiseaseModel):
 
         return y0
 
-    def model_func(self, y, t, p):
+    def model_func(self, y, t):
         """Defines system of ODEs for dengue model"""
         # States and population
         Sh, Eh, Iha, Ihs, Rh, Sv, Ev, Iv = y
@@ -57,13 +58,13 @@ class DengueSEIRModel(vbdm.VectorBorneDiseaseModel):
         # System of equations
         dSh = -lambda_h * Sh
         dEh = lambda_h * Sh - self.params['nu_h'] * Eh
-        dIha = self.params['psi'] * self.params['nu_h'] * Eh - \
+        dIha = self.params['phi'] * self.params['nu_h'] * Eh - \
             self.params['gamma_h'] * Iha
-        dIhs = (1 - self.params['psi']) * self.params['nu_h'] * \
+        dIhs = (1 - self.params['phi']) * self.params['nu_h'] * \
             Eh - self.params['gamma_h'] * Ihs
         dRh = self.params['gamma_h'] * (Iha + Ihs)
-        dSv = -lambda_v * Sh
-        dEv = lambda_v * Sh - self.params['nu_v'] * Ev
+        dSv = -lambda_v * Sv - self.params['mu_v'] * Sv
+        dEv = lambda_v * Sv - self.params['nu_v'] * Ev - self.params['mu_v'] * Ev
         dIv = self.params['nu_v'] * Ev - self.params['mu_v'] * Iv
 
         return dSh, dEh, dIha, dIhs, dRh, dSv, dEv, dIv

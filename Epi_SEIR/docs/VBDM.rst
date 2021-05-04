@@ -1,7 +1,7 @@
-VBDM module
+vbdm module
 ===========
 
-.. automodule:: VBDM
+.. automodule:: vbdm
    :members:
    :undoc-members:
    :show-inheritance:

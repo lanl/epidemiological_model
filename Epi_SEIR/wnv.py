@@ -35,8 +35,9 @@ class WNVSEIRModel(vbdm.VectorBorneDiseaseModel):
 
         return y0
 
-    def model_func(self, y, t, p):
-        """Defines system of ODEs for WNV model"""
+    def model_func(self, y, t):
+        """Defines system of ODEs for dengue model"""
+        # NOTE: wnv system not modeled yet in this function
         # States and population
         Sh, Eh, Iha, Ihs, Rh, Sv, Ev, Iv = y
         N_h = sum([Sh, Eh, Iha, Ihs, Rh])

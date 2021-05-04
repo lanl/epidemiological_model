@@ -1,12 +1,13 @@
-Epi_SEIR
+epi_seir
 ========
 
 .. toctree::
    :maxdepth: 4
 
-   VBDM
    dengue
+   generate_inputs
    models_main
    plotting
    utils
+   vbdm
    wnv
