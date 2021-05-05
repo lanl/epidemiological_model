@@ -1,5 +1,3 @@
-Human Disease Model README
-
 ### *Conda Environment Creation*
 - `conda create --name human-epi python=3.8.3`
 - `conda activate human-epi`
