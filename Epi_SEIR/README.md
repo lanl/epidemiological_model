@@ -1,11 +1,11 @@
 Human Disease Model README
 
-### Conda Environment
+### *Conda Environment*
 - `conda create --name human-epi python=3.8.3`
 - `conda install --channel conda-forge numpy pyyaml pandas scipy pyarrow matplotlib sphinx`
 - `conda activate human-epi`
 
-### Files
+### *Files*
 
 #### Python Scripts
 - **models_main.py**: main function for model - runs each general stage of model.
