@@ -1,9 +1,16 @@
 Human Disease Model README
 
-### *Conda Environment*
+### *Conda Environment Creation*
 - `conda create --name human-epi python=3.8.3`
-- `conda install --channel conda-forge numpy pyyaml pandas scipy pyarrow matplotlib sphinx`
 - `conda activate human-epi`
+- `conda install --channel conda-forge numpy pyyaml pandas scipy pyarrow matplotlib sphinx`
+
+### *Running Model*
+- `./run_human_epi_model.sh`
+
+### *Building Documentation*
+- `pip install sphinx_rtd_theme`
+- `./build_docs.sh`
 
 ### *Files*
 

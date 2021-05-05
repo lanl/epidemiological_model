@@ -56,13 +56,13 @@ class WNVSEIRModel(vbdm.VectorBorneDiseaseModel):
         # System of equations
         dSh = -lambda_h * Sh
         dEh = lambda_h * Sh - self.params['nu_h'] * Eh
-        dIha = self.params['psi'] * self.params['nu_h'] * Eh - \
+        dIha = self.params['phi'] * self.params['nu_h'] * Eh - \
             self.params['gamma_h'] * Iha
-        dIhs = (1 - self.params['psi']) * self.params['nu_h'] * \
+        dIhs = (1 - self.params['phi']) * self.params['nu_h'] * \
             Eh - self.params['gamma_h'] * Ihs
         dRh = self.params['gamma_h'] * (Iha + Ihs)
-        dSv = -lambda_v * Sh
-        dEv = lambda_v * Sh - self.params['nu_v'] * Ev
+        dSv = -lambda_v * Sv - self.params['mu_v'] * Sv
+        dEv = lambda_v * Sv - self.params['nu_v'] * Ev - self.params['mu_v'] * Ev
         dIv = self.params['nu_v'] * Ev - self.params['mu_v'] * Iv
 
         return dSh, dEh, dIha, dIhs, dRh, dSv, dEv, dIv
