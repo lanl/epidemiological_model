@@ -1,6 +1,9 @@
 ### *Conda Environment Creation*
-- `conda create --name human-epi python=3.8.3`
-- `conda activate human-epi`
+To create environment from text file specification, run
+`conda create --name human-epi-env --file conda_environments/human-epi-env.txt`
+To create environment manually, run the following
+- `conda create --name human-epi-env python=3.8.3`
+- `conda activate human-epi-env`
 - `conda install --channel conda-forge numpy pyyaml pandas scipy pyarrow matplotlib sphinx`
 
 ### *Running Model*
