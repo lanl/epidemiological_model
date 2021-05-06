@@ -1,6 +1,7 @@
 ### *Conda Environment Creation*
-To create environment from text file specification, run  
-`conda create --name human-epi-env --file conda_environments/human-epi-env.txt`  
+To create environment from text file specification, run
+- `conda create --name human-epi-env --file conda_environments/human-epi-env.txt`
+ 
 To create environment manually, run the following  
 - `conda create --name human-epi-env python=3.8.3`
 - `conda activate human-epi-env`
