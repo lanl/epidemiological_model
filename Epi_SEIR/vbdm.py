@@ -24,10 +24,11 @@ class VectorBorneDiseaseModel(ABC):
     Reads root config file and sets parameters.
 
     Attributes:
-        config_dict: All configurations read in from config file.
-        params: ODE system parameters.
-        initial_states: initial states for population sizes.
-        mosq: Daily mosquito population data.
+        config_dict: All configurations read in from config file.\n
+        params: ODE system parameters.\n
+
+        initial_states: initial states for population sizes.\n
+        mosq: Daily mosquito population data.\n
 
     """
 

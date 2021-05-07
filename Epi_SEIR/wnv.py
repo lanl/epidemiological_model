@@ -38,6 +38,11 @@ class WNVSEIRModel(vbdm.VectorBorneDiseaseModel):
     def model_func(self, y, t):
         """Defines system of ODEs for dengue model"""
         # NOTE: wnv system not modeled yet in this function
+
+        # TODO Implement actual WNV system of equations
+
+        # TODO Add parameter comment block, see dengue.py
+
         # States and population
         Sh, Eh, Iha, Ihs, Rh, Sv, Ev, Iv = y
         N_h = sum([Sh, Eh, Iha, Ihs, Rh])
@@ -56,9 +61,9 @@ class WNVSEIRModel(vbdm.VectorBorneDiseaseModel):
         # System of equations
         dSh = -lambda_h * Sh
         dEh = lambda_h * Sh - self.params['nu_h'] * Eh
-        dIha = self.params['phi'] * self.params['nu_h'] * Eh - \
+        dIha = self.params['psi'] * self.params['nu_h'] * Eh - \
             self.params['gamma_h'] * Iha
-        dIhs = (1 - self.params['phi']) * self.params['nu_h'] * \
+        dIhs = (1 - self.params['psi']) * self.params['nu_h'] * \
             Eh - self.params['gamma_h'] * Ihs
         dRh = self.params['gamma_h'] * (Iha + Ihs)
         dSv = -lambda_v * Sv - self.params['mu_v'] * Sv
