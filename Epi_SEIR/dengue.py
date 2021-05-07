@@ -42,18 +42,29 @@ class DengueSEIRModel(vbdm.VectorBorneDiseaseModel):
         """Defines system of ODEs for dengue model.
 
         Initial State Names:
-            Sh: test1.\n
-            Eh: test2.\n
-            Iha: \n
-            Ihs: \n
-            Rh: \n
-            Sv: \n
-            Ev: \n
-            Iv: \n
+            Sh: Susceptible human population.\n
+            Eh: Exposed human population.\n
+            Iha: Asymptomatic infectious human population.\n
+            Ihs: Symptomatic infectious human population.\n
+            Rh: Recovered human population.\n
+            Sv: Susceptible vector population.\n
+            Ev: Exposed vector population.\n
+            Iv: Infectious vector population.\n
 
         Parameters:
-            lambda_h: \n
-            lambda_v: \n
+            lambda_h: Human force of infection.\n
+            lambda_v: Vector force of infection.\n
+            nu_h: Human latent period.\n
+            nu_v: Vector latent period.\n
+            psi: Proportion of infections reported.\n
+            gamma_h: Human infectious period.\n
+            mu_v: Vector life expectancy.\n
+            sigma_h: Maximum number of bites a human can support per unit time.\n
+            sigma_v: Maximum vector biting rate.\n
+            beta_h: Probability of vector to host transmission.\n
+            beta_v: Probability of host tp vector transmission.\n
+            b_h: Biting rate (1 / (day * human))\n
+            b_v: Biting rate (1 / (day * mosquito))\n
 
         """
         # States and population

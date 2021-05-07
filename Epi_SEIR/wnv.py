@@ -36,12 +36,39 @@ class WNVSEIRModel(vbdm.VectorBorneDiseaseModel):
         return y0
 
     def model_func(self, y, t):
-        """Defines system of ODEs for dengue model"""
+        """Defines system of ODEs for dengue model
+
+        Initial State Names:
+            Sh: Susceptible human population.\n
+            Eh: Exposed human population.\n
+            Iha: Asymptomatic infectious human population.\n
+            Ihs: Symptomatic infectious human population.\n
+            Rh: Recovered human population.\n
+            Sv: Susceptible vector population.\n
+            Ev: Exposed vector population.\n
+            Iv: Infectious vector population.\n
+
+        Parameters:
+            lambda_h: Human force of infection.\n
+            lambda_v: Vector force of infection.\n
+            nu_h: Human latent period.\n
+            nu_v: Vector latent period.\n
+            psi: Proportion of infections reported.\n
+            gamma_h: Human infectious period.\n
+            mu_v: Vector life expectancy.\n
+            sigma_h: Maximum number of bites a human can support per unit time.\n
+            sigma_v: Maximum vector biting rate.\n
+            beta_h: Probability of vector to host transmission.\n
+            beta_v: Probability of host tp vector transmission.\n
+            b_h: Biting rate (1 / (day * human))\n
+            b_v: Biting rate (1 / (day * mosquito))\n
+
+        """
         # NOTE: wnv system not modeled yet in this function
 
         # TODO Implement actual WNV system of equations
 
-        # TODO Add parameter comment block, see dengue.py
+        # TODO Update parameter comment block
 
         # States and population
         Sh, Eh, Iha, Ihs, Rh, Sv, Ev, Iv = y
