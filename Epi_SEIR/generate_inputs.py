@@ -1,21 +1,30 @@
 import pandas as pd
-import random
+#import random
 import numpy as np
 import yaml
-import pyarrow as pa
-import pyarrow.parquet as pq
+#import pyarrow as pa
+#import pyarrow.parquet as pq
 import os
+import argparse
+
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-c', '--config_file', action='store',
+                    default='config/config.yaml')
+args = parser.parse_args()
 
 # generate mosquito population input
-with open('/Users/jkeithley/Documents/CIMMID/human/dengue_model/Epi_SEIR/config/config.yaml', 'r') as in_file:
-    n = yaml.safe_load(in_file)['DURATION']
-output_path = '/Users/jkeithley/Documents/CIMMID/human/dengue_model/epi_seir/mosquitoes'
+with open(args.config_file, 'r') as in_file:
+    config_dict = yaml.safe_load(in_file)
+
+n = config_dict['DURATION']
+output_path = config_dict['MOSQUITOES_FILE_PATH']
 
 arr = np.random.randint(100, 1500, size=n)
 df = pd.DataFrame({'Sv': arr})
 df.to_csv(os.path.join(output_path, 'mosq.csv'))
-pq.write_table(pa.Table.from_pandas(df), os.path.join(output_path,
-                                                          'mosq.parquet'))
+#pq.write_table(pa.Table.from_pandas(df), os.path.join(output_path,
+#                                                          'mosq.parquet'))
 
 # generate other initial states
 #output_path = '/Users/jkeithley/Documents/CIMMID/human/dengue_model/epi_seir/initial_states_input'

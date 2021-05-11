@@ -4,15 +4,15 @@
 
 PROJECT_ROOT: '/Users/jkeithley/Documents/CIMMID/human/dengue_model/epi_seir'
 LOGFILE_PATH: '/Users/jkeithley/Documents/CIMMID/human/dengue_model/epi_seir/logs'
-MOSQUITOES_FILE_PATH: '/Users/jkeithley/Documents/CIMMID/human/dengue_model/epi_seir/mosquitoes/mosq.csv'
+MOSQUITOES_FILE_PATH: '/Users/jkeithley/Documents/CIMMID/human/dengue_model/epi_seir/mosquitoes'
 INITIAL_STATES_FILE_PATH: '/Users/jkeithley/Documents/CIMMID/human/dengue_model/epi_seir/initial_states_input/initial_states.yaml'
 OUTPUT_DIR: '/Users/jkeithley/Documents/CIMMID/human/dengue_model/Epi_SEIR/human_model_output'
 
 # Add unit test specification?
 OUTPUT_TYPE: 'csv' # default is .parquet
 
-DURATION: 800 # number of days to run the model
-RESOLUTION: 500 # how many points to run per day
+DURATION: 10 # number of days to run the model
+RESOLUTION: 50 # how many points to run per day
 
 DENGUE:
   PARAMETERS:
@@ -31,12 +31,11 @@ DENGUE:
     # N_v: 1000000
 WNV:
   PARAMETERS:
-    psi: 0.5
-    nu_h: 5
-    nu_v: 9
-    gamma_h: 7
-    mu_v: 12
-    beta_h: 0.5
-    beta_v: 0.75
-    sigma_h: 19
-    sigma_v: 0.5
+    mu_m: 0.5
+    alpha: 5
+    delta_b: 9
+    eta: 7
+    A: 3
+    K: 8
+    r: 0.75
+    t0: 0.2

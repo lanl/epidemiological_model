@@ -5,16 +5,15 @@ DENGUE:
     Iha: 20
     Ihs: 20
     Rh: 0
-    #Sv: 1000000 # Have as vector (number per day)
-    Ev: 0
-    Iv: 0
+    Sv: 1 # INITIALIZE BUT REPLACE
+    Ev: 2
+    Iv: 3
 WNV:
   INITIAL_STATES:
-    Sh: 60
-    Eh: 1
-    Iha: 21
-    Ihs: 20
-    Rh: 3
-    #Sv: 1000000
-    Ev: 2
-    Iv: 5
+    Sv: 1
+    Iv: 2
+    Nv: 3
+    Sb: 20
+    Ib: 3
+    Nb: 2
+    Ih: 5

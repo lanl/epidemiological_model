@@ -194,11 +194,28 @@ of equations and plots the resulting curves.</p>
 <code class="sig-name descname">model_func</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">t</span></em><span class="sig-paren">)</span><a class="headerlink" href="#dengue.DengueSEIRModel.model_func" title="Permalink to this definition">¶</a></dt>
 <dd><p>Defines system of ODEs for dengue model.</p>
 <dl>
-<dt>Initial State Names:</dt><dd><p>Sh: test1.</p>
-<p>Eh: test2.</p>
+<dt>Initial State Names:</dt><dd><p>Sh: Susceptible human population.</p>
+<p>Eh: Exposed human population.</p>
+<p>Iha: Asymptomatic infectious human population.</p>
+<p>Ihs: Symptomatic infectious human population</p>
+<p>Rh: Recovered human population.</p>
+<p>Sv: Susceptible vector population.</p>
+<p>Ev: Exposed vector population.</p>
+<p>Iv: Infectious vector population.</p>
 </dd>
-<dt>Parameters:</dt><dd><p>sigma_h: test3.</p>
-<p>sigma_v: test4.</p>
+<dt>Parameters:</dt><dd><p>lambda_h: Human force of infection.</p>
+<p>lambda_v: Vector force of infection.</p>
+<p>nu_h: Human latent period.</p>
+<p>nu_v: Vector latent period.</p>
+<p>psi: Proportion of infections reported.</p>
+<p>gamma_h: Human infectious period.</p>
+<p>mu_v: Vector life expectancy.</p>
+<p>sigma_h: Maximum number of bites a human can support per unit time.</p>
+<p>sigma_v: Maximum vector biting rate.</p>
+<p>beta_h: Probability of vector to host transmission.</p>
+<p>beta_v: Probability of host tp vector transmission.</p>
+<p>b_h: Biting rate (1 / (day * human))</p>
+<p>b_v: Biting rate (1 / (day * mosquito))</p>
 </dd>
 </dl>
 </dd></dl>

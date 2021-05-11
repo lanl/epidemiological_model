@@ -62,13 +62,13 @@ class VectorBorneDiseaseModel(ABC):
 
         # Read mosquito initial states
         try:
-            self.mosq = np.array(pd.read_csv(self.config_dict['MOSQUITOES_FILE_PATH'])['Sv'])
+            self.mosq = np.array(pd.read_csv(os.path.join(self.config_dict['MOSQUITOES_FILE_PATH'], 'mosq.csv'))['Sv'])
         except FileNotFoundError as e:
             self.logger.exception('Mosquito population input file not found.')
             raise e
         else:
             self.logger.info('Mosquito population data successfully opened'
-                            f' with {len(self.mosq)} days available')
+                             f' with {len(self.mosq)} days available')
 
         try:
             if not all(i >= 0 for i in self.mosq):
@@ -128,7 +128,9 @@ class VectorBorneDiseaseModel(ABC):
     @timer
     def run_model(self):
         """Runs ODE solver to generate model output"""
-        keys = ['Sh', 'Eh', 'Iha', 'Ihs', 'Rh', 'Sv', 'Ev', 'Iv']
+        # self.initial_states['Sv'] = 0  # initialize Sv so we have correct dimensions
+
+        keys = list(self.initial_states.keys())
         self.model_output = np.empty([0, len(keys)])
 
         t = np.linspace(0, 1, self.config_dict['RESOLUTION'] + 1)
@@ -151,10 +153,12 @@ class VectorBorneDiseaseModel(ABC):
 
     def save_output(self, disease_name):
         """Save output to file"""
-        keys = ['Susceptible Humans', 'Exposed Humans',
-                'Asymptomatic Infected Humans', 'Symptomatic Infected Humans',
-                'Recovered Humans', 'Susceptible Vectors',
-                'Exposed Vectors', 'Infected Vectors']
+        # TODO Add longer names as a class attribute in wnv and dengue modules
+        #keys = ['Susceptible Humans', 'Exposed Humans',
+        #        'Asymptomatic Infected Humans', 'Symptomatic Infected Humans',
+        #        'Recovered Humans', 'Susceptible Vectors',
+        #        'Exposed Vectors', 'Infected Vectors']
+        keys = list(self.initial_states.keys())
         df = pd.DataFrame(dict(zip(keys, self.model_output.T)))
 
         if self.config_dict['OUTPUT_TYPE'].lower() == 'csv':
