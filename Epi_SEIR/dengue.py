@@ -20,12 +20,17 @@ class DengueSEIRModel(vbdm.VectorBorneDiseaseModel):
     of equations and plots the resulting curves.
 
     Attributes:
-        logger: python logging object
+        logger: python logging object.
+        long_state_names: more compartment values for output.
 
     """
 
     def __init__(self, config_file):
         self.logger = create_logger(__name__, vbdm.args.config_file)
+        self.long_state_names = ['Susceptible Humans', 'Exposed Humans',
+                                 'Asymptomatic Infected Humans', 'Symptomatic Infected Humans',
+                                 'Recovered Humans', 'Susceptible Vectors',
+                                 'Exposed Vectors', 'Infected Vectors']
 
         super().__init__(config_file, 'DENGUE')
 

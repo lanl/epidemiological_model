@@ -128,8 +128,6 @@ class VectorBorneDiseaseModel(ABC):
     @timer
     def run_model(self):
         """Runs ODE solver to generate model output"""
-        # self.initial_states['Sv'] = 0  # initialize Sv so we have correct dimensions
-
         keys = list(self.initial_states.keys())
         self.model_output = np.empty([0, len(keys)])
 
@@ -153,13 +151,7 @@ class VectorBorneDiseaseModel(ABC):
 
     def save_output(self, disease_name):
         """Save output to file"""
-        # TODO Add longer names as a class attribute in wnv and dengue modules
-        #keys = ['Susceptible Humans', 'Exposed Humans',
-        #        'Asymptomatic Infected Humans', 'Symptomatic Infected Humans',
-        #        'Recovered Humans', 'Susceptible Vectors',
-        #        'Exposed Vectors', 'Infected Vectors']
-        keys = list(self.initial_states.keys())  # TODO REMOVE
-        df = pd.DataFrame(dict(zip(keys, self.model_output.T)))
+        df = pd.DataFrame(dict(zip(self.long_state_names, self.model_output.T)))
 
         if self.config_dict['OUTPUT_TYPE'].lower() == 'csv':
             output_path = os.path.join(self.config_dict['OUTPUT_DIR'],

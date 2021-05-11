@@ -21,10 +21,18 @@ class WNVSEIRModel(vbdm.VectorBorneDiseaseModel):
     Inherits from the VectorBorneDiseaseModel class. Solves ODE system
     of equations and plots the resulting curves.
 
+    Attributes:
+        logger: python logging object.
+        long_state_names: more compartment values for output.
+
     """
 
     def __init__(self, config_file):
         self.logger = create_logger(__name__, vbdm.args.config_file)
+        self.long_state_names = ['Susceptible Vectors', 'Infected Vectors',
+                                 'Vector Population Size', 'Susceptible Birds',
+                                 'Infected Birds', 'Bird Population Size',
+                                 'Infected Humans']
 
         super().__init__(config_file, 'WNV')
 
