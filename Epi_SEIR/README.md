@@ -36,4 +36,6 @@ To create environment manually, run the following
 #### Shell Scripts
 - **build_docs.sh**: builds documentation using sphinx-autodoc.
 - **clean.sh**: for testing purposes - moves old logfiles to logs/logfile_archive and deletes old model output.
+	- *usage*: `./clean.sh <config_file_path>`
 - **run_human_epi_model.sh**: generates dummy mosquito population input and runs the model for dengue and WNV.
+	- *usage*: `./run_human_epi_model.sh <config_file_path>`

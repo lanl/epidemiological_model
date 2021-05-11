@@ -5,7 +5,6 @@ epi_seir
    :maxdepth: 4
 
    dengue
-   generate_inputs
    models_main
    plotting
    utils
