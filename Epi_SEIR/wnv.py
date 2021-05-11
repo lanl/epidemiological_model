@@ -65,18 +65,6 @@ class WNVSEIRModel(vbdm.VectorBorneDiseaseModel):
             t0: Inflection point for beta.\n
 
         """
-        # NOTE: wnv system not modeled yet in this function
-
-        # TODO Implement actual WNV system of equations
-
-        # TODO Update parameter comment block
-
-        # TODO update config file with dummy values
-
-        # TODO update population values input with dummy values
-
-        # TODO uncomment import wnv in models_main module
-
         # States and population
         Sv, Iv, Nv, Sb, Ib, Nb, Ih = y
 
@@ -92,33 +80,3 @@ class WNVSEIRModel(vbdm.VectorBorneDiseaseModel):
         dIh = self.params['eta'] * Iv  # TODO wrap in poisson random number generator
 
         return dSv, dIv, Nv, dSb, dIb, Nb, dIh
-
-
-        # ----- OLD EQUATIONS
-        # N_h = sum([Sh, Eh, Iha, Ihs, Rh])
-        # N_v = sum([Sv, Ev, Iv])
-
-        # Biting rate
-        #b = self.params['sigma_h'] * self.params['sigma_v'] / \
-        #    (self.params['sigma_h'] * N_h + self.params['sigma_v'] * N_v)
-        #b_h = b * N_v
-        #b_v = b * N_h
-
-        # Force of infecton
-        #lambda_h = b_h * self.params['beta_h'] * Iv / N_v
-        #lambda_v = b_v * self.params['beta_v'] * (Iha + Ihs) / N_h
-
-        # System of equations
-        #dSh = -lambda_h * Sh
-        #dEh = lambda_h * Sh - self.params['nu_h'] * Eh
-        #dIha = self.params['psi'] * self.params['nu_h'] * Eh - \
-        #    self.params['gamma_h'] * Iha
-        #dIhs = (1 - self.params['psi']) * self.params['nu_h'] * \
-        #    Eh - self.params['gamma_h'] * Ihs
-        #dRh = self.params['gamma_h'] * (Iha + Ihs)
-        #dSv = -lambda_v * Sv - self.params['mu_v'] * Sv
-        #dEv = lambda_v * Sv - self.params['nu_v'] * Ev - self.params['mu_v'] * Ev
-        #dIv = self.params['nu_v'] * Ev - self.params['mu_v'] * Iv
-
-        #return dSh, dEh, dIha, dIhs, dRh, dSv, dEv, dIv
-        # -----

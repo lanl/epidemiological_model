@@ -10,7 +10,7 @@ DENGUE:
     Iv: 3
 WNV:
   INITIAL_STATES:
-    Sv: 1
+    Sv: 1 # INITIALIZE BUT REPLACE
     Iv: 2
     Nv: 3
     Sb: 20

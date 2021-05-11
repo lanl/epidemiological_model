@@ -158,7 +158,7 @@ class VectorBorneDiseaseModel(ABC):
         #        'Asymptomatic Infected Humans', 'Symptomatic Infected Humans',
         #        'Recovered Humans', 'Susceptible Vectors',
         #        'Exposed Vectors', 'Infected Vectors']
-        keys = list(self.initial_states.keys())
+        keys = list(self.initial_states.keys())  # TODO REMOVE
         df = pd.DataFrame(dict(zip(keys, self.model_output.T)))
 
         if self.config_dict['OUTPUT_TYPE'].lower() == 'csv':
