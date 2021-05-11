@@ -10,7 +10,7 @@ Vector Borne Disease Model class.
 
 from utils import create_logger
 import vbdm
-#import numpy as np
+import numpy as np
 import math
 
 
@@ -24,6 +24,7 @@ class WNVSEIRModel(vbdm.VectorBorneDiseaseModel):
     Attributes:
         logger: python logging object.
         long_state_names: more compartment values for output.
+        day_counter: keeps track of time passed to determine alpha.
 
     """
 
@@ -33,6 +34,7 @@ class WNVSEIRModel(vbdm.VectorBorneDiseaseModel):
                                  'Vector Population Size', 'Susceptible Birds',
                                  'Infected Birds', 'Bird Population Size',
                                  'Infected Humans']
+        self.day_counter = 0
 
         super().__init__(config_file, 'WNV')
 
@@ -76,6 +78,10 @@ class WNVSEIRModel(vbdm.VectorBorneDiseaseModel):
         # States and population
         Sv, Iv, Nv, Sb, Ib, Nb, Ih = y
 
+        self.day_counter += 1
+        if self.day_counter >= 200:
+            self.params['alpha'] = 0
+
         beta = self.params['A'] + (self.params['K'] - self.params['A']) / \
             (1 + math.exp(-self.params['r'] * (t - self.params['t0'])))
 
@@ -85,6 +91,11 @@ class WNVSEIRModel(vbdm.VectorBorneDiseaseModel):
             self.params['alpha'] * Sv
         dSb = -beta * Iv * Sb / Nb
         dIb = beta * Iv * Sb / Nb - Ib / self.params['delta_b']
-        dIh = self.params['eta'] * Iv  # TODO wrap in poisson random number generator
+
+        # rng = np.random.default_rng()
+        # dIh = rng.poisson(lam=self.params['eta'] * Iv)
+        # print('FLAG -------- dIh, Iv:', dIh, Iv)
+
+        dIh = self.params['eta'] * Iv
 
         return dSv, dIv, Nv, dSb, dIb, Nb, dIh

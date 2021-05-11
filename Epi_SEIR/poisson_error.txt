@@ -1,0 +1,102 @@
+FLAG -------- dIh, Iv: 0 6.069342649209673
+FLAG -------- dIh, Iv: 0 6.069342649209673
+FLAG -------- dIh, Iv: 0 6.069342649209673
+FLAG -------- dIh, Iv: 1 6.069342650587369
+FLAG -------- dIh, Iv: 0 6.069342650587369
+FLAG -------- dIh, Iv: 1 6.068922369787005
+FLAG -------- dIh, Iv: 1 6.068922369787005
+FLAG -------- dIh, Iv: 0 6.068922460220995
+FLAG -------- dIh, Iv: 1 6.068922369787005
+FLAG -------- dIh, Iv: 1 6.068922369787005
+FLAG -------- dIh, Iv: 0 6.068922369787005
+FLAG -------- dIh, Iv: 0 6.068922369787005
+FLAG -------- dIh, Iv: 0 6.068922369787005
+FLAG -------- dIh, Iv: 0 6.069062463100091
+FLAG -------- dIh, Iv: 0 6.06934264981237
+FLAG -------- dIh, Iv: 3 6.06934264981237
+FLAG -------- dIh, Iv: 0 6.069342740252623
+FLAG -------- dIh, Iv: 1 6.06934264981237
+FLAG -------- dIh, Iv: 0 6.06934264981237
+FLAG -------- dIh, Iv: 1 6.06934264981237
+FLAG -------- dIh, Iv: 0 6.06934264981237
+FLAG -------- dIh, Iv: 0 6.06934264981237
+FLAG -------- dIh, Iv: 0 6.069622837127395
+FLAG -------- dIh, Iv: 1 6.072424710622285
+FLAG -------- dIh, Iv: 0 6.072424710622285
+FLAG -------- dIh, Iv: 0 6.072424801108465
+FLAG -------- dIh, Iv: 1 6.072424710622285
+FLAG -------- dIh, Iv: 0 6.072424710622285
+FLAG -------- dIh, Iv: 0 6.072424710622285
+FLAG -------- dIh, Iv: 1 6.072424710622285
+FLAG -------- dIh, Iv: 1 6.072424710622285
+FLAG -------- dIh, Iv: 1 6.0724247450867646
+FLAG -------- dIh, Iv: 1 6.07032330575945
+FLAG -------- dIh, Iv: 1 6.07032330575945
+FLAG -------- dIh, Iv: 0 6.070323396214316
+FLAG -------- dIh, Iv: 0 6.07032330575945
+FLAG -------- dIh, Iv: 0 6.07032330575945
+FLAG -------- dIh, Iv: 0 6.07032330575945
+FLAG -------- dIh, Iv: 0 6.07032330575945
+FLAG -------- dIh, Iv: 0 6.07032330575945
+FLAG -------- dIh, Iv: 0 6.0703233079125365
+FLAG -------- dIh, Iv: 0 6.071023778353235
+/Users/jkeithley/opt/anaconda3/lib/python3.8/site-packages/scipy/integrate/odepack.py:247: ODEintWarning: Excess work done on this call (perhaps wrong Dfun type). Run with full_output = 1 to get quantitative information.
+  warnings.warn(warning_msg, ODEintWarning)
+/Users/jkeithley/Documents/CIMMID/human/dengue_model/epi_seir/wnv.py:82: RuntimeWarning: overflow encountered in double_scalars
+  dSv = self.params['mu_m'] * Nv - beta * Sv * Ib / Nb - \
+/Users/jkeithley/Documents/CIMMID/human/dengue_model/epi_seir/wnv.py:84: RuntimeWarning: overflow encountered in double_scalars
+  dIv = beta * Sv * Ib / Nb - self.params['mu_m'] * Iv + \
+[2021-05-11 16:09:28] wnv                 ERROR: Exception occured running dengue model
+Traceback (most recent call last):
+  File "/Users/jkeithley/Documents/CIMMID/human/dengue_model/epi_seir/vbdm.py", line 141, in run_model
+    out = odeint(self.model_func, y0, t)
+  File "/Users/jkeithley/opt/anaconda3/lib/python3.8/site-packages/scipy/integrate/odepack.py", line 241, in odeint
+    output = _odepack.odeint(func, y0, t, args, Dfun, col_deriv, ml, mu,
+  File "/Users/jkeithley/Documents/CIMMID/human/dengue_model/epi_seir/wnv.py", line 90, in model_func
+    dIh = rng.poisson(lam=self.params['eta'] * Iv)
+  File "_generator.pyx", line 3088, in numpy.random._generator.Generator.poisson
+  File "_common.pyx", line 815, in numpy.random._common.disc
+  File "_common.pyx", line 374, in numpy.random._common.check_constraint
+ValueError: lam value too large
+Traceback (most recent call last):
+  File "models_main.py", line 38, in <module>
+    main()
+  File "models_main.py", line 32, in main
+    wnv.run_model()
+  File "/Users/jkeithley/Documents/CIMMID/human/dengue_model/epi_seir/utils.py", line 93, in wrapper_timer
+    value = func(self, *args, **kwargs)
+  File "/Users/jkeithley/Documents/CIMMID/human/dengue_model/epi_seir/vbdm.py", line 144, in run_model
+    raise e
+  File "/Users/jkeithley/Documents/CIMMID/human/dengue_model/epi_seir/vbdm.py", line 141, in run_model
+    out = odeint(self.model_func, y0, t)
+  File "/Users/jkeithley/opt/anaconda3/lib/python3.8/site-packages/scipy/integrate/odepack.py", line 241, in odeint
+    output = _odepack.odeint(func, y0, t, args, Dfun, col_deriv, ml, mu,
+  File "/Users/jkeithley/Documents/CIMMID/human/dengue_model/epi_seir/wnv.py", line 90, in model_func
+    dIh = rng.poisson(lam=self.params['eta'] * Iv)
+  File "_generator.pyx", line 3088, in numpy.random._generator.Generator.poisson
+  File "_common.pyx", line 815, in numpy.random._common.disc
+  File "_common.pyx", line 374, in numpy.random._common.check_constraint
+ValueError: lam value too large
+
+[2021-05-11 16:09:26] dengue                 INFO: Configuration file successfully opened
+[2021-05-11 16:09:26] dengue                 INFO: Initial states data successfully opened
+[2021-05-11 16:09:26] dengue                 INFO: Mosquito population data successfully opened with 10 days available
+[2021-05-11 16:09:26] dengue                 INFO: Running model for 10 days at 50 points per day
+[2021-05-11 16:09:26] dengue                 INFO: Finished 'run_model' in 0.0287 seconds
+[2021-05-11 16:09:26] dengue                 INFO: Output saved to /Users/jkeithley/Documents/CIMMID/human/dengue_model/Epi_SEIR/human_model_output/dengue_model_output.csv
+[2021-05-11 16:09:26] dengue                 INFO: SUCCESS
+[2021-05-11 16:09:27] wnv                 INFO: Configuration file successfully opened
+[2021-05-11 16:09:27] wnv                 INFO: Initial states data successfully opened
+[2021-05-11 16:09:27] wnv                 INFO: Mosquito population data successfully opened with 10 days available
+[2021-05-11 16:09:28] wnv                 ERROR: Exception occured running dengue model
+Traceback (most recent call last):
+  File "/Users/jkeithley/Documents/CIMMID/human/dengue_model/epi_seir/vbdm.py", line 141, in run_model
+    out = odeint(self.model_func, y0, t)
+  File "/Users/jkeithley/opt/anaconda3/lib/python3.8/site-packages/scipy/integrate/odepack.py", line 241, in odeint
+    output = _odepack.odeint(func, y0, t, args, Dfun, col_deriv, ml, mu,
+  File "/Users/jkeithley/Documents/CIMMID/human/dengue_model/epi_seir/wnv.py", line 90, in model_func
+    dIh = rng.poisson(lam=self.params['eta'] * Iv)
+  File "_generator.pyx", line 3088, in numpy.random._generator.Generator.poisson
+  File "_common.pyx", line 815, in numpy.random._common.disc
+  File "_common.pyx", line 374, in numpy.random._common.check_constraint
+ValueError: lam value too large

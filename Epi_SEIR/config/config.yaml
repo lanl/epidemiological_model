@@ -30,7 +30,7 @@ WNV:
     mu_m: 0.5
     alpha: 5
     delta_b: 9
-    eta: 7
+    eta: 0.1
     A: 3
     K: 8
     r: 0.75
