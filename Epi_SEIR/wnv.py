@@ -60,7 +60,7 @@ class WNVSEIRModel(vbdm.VectorBorneDiseaseModel):
             Ih: Infectious human population.\n
 
         Parameters:
-            mu_m: Mosquito birth/death rate.\n
+            mu_v: Mosquito birth/death rate.\n
             beta: Contact rate, probability of transmission between birds and
                   mosquitoes at time t. \n
             alpha: Rate of WNV seeding into the local model domain before day
@@ -85,9 +85,9 @@ class WNVSEIRModel(vbdm.VectorBorneDiseaseModel):
         beta = self.params['A'] + (self.params['K'] - self.params['A']) / \
             (1 + math.exp(-self.params['r'] * (t - self.params['t0'])))
 
-        dSv = self.params['mu_m'] * Nv - beta * Sv * Ib / Nb - \
-            (self.params['mu_m'] + self.params['alpha']) * Sv
-        dIv = beta * Sv * Ib / Nb - self.params['mu_m'] * Iv + \
+        dSv = self.params['mu_v'] * Nv - beta * Sv * Ib / Nb - \
+            (self.params['mu_v'] + self.params['alpha']) * Sv
+        dIv = beta * Sv * Ib / Nb - self.params['mu_v'] * Iv + \
             self.params['alpha'] * Sv
         dSb = -beta * Iv * Sb / Nb
         dIb = beta * Iv * Sb / Nb - Ib / self.params['delta_b']
