@@ -1,16 +1,33 @@
 DENGUE:
+  ORDER: 
+    Sh: 'Susceptible Humans'
+    Eh: 'Exposed Humans'
+    Iha: 'Asymptomatic Infected Humans'
+    Ihs: 'Symptomatic Infected Humans'
+    Rh: 'Recovered Humans'
+    Sv: 'Susceptible Vectors'
+    Ev: 'Exposed Vectors'
+    Iv: 'Infected Vectors'
   INITIAL_STATES:
     Sh: 60
     Eh: 0
     Iha: 20
     Ihs: 20
     Rh: 0
-    Sv: 1 # INITIALIZE BUT REPLACE
+    Sv: 0 # INITIALIZE BUT REPLACE (DOES ORDER KEY SOLVE THIS?)
     Ev: 2
     Iv: 3
 WNV:
+  ORDER:
+    Sv: 'Susceptible Vectors'
+    Iv: 'Infected Vectors'
+    Nv: 'Vector Population'
+    Sb: 'Susceptible Birds'
+    Ib: 'Infected Birds'
+    Nb: 'Bird Population'
+    Ih: 'Infected Humans'
   INITIAL_STATES:
-    Sv: 1 # INITIALIZE BUT REPLACE
+    Sv: 0 # INITIALIZE BUT REPLACE (DOES ORDER KEY SOLVE THIS?)
     Iv: 2
     Nv: 3
     Sb: 20

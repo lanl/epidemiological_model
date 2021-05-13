@@ -30,10 +30,10 @@ class WNVSEIRModel(vbdm.VectorBorneDiseaseModel):
 
     def __init__(self, config_file):
         self.logger = create_logger(__name__, vbdm.args.config_file)
-        self.long_state_names = ['Susceptible Vectors', 'Infected Vectors',
-                                 'Vector Population Size', 'Susceptible Birds',
-                                 'Infected Birds', 'Bird Population Size',
-                                 'Infected Humans']
+        #self.long_state_names = ['Susceptible Vectors', 'Infected Vectors',
+        #                         'Vector Population Size', 'Susceptible Birds',
+        #                         'Infected Birds', 'Bird Population Size',
+        #                         'Infected Humans']
         self.day_counter = 0
 
         super().__init__(config_file, 'WNV')

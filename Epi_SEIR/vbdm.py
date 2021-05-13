@@ -47,17 +47,26 @@ class VectorBorneDiseaseModel(ABC):
         # Read initial states
         try:
             with open(self.config_dict['INITIAL_STATES_FILE_PATH'], 'r') as in_file:
-                self.initial_states = yaml.safe_load(in_file)[disease_name]['INITIAL_STATES']
+                self.initial_states = yaml.safe_load(in_file)[disease_name]
         except FileNotFoundError as e:
             self.logger.exception('Initial states input file not found.')
             raise e
-        self.logger.info('Initial states data successfully opened')
+        else:
+            self.logger.info('Initial states data successfully opened')
+
+        self.state_names_order = self.initial_states['ORDER']
+        self.initial_states = {**self.state_names_order,
+                               **self.initial_states['INITIAL_STATES']}
 
         try:
             if not all(_ >= 0 for _ in self.initial_states.values()):
                 raise ValueError('Model initial states must be positive')
         except ValueError as e:
             self.logger.exception('Model initial states must be positive')
+            raise e
+        except TypeError as e:
+            self.logger.exception('Initial states must be numerical values.'
+                                  ' Initialize all initial states.')
             raise e
 
         # Read mosquito initial states
@@ -75,6 +84,10 @@ class VectorBorneDiseaseModel(ABC):
                 raise ValueError('Mosquito initial states must be positive')
         except ValueError as e:
             self.logger.exception('Mosquito initial states must be positive')
+            raise e
+        except TypeError as e:
+            self.logger.exception('Mosquito initial states must be numerical values.'
+                                  ' Initialize all mosquito initial states.')
             raise e
 
         # Check duration
@@ -151,7 +164,7 @@ class VectorBorneDiseaseModel(ABC):
 
     def save_output(self, disease_name):
         """Save output to file"""
-        df = pd.DataFrame(dict(zip(self.long_state_names, self.model_output.T)))
+        df = pd.DataFrame(dict(zip(list(self.state_names_order.values()), self.model_output.T)))
 
         if self.config_dict['OUTPUT_TYPE'].lower() == 'csv':
             output_path = os.path.join(self.config_dict['OUTPUT_DIR'],
