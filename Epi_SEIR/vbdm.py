@@ -37,12 +37,12 @@ class VectorBorneDiseaseModel(ABC):
 
         # Read parameters
         self.params = self.config_dict[disease_name]['PARAMETERS']
-        try:
-            if not all(_ >= 0 for _ in self.params.values()):
-                raise ValueError('Model parameters must be positive')
-        except ValueError as e:
-            self.logger.exception('Model parameters must be positive')
-            raise e
+        # try:
+        #     if not all(_ >= 0 for _ in self.params.values()):
+        #         raise ValueError('Model parameters must be positive')
+        # except ValueError as e:
+        #     self.logger.exception('Model parameters must be positive')
+        #     raise e
 
         # Read initial states
         try:

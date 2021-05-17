@@ -20,7 +20,7 @@ with open(args.config_file, 'r') as in_file:
 n = config_dict['DURATION']
 output_path = config_dict['MOSQUITOES_FILE_PATH']
 
-arr = np.random.randint(100, 1500, size=n)
+arr = np.random.randint(4000, 4001, size=n)
 df = pd.DataFrame({'Sv': arr})
 df.to_csv(os.path.join(output_path, 'mosq.csv'))
 #pq.write_table(pa.Table.from_pandas(df), os.path.join(output_path,

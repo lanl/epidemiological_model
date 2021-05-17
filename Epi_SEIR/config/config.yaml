@@ -27,11 +27,11 @@ DENGUE:
     sigma_v: 0.5
 WNV:
   PARAMETERS:
-    mu_v: 0.5
-    alpha: 5
-    delta_b: 9
-    eta: 0.1
-    A: 1
-    K: 5
-    r: 1
+    mu_v: 0.06
+    alpha: 0.0006
+    delta_b: 4.5
+    eta: 0.003
+    A: 0.008
+    K: 0.08
+    r: -0.12
     t0: 2

@@ -62,18 +62,18 @@ class DengueSEIRModel(vbdm.VectorBorneDiseaseModel):
         ddt = self.initial_states.copy()
         states = dict(zip(self.initial_states.keys(), y))
 
-        N_h = sum([states['Sh'], states['Eh'], states['Iha'], states['Ihs'], states['Rh']])
-        N_v = sum([states['Sv'], states['Ev'], states['Iv']])
+        Nh = sum([states['Sh'], states['Eh'], states['Iha'], states['Ihs'], states['Rh']])
+        Nv = sum([states['Sv'], states['Ev'], states['Iv']])
 
         # Biting rate
         b = self.params['sigma_h'] * self.params['sigma_v'] / \
-            (self.params['sigma_h'] * N_h + self.params['sigma_v'] * N_v)
-        b_h = b * N_v
-        b_v = b * N_h
+            (self.params['sigma_h'] * Nh + self.params['sigma_v'] * Nv)
+        b_h = b * Nv
+        b_v = b * Nh
 
         # Force of infecton
-        lambda_h = b_h * self.params['beta_h'] * states['Iv'] / N_v
-        lambda_v = b_v * self.params['beta_v'] * (states['Iha'] + states['Ihs']) / N_h
+        lambda_h = b_h * self.params['beta_h'] * states['Iv'] / Nv
+        lambda_v = b_v * self.params['beta_v'] * (states['Iha'] + states['Ihs']) / Nh
 
         # System of equations
         ddt['Sh'] = -lambda_h * states['Sh']

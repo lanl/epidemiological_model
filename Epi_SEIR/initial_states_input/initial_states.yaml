@@ -21,16 +21,16 @@ WNV:
   ORDER:
     Sv: 'Susceptible Vectors'
     Iv: 'Infected Vectors'
-    Nv: 'Vector Population'
+    # Nv: 'Vector Population'
     Sb: 'Susceptible Birds'
     Ib: 'Infected Birds'
-    Nb: 'Bird Population'
+    # Nb: 'Bird Population'
     Ih: 'Infected Humans'
   INITIAL_STATES:
     Sv: 0 # INITIALIZE BUT REPLACE
-    Iv: 2
-    Nv: 3
-    Sb: 20
-    Ib: 3
-    Nb: 2
-    Ih: 5
+    Iv: 0
+    # Nv: 3
+    Sb: 500
+    Ib: 0
+    # Nb: 2
+    Ih: 0
