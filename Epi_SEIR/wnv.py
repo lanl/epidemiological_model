@@ -83,10 +83,12 @@ class WNVSEIRModel(vbdm.VectorBorneDiseaseModel):
         ddt['Ib'] = beta * states['Iv'] * states['Sb'] / states['Nb'] - \
             states['Ib'] / self.params['delta_b']
 
-        # rng = np.random.default_rng()
-        # dIh = rng.poisson(lam=self.params['eta'] * Iv)
-        # print('FLAG -------- dIh, Iv:', dIh, Iv)
+        rng = np.random.default_rng()
+        # print('FLAG -------- lam', self.params['eta'] * states['Iv'])
+        # ddt['Ih'] = rng.poisson(lam=self.params['eta'] * states['Iv'])
+        # print('FLAG -------- dIh', ddt['Ih'])
 
         ddt['Ih'] = self.params['eta'] * states['Iv']
+        #print('FLAG ---- lam, poisson(eta*Iv)', self.params['eta'] * states['Iv'], rng.poisson(lam=self.params['eta'] * states['Iv']))
 
         return tuple(ddt.values())
