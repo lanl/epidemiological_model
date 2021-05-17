@@ -59,8 +59,6 @@ class DengueSEIRModel(vbdm.VectorBorneDiseaseModel):
             b_v: Biting rate (1 / (day * mosquito))\n
 
         """
-        # States and population
-        # Sh, Eh, Iha, Ihs, Rh, Sv, Ev, Iv = y
         ddt = self.initial_states.copy()
         states = dict(zip(self.initial_states.keys(), y))
 
@@ -94,5 +92,4 @@ class DengueSEIRModel(vbdm.VectorBorneDiseaseModel):
         ddt['Iv'] = self.params['nu_v'] * states['Ev'] - \
             self.params['mu_v'] * states['Iv']
 
-        # return dSh, dEh, dIha, dIhs, dRh, dSv, dEv, dIv
         return tuple(ddt.values())

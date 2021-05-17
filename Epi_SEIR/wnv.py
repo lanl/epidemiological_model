@@ -62,13 +62,8 @@ class WNVSEIRModel(vbdm.VectorBorneDiseaseModel):
             t0: Inflection point for beta.\n
 
         """
-        # States and population
-        # NOTE y is an ndarray
-
         ddt = self.initial_states.copy()
 
-        # Sv, Iv, Nv, Sb, Ib, Nb, Ih = y
-        # TODO convert each state variable to dictionary entry
         states = dict(zip(self.initial_states.keys(), y))
 
         self.day_counter += 1
@@ -94,5 +89,4 @@ class WNVSEIRModel(vbdm.VectorBorneDiseaseModel):
 
         ddt['Ih'] = self.params['eta'] * states['Iv']
 
-        # return ddt['Sv'], ddt['Iv'], ddt['Nv'], ddt['Sb'], ddt['Ib'], ddt['Nb'], ddt['Ih']
         return tuple(ddt.values())

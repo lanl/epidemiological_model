@@ -144,7 +144,6 @@ class VectorBorneDiseaseModel(ABC):
 
         for i in range(0, self.config_dict['DURATION']):
             self.initial_states['Sv'] = self.mosq[i]
-            #y0 = self.set_y0()
 
             try:
                 out = odeint(self.model_func, list(self.initial_states.values()), t)
