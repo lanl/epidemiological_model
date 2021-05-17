@@ -27,10 +27,6 @@ class DengueSEIRModel(vbdm.VectorBorneDiseaseModel):
 
     def __init__(self, config_file):
         self.logger = create_logger(__name__, vbdm.args.config_file)
-        #self.long_state_names = ['Susceptible Humans', 'Exposed Humans',
-        #                         'Asymptomatic Infected Humans', 'Symptomatic Infected Humans',
-        #                         'Recovered Humans', 'Susceptible Vectors',
-        #                         'Exposed Vectors', 'Infected Vectors']
 
         super().__init__(config_file, 'DENGUE')
 

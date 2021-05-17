@@ -30,20 +30,18 @@ class WNVSEIRModel(vbdm.VectorBorneDiseaseModel):
 
     def __init__(self, config_file):
         self.logger = create_logger(__name__, vbdm.args.config_file)
-        #self.long_state_names = ['Susceptible Vectors', 'Infected Vectors',
-        #                         'Vector Population Size', 'Susceptible Birds',
-        #                         'Infected Birds', 'Bird Population Size',
-        #                         'Infected Humans']
         self.day_counter = 0
 
         super().__init__(config_file, 'WNV')
 
     def set_y0(self):
         """Sets initial states to be passed into model_func"""
-        y0 = self.initial_states['Sv'], self.initial_states['Iv'], \
-            self.initial_states['Nv'], self.initial_states['Sb'], \
-            self.initial_states['Ib'], self.initial_states['Nb'], \
-            self.initial_states['Ih']
+        #y0 = self.initial_states['Sv'], self.initial_states['Iv'], \
+        #    self.initial_states['Nv'], self.initial_states['Sb'], \
+        #    self.initial_states['Ib'], self.initial_states['Nb'], \
+        #    self.initial_states['Ih']
+
+        y0 = tuple(self.initial_states.values())
 
         return y0
 
@@ -76,7 +74,13 @@ class WNVSEIRModel(vbdm.VectorBorneDiseaseModel):
 
         """
         # States and population
-        Sv, Iv, Nv, Sb, Ib, Nb, Ih = y
+        # NOTE y is an ndarray
+
+        ddt = self.initial_states.copy()
+
+        # Sv, Iv, Nv, Sb, Ib, Nb, Ih = y
+        # TODO convert each state variable to dictionary entry
+        states = dict(zip(self.initial_states.keys(), y))
 
         self.day_counter += 1
         if self.day_counter >= 200:
@@ -85,17 +89,17 @@ class WNVSEIRModel(vbdm.VectorBorneDiseaseModel):
         beta = self.params['A'] + (self.params['K'] - self.params['A']) / \
             (1 + math.exp(-self.params['r'] * (t - self.params['t0'])))
 
-        dSv = self.params['mu_v'] * Nv - beta * Sv * Ib / Nb - \
-            (self.params['mu_v'] + self.params['alpha']) * Sv
-        dIv = beta * Sv * Ib / Nb - self.params['mu_v'] * Iv + \
-            self.params['alpha'] * Sv
-        dSb = -beta * Iv * Sb / Nb
-        dIb = beta * Iv * Sb / Nb - Ib / self.params['delta_b']
+        ddt['Sv'] = self.params['mu_v'] * states['Nv'] - beta * states['Sv'] * states['Ib'] / states['Nb'] - \
+            (self.params['mu_v'] + self.params['alpha']) * states['Sv']
+        ddt['Iv'] = beta * states['Sv'] * states['Ib'] / states['Nb'] - self.params['mu_v'] * states['Iv'] + \
+            self.params['alpha'] * states['Sv']
+        ddt['Sb'] = -beta * states['Iv'] * states['Sb'] / states['Nb']
+        ddt['Ib'] = beta * states['Iv'] * states['Sb'] / states['Nb'] - states['Ib'] / self.params['delta_b']
 
         # rng = np.random.default_rng()
         # dIh = rng.poisson(lam=self.params['eta'] * Iv)
         # print('FLAG -------- dIh, Iv:', dIh, Iv)
 
-        dIh = self.params['eta'] * Iv
+        ddt['Ih'] = self.params['eta'] * states['Iv']
 
-        return dSv, dIv, Nv, dSb, dIb, Nb, dIh
+        return ddt['Sv'], ddt['Iv'], ddt['Nv'], ddt['Sb'], ddt['Ib'], ddt['Nb'], ddt['Ih']
