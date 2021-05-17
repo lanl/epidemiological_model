@@ -29,6 +29,7 @@ def main():
         den.logger.info('SUCCESS')
     elif disease_name == 'wnv':
         wnv = WNVSEIRModel(config_file)
+        wnv.logger.info(wnv)
         wnv.run_model()
         wnv.save_output(disease_name)
         wnv.logger.info('SUCCESS')

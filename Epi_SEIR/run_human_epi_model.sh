@@ -12,7 +12,7 @@ CONFIG_FILE_PATH=$1
 # generate mosquito input for development of model
 python generate_inputs.py -c $CONFIG_FILE_PATH 
 
-#python models_main.py -c $CONFIG_FILE_PATH -d dengue
+python models_main.py -c $CONFIG_FILE_PATH -d dengue
 python models_main.py -c $CONFIG_FILE_PATH -d wnv
 
 echo " "

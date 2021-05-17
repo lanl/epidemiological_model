@@ -149,7 +149,7 @@ class VectorBorneDiseaseModel(ABC):
             try:
                 out = odeint(self.model_func, list(self.initial_states.values()), t)
             except Exception as e:
-                self.logger.exception('Exception occured running dengue model')
+                self.logger.exception('Exception occured running model')
                 raise e
 
             self.initial_states = dict(zip(keys, out[-1]))
