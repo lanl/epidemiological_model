@@ -41,7 +41,7 @@ class WNVSEIRModel(vbdm.VectorBorneDiseaseModel):
         #    self.initial_states['Ib'], self.initial_states['Nb'], \
         #    self.initial_states['Ih']
 
-        y0 = tuple(self.initial_states.values())
+        y0 = list(self.initial_states.values())
 
         return y0
 
@@ -89,12 +89,15 @@ class WNVSEIRModel(vbdm.VectorBorneDiseaseModel):
         beta = self.params['A'] + (self.params['K'] - self.params['A']) / \
             (1 + math.exp(-self.params['r'] * (t - self.params['t0'])))
 
-        ddt['Sv'] = self.params['mu_v'] * states['Nv'] - beta * states['Sv'] * states['Ib'] / states['Nb'] - \
+        ddt['Sv'] = self.params['mu_v'] * states['Nv'] - \
+            beta * states['Sv'] * states['Ib'] / states['Nb'] - \
             (self.params['mu_v'] + self.params['alpha']) * states['Sv']
-        ddt['Iv'] = beta * states['Sv'] * states['Ib'] / states['Nb'] - self.params['mu_v'] * states['Iv'] + \
+        ddt['Iv'] = beta * states['Sv'] * states['Ib'] / states['Nb'] - \
+            self.params['mu_v'] * states['Iv'] + \
             self.params['alpha'] * states['Sv']
         ddt['Sb'] = -beta * states['Iv'] * states['Sb'] / states['Nb']
-        ddt['Ib'] = beta * states['Iv'] * states['Sb'] / states['Nb'] - states['Ib'] / self.params['delta_b']
+        ddt['Ib'] = beta * states['Iv'] * states['Sb'] / states['Nb'] - \
+            states['Ib'] / self.params['delta_b']
 
         # rng = np.random.default_rng()
         # dIh = rng.poisson(lam=self.params['eta'] * Iv)
@@ -102,4 +105,5 @@ class WNVSEIRModel(vbdm.VectorBorneDiseaseModel):
 
         ddt['Ih'] = self.params['eta'] * states['Iv']
 
-        return ddt['Sv'], ddt['Iv'], ddt['Nv'], ddt['Sb'], ddt['Ib'], ddt['Nb'], ddt['Ih']
+        # return ddt['Sv'], ddt['Iv'], ddt['Nv'], ddt['Sb'], ddt['Ib'], ddt['Nb'], ddt['Ih']
+        return tuple(ddt.values())

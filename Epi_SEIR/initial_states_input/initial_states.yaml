@@ -14,7 +14,7 @@ DENGUE:
     Iha: 20
     Ihs: 20
     Rh: 0
-    Sv: 0 # INITIALIZE BUT REPLACE (DOES ORDER KEY SOLVE THIS?)
+    Sv: 0 # INITIALIZE BUT REPLACE
     Ev: 2
     Iv: 3
 WNV:
@@ -27,7 +27,7 @@ WNV:
     Nb: 'Bird Population'
     Ih: 'Infected Humans'
   INITIAL_STATES:
-    Sv: 0 # INITIALIZE BUT REPLACE (DOES ORDER KEY SOLVE THIS?)
+    Sv: 0 # INITIALIZE BUT REPLACE
     Iv: 2
     Nv: 3
     Sb: 20
