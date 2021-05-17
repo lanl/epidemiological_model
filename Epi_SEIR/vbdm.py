@@ -131,10 +131,6 @@ class VectorBorneDiseaseModel(ABC):
                f" {self.config_dict['RESOLUTION']} points per day"
 
     @abstractmethod
-    def set_y0(self):
-        pass
-
-    @abstractmethod
     def model_func(self, y, t):
         pass
 

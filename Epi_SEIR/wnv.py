@@ -34,17 +34,6 @@ class WNVSEIRModel(vbdm.VectorBorneDiseaseModel):
 
         super().__init__(config_file, 'WNV')
 
-    def set_y0(self):
-        """Sets initial states to be passed into model_func"""
-        #y0 = self.initial_states['Sv'], self.initial_states['Iv'], \
-        #    self.initial_states['Nv'], self.initial_states['Sb'], \
-        #    self.initial_states['Ib'], self.initial_states['Nb'], \
-        #    self.initial_states['Ih']
-
-        y0 = list(self.initial_states.values())
-
-        return y0
-
     def model_func(self, y, t):
         """Defines system of ODEs for dengue model
 
