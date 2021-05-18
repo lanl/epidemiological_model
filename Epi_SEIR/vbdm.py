@@ -37,6 +37,8 @@ class VectorBorneDiseaseModel(ABC):
 
         # Read parameters
         self.params = self.config_dict[disease_name]['PARAMETERS']
+
+        # ... Can parameters be negative?
         # try:
         #     if not all(_ >= 0 for _ in self.params.values()):
         #         raise ValueError('Model parameters must be positive')
