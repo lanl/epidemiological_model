@@ -2,11 +2,11 @@
 # Vector Borne Disease Model Configuration # (add more specific info in this later)
 #------------------------------------------#
 
-PROJECT_ROOT: '/Users/jkeithley/Documents/CIMMID/human/dengue_model/epi_seir'
-LOGFILE_PATH: '/Users/jkeithley/Documents/CIMMID/human/dengue_model/epi_seir/logs'
-MOSQUITOES_FILE_PATH: '/Users/jkeithley/Documents/CIMMID/human/dengue_model/epi_seir/mosquitoes'
-INITIAL_STATES_FILE_PATH: '/Users/jkeithley/Documents/CIMMID/human/dengue_model/epi_seir/initial_states_input/initial_states.yaml'
-OUTPUT_DIR: '/Users/jkeithley/Documents/CIMMID/human/dengue_model/Epi_SEIR/human_model_output'
+PROJECT_ROOT: 'HUMAN_EPI_MODEL_PATH/dengue_model/epi_seir'
+LOGFILE_PATH: 'LOGS_PATH'
+MOSQUITOES_FILE_PATH: 'HUMAN_EPI_MODEL_PATH/mosquitoes'
+INITIAL_STATES_FILE_PATH: 'HUMAN_EPI_MODEL_PATH/initial_states_input/initial_states.yaml'
+OUTPUT_DIR: 'HUMAN_EPI_MODEL_OUTPUT_PATH'
 
 # Add unit test specification?
 OUTPUT_TYPE: 'csv' # default is .parquet
@@ -27,11 +27,11 @@ DENGUE:
     sigma_v: 0.5
 WNV:
   PARAMETERS:
-    mu_v: 0.06
-    alpha: 0.0006
-    delta_b: 4.5
-    eta: 0.003
-    A: 0.008
-    K: 0.08
-    r: -0.12
+    mu_v: 0.5
+    alpha: 5
+    delta_b: 9
+    eta: 0.1
+    A: 1
+    K: 5
+    r: 1
     t0: 2
