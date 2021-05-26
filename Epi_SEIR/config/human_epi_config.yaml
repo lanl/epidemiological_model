@@ -2,11 +2,11 @@
 # Vector Borne Disease Model Configuration # (add more specific info in this later)
 #------------------------------------------#
 
-PROJECT_ROOT: 'HUMAN_EPI_MODEL_PATH'
-LOGFILE_PATH: 'HUMAN_EPI_LOGS_PATH'
-MOSQUITOES_FILE_PATH: 'HUMAN_EPI_MODEL_PATH/mosquitoes'
-INITIAL_STATES_FILE_PATH: 'HUMAN_EPI_MODEL_PATH/initial_states_input/initial_states.yaml'
-OUTPUT_DIR: 'HUMAN_EPI_MODEL_OUTPUT_PATH'
+PROJECT_ROOT: 'HUMAN_EPI_MODEL_PATH' # (e.g., '/Users/jkeithley/Documents/CIMMID/human/dengue_model/Epi_SEIR')
+LOGFILE_PATH: 'HUMAN_EPI_LOGS_PATH' # (e.g., '/Users/jkeithley/Documents/CIMMID/human/dengue_model/Epi_SEIR/logs') 
+MOSQUITOES_FILE_PATH: 'HUMAN_EPI_MODEL_PATH/mosquitoes' # (e.g., '/Users/jkeithley/Documents/CIMMID/human/dengue_model/Epi_SEIR/mosquitoes')
+INITIAL_STATES_FILE_PATH: 'HUMAN_EPI_MODEL_PATH/initial_states_input/initial_states.yaml' # (e.g., '/Users/jkeithley/Documents/CIMMID/human/dengue_model/Epi_SEIR/initial_states_input/initial_states.yaml')
+OUTPUT_DIR: 'HUMAN_EPI_MODEL_OUTPUT_PATH' # (e.g., '/Users/jkeithley/Documents/CIMMID/human/dengue_model/Epi_SEIR/human_model_output')
 
 # Add unit test specification?
 OUTPUT_TYPE: 'csv' # default is .parquet
