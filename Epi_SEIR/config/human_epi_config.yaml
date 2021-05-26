@@ -2,7 +2,7 @@
 # Vector Borne Disease Model Configuration # (add more specific info in this later)
 #------------------------------------------#
 
-PROJECT_ROOT: 'HUMAN_EPI_MODEL_PATH/dengue_model/epi_seir'
+PROJECT_ROOT: 'HUMAN_EPI_MODEL_PATH'
 LOGFILE_PATH: 'LOGS_PATH'
 MOSQUITOES_FILE_PATH: 'HUMAN_EPI_MODEL_PATH/mosquitoes'
 INITIAL_STATES_FILE_PATH: 'HUMAN_EPI_MODEL_PATH/initial_states_input/initial_states.yaml'
