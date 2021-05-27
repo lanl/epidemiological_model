@@ -1,5 +1,5 @@
 #------------------------------------------#
-# Vector Borne Disease Model Configuration # (add more specific info in this later)
+# Vector Borne Disease Model Configuration #
 #------------------------------------------#
 
 PROJECT_ROOT: 'HUMAN_EPI_MODEL_PATH' # (e.g., '/Users/jkeithley/Documents/CIMMID/human/dengue_model/Epi_SEIR')

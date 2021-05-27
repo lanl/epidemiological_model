@@ -38,7 +38,7 @@ class VectorBorneDiseaseModel(ABC):
         # Read parameters
         self.params = self.config_dict[disease_name]['PARAMETERS']
 
-        # ... Can parameters be negative?
+        # NOTE ... Can parameters be negative?
         # try:
         #     if not all(_ >= 0 for _ in self.params.values()):
         #         raise ValueError('Model parameters must be positive')
@@ -56,9 +56,22 @@ class VectorBorneDiseaseModel(ABC):
         else:
             self.logger.info('Initial states data successfully opened')
 
-        self.state_names_order = self.initial_states['ORDER']
-        self.initial_states = {**self.state_names_order,
-                               **self.initial_states['INITIAL_STATES']}
+        # self.state_names_order = self.initial_states['ORDER']
+        # self.initial_states = {**self.state_names_order,
+        #                        **self.initial_states['INITIAL_STATES']}
+
+        # SORT entire dictionary
+        self.initial_states = dict(sorted(self.initial_states.items(), key=lambda x: x[1]['position']))
+
+        # EXTRACT order names
+        self.state_names_order = dict(zip(self.initial_states.keys(),
+                                          [list(self.initial_states.values())[i]['name']
+                                          for i in range(len(self.initial_states.values()))]))
+
+        # EXTRACT values, set as initial states
+        self.initial_states = dict(zip(self.initial_states.keys(),
+                                       [list(self.initial_states.values())[i]['value']
+                                       for i in range(len(self.initial_states.values()))]))
 
         try:
             if not all(_ >= 0 for _ in self.initial_states.values()):

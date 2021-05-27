@@ -1,43 +1,61 @@
+#-------------------------------------------#
+# Vector Borne Disease Model Initial States #
+#-------------------------------------------#
+
+# NOTE 'position' argument determines order in 
+# which output will be generated
+
 DENGUE:
-  ORDER: 
-    Sh: 'Susceptible Humans'
-    Eh: 'Exposed Humans'
-    Iha: 'Asymptomatic Infected Humans'
-    Ihs: 'Symptomatic Infected Humans'
-    Rh: 'Recovered Humans'
-    Sv: 'Susceptible Vectors'
-    Ev: 'Exposed Vectors'
-    Iv: 'Infected Vectors'
-  INITIAL_STATES:
-    Sh: 60
-    Eh: 0
-    Iha: 20
-    Ihs: 20
-    Rh: 0
-    Sv: 0 # INITIALIZE BUT REPLACE
-    Ev: 2
-    Iv: 3
   Sh:
-    Name: 'Suscep...'
-    Order: 0
+    name: 'Susceptible Humans'
+    value: 60
+    position: 0
   Eh:
-    Name: 'Exposed'
-    Order: 1
-  Order
+    name: 'Exposed Humans'
+    value: 0
+    position: 1
+  Iha:
+    name: 'Asymptomatic Infected Humans'
+    value: 20
+    position: 2
+  Ihs:
+    name: 'Symptomatic Infected Humans'
+    value: 20
+    position: 3
+  Rh:
+    name: 'Recovered Humans'
+    value: 0
+    position: 4
+  Sv:
+    name: 'Susceptible Vectors'
+    value: 0 # INITIALIZE BUT REPLACE
+    position: 5
+  Ev:
+    name: 'Exposed Vectors'
+    value: 2
+    position: 6
+  Iv:
+    name: 'Infected Vectors'
+    value: 2
+    position: 7
 WNV:
-  ORDER:
-    Sv: 'Susceptible Vectors'
-    Iv: 'Infected Vectors'
-    # Nv: 'Vector Population'
-    Sb: 'Susceptible Birds'
-    Ib: 'Infected Birds'
-    # Nb: 'Bird Population'
-    Ih: 'Infected Humans'
-  INITIAL_STATES:
-    Sv: 0 # INITIALIZE BUT REPLACE
-    Iv: 0
-    # Nv: 3
-    Sb: 500
-    Ib: 0
-    # Nb: 2
-    Ih: 0
+  Sv:
+    name: 'Susceptible Vectors'
+    value: 0 # INITIALIZE BUT REPLACE
+    position: 0
+  Iv:
+    name: 'Infected Vectors'
+    value: 0
+    position: 1
+  Sb:
+    name: 'Susceptible Birds'
+    value: 500
+    position: 2
+  Ib:
+    name: 'Infected Birds'
+    value: 0
+    position: 3
+  Ih:
+    name: 'Infected Humans'
+    value: 0
+    position: 4
