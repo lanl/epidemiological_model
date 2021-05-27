@@ -17,6 +17,13 @@ DENGUE:
     Sv: 0 # INITIALIZE BUT REPLACE
     Ev: 2
     Iv: 3
+  Sh:
+    Name: 'Suscep...'
+    Order: 0
+  Eh:
+    Name: 'Exposed'
+    Order: 1
+  Order
 WNV:
   ORDER:
     Sv: 'Susceptible Vectors'
