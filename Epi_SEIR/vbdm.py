@@ -63,6 +63,10 @@ class VectorBorneDiseaseModel(ABC):
         # SORT entire dictionary
         self.initial_states = dict(sorted(self.initial_states.items(), key=lambda x: x[1]['position']))
 
+        # TODO ERROR CHECK POSITION (at least unique, integer)
+
+        # TODO log info about compartments once they are loaded
+
         # EXTRACT order names
         self.state_names_order = dict(zip(self.initial_states.keys(),
                                           [list(self.initial_states.values())[i]['name']
