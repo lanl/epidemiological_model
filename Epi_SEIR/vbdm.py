@@ -13,7 +13,8 @@ import sys
 import pandas as pd
 import pyarrow as pa
 import pyarrow.parquet as pq
-from utils import create_arg_parser, timer
+from utils import create_arg_parser, timer, error_check_state_names, \
+    error_check_positions, error_check_initial_states, error_check_mosq_initial_states
 from scipy.integrate import odeint
 from abc import ABC, abstractmethod
 
@@ -48,63 +49,26 @@ class VectorBorneDiseaseModel(ABC):
         else:
             self.logger.info('Initial states data successfully opened')
 
-        # SORT entire dictionary
+        # SORT entire initial states dictionary
         self.initial_states = dict(sorted(self.initial_states.items(), key=lambda x: x[1]['position']))
 
         # TODO log info about compartments once they are loaded
 
-        # EXTRACT order names
+        # EXTRACT initial states order names
         self.state_names_order = dict(zip(self.initial_states.keys(),
                                           [list(self.initial_states.values())[i]['name']
                                           for i in range(len(self.initial_states.values()))]))
 
-        try:
-            if not all(isinstance(_, str) for _ in self.state_names_order):
-                raise TypeError('Initial state names must be strings')
-        except TypeError as e:
-            self.logger.exception('Initial state names must be strings')
-            raise e
+        error_check_state_names(self)
 
-        # EXTRACT list of position
-        positions = [list(self.initial_states.values())[i]['position'] for i in
-                     range(len(self.initial_states.values()))]
-
-        try:
-            if len(positions) != len(np.unique(positions)):
-                raise ValueError('Position values must be unique')
-        except ValueError as e:
-            self.logger.exception('Position values must be unique')
-            raise e
-
-        try:
-            if not all(isinstance(_, int) for _ in positions):
-                raise TypeError('Position values must be integers')
-        except TypeError as e:
-            self.logger.exception('Position values must be integers')
-            raise e
-
-        try:
-            if not all(_ >= 0 for _ in positions):
-                raise ValueError('Position values must be positive')
-        except ValueError as e:
-            self.logger.exception('Position values must be positive')
-            raise e
+        error_check_positions(self)
 
         # EXTRACT values, set as initial states
         self.initial_states = dict(zip(self.initial_states.keys(),
                                        [list(self.initial_states.values())[i]['value']
                                        for i in range(len(self.initial_states.values()))]))
 
-        try:
-            if not all(_ >= 0 for _ in self.initial_states.values()):
-                raise ValueError('Model initial states must be positive')
-        except ValueError as e:
-            self.logger.exception('Model initial states must be positive')
-            raise e
-        except TypeError as e:
-            self.logger.exception('Initial states must be numerical values.'
-                                  ' Initialize all initial states.')
-            raise e
+        error_check_initial_states(self)
 
         # Read mosquito initial states
         try:
@@ -116,41 +80,7 @@ class VectorBorneDiseaseModel(ABC):
             self.logger.info('Mosquito population data successfully opened'
                              f' with {len(self.mosq)} days available')
 
-        try:
-            if not all(i >= 0 for i in self.mosq):
-                raise ValueError('Mosquito initial states must be positive')
-        except ValueError as e:
-            self.logger.exception('Mosquito initial states must be positive')
-            raise e
-        except TypeError as e:
-            self.logger.exception('Mosquito initial states must be numerical values.'
-                                  ' Initialize all mosquito initial states.')
-            raise e
-
-        # Check duration
-        try:
-            if not self.config_dict['DURATION'] > 0:
-                raise ValueError('Simulation duration must be positive')
-        except ValueError as e:
-            self.logger.exception('Simulation duration must be positive')
-            raise e
-
-        try:
-            if self.config_dict['DURATION'] > len(self.mosq):
-                raise ValueError('Simulation duration exceeds days of'
-                                 ' available mosquito population data.')
-        except ValueError as e:
-            self.logger.exception('Simulation duration exceeds days of'
-                                  ' available mosquito population data.')
-            raise e
-
-        # Check resolution
-        try:
-            if not self.config_dict['RESOLUTION'] > 0:
-                raise ValueError('Simulation resolution must be positive')
-        except ValueError as e:
-            self.logger.exception('Simulation resolution must be positive')
-            raise e
+        error_check_mosq_initial_states(self)
 
     def _read_config(self, config_file, disease_name):
         """Reads root configuration file"""
