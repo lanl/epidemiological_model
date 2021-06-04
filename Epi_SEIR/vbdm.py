@@ -38,14 +38,6 @@ class VectorBorneDiseaseModel(ABC):
         # Read parameters
         self.params = self.config_dict[disease_name]['PARAMETERS']
 
-        # NOTE ... Can parameters be negative?
-        # try:
-        #     if not all(_ >= 0 for _ in self.params.values()):
-        #         raise ValueError('Model parameters must be positive')
-        # except ValueError as e:
-        #     self.logger.exception('Model parameters must be positive')
-        #     raise e
-
         # Read initial states
         try:
             with open(self.config_dict['INITIAL_STATES_FILE_PATH'], 'r') as in_file:
@@ -56,14 +48,8 @@ class VectorBorneDiseaseModel(ABC):
         else:
             self.logger.info('Initial states data successfully opened')
 
-        # self.state_names_order = self.initial_states['ORDER']
-        # self.initial_states = {**self.state_names_order,
-        #                        **self.initial_states['INITIAL_STATES']}
-
         # SORT entire dictionary
         self.initial_states = dict(sorted(self.initial_states.items(), key=lambda x: x[1]['position']))
-
-        # TODO ERROR CHECK POSITION (at least unique, integer)
 
         # TODO log info about compartments once they are loaded
 
@@ -71,6 +57,38 @@ class VectorBorneDiseaseModel(ABC):
         self.state_names_order = dict(zip(self.initial_states.keys(),
                                           [list(self.initial_states.values())[i]['name']
                                           for i in range(len(self.initial_states.values()))]))
+
+        try:
+            if not all(isinstance(_, str) for _ in self.state_names_order):
+                raise TypeError('Initial state names must be strings')
+        except TypeError as e:
+            self.logger.exception('Initial state names must be strings')
+            raise e
+
+        # EXTRACT list of position
+        positions = [list(self.initial_states.values())[i]['position'] for i in
+                     range(len(self.initial_states.values()))]
+
+        try:
+            if len(positions) != len(np.unique(positions)):
+                raise ValueError('Position values must be unique')
+        except ValueError as e:
+            self.logger.exception('Position values must be unique')
+            raise e
+
+        try:
+            if not all(isinstance(_, int) for _ in positions):
+                raise TypeError('Position values must be integers')
+        except TypeError as e:
+            self.logger.exception('Position values must be integers')
+            raise e
+
+        try:
+            if not all(_ >= 0 for _ in positions):
+                raise ValueError('Position values must be positive')
+        except ValueError as e:
+            self.logger.exception('Position values must be positive')
+            raise e
 
         # EXTRACT values, set as initial states
         self.initial_states = dict(zip(self.initial_states.keys(),
