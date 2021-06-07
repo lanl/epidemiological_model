@@ -86,6 +86,7 @@ def create_logger(name, config_file):
 
     return logger
 
+
 def timer(func):
     """Print the runtime of the decorated function"""
     @wraps(func)
@@ -97,7 +98,9 @@ def timer(func):
         return value
     return wrapper_timer
 
+
 def error_check_state_names(self):
+    # check if compartment names field is string type
     try:
         if not all(isinstance(_, str) for _ in self.state_names_order):
             raise TypeError('Initial state names must be strings')
@@ -105,11 +108,13 @@ def error_check_state_names(self):
         self.logger.exception('Initial state names must be strings')
         raise e
 
+
 def error_check_positions(self):
     # EXTRACT list of position
     positions = [list(self.initial_states.values())[i]['position'] for i in
                  range(len(self.initial_states.values()))]
 
+    # check if position array is unique
     try:
         if len(positions) != len(np.unique(positions)):
             raise ValueError('Position values must be unique')
@@ -117,6 +122,7 @@ def error_check_positions(self):
         self.logger.exception('Position values must be unique')
         raise e
 
+    # check if position array is int type
     try:
         if not all(isinstance(_, int) for _ in positions):
             raise TypeError('Position values must be integers')
@@ -124,6 +130,7 @@ def error_check_positions(self):
         self.logger.exception('Position values must be integers')
         raise e
 
+    # check if positions array is positive
     try:
         if not all(_ >= 0 for _ in positions):
             raise ValueError('Position values must be positive')
@@ -131,7 +138,9 @@ def error_check_positions(self):
         self.logger.exception('Position values must be positive')
         raise e
 
+
 def error_check_initial_states(self):
+    # check if initial states are positive
     try:
         if not all(_ >= 0 for _ in self.initial_states.values()):
             raise ValueError('Model initial states must be positive')
@@ -143,9 +152,11 @@ def error_check_initial_states(self):
                               ' Initialize all initial states.')
         raise e
 
+
 def error_check_mosq_initial_states(self):
+    # check if mosquito initial states are positive
     try:
-        if not all(i >= 0 for i in self.mosq):
+        if not all(_ >= 0 for _ in self.mosq):
             raise ValueError('Mosquito initial states must be positive')
     except ValueError as e:
         self.logger.exception('Mosquito initial states must be positive')
@@ -155,7 +166,7 @@ def error_check_mosq_initial_states(self):
                               ' Initialize all mosquito initial states.')
         raise e
 
-    # Check duration
+    # check if duration is positive
     try:
         if not self.config_dict['DURATION'] > 0:
             raise ValueError('Simulation duration must be positive')
@@ -163,6 +174,7 @@ def error_check_mosq_initial_states(self):
         self.logger.exception('Simulation duration must be positive')
         raise e
 
+    # check if a long enough mosquito population vector is supplied
     try:
         if self.config_dict['DURATION'] > len(self.mosq):
             raise ValueError('Simulation duration exceeds days of'
@@ -172,7 +184,7 @@ def error_check_mosq_initial_states(self):
                               ' available mosquito population data.')
         raise e
 
-    # Check resolution
+    # check if resolution is positive
     try:
         if not self.config_dict['RESOLUTION'] > 0:
             raise ValueError('Simulation resolution must be positive')
