@@ -39,6 +39,8 @@ class VectorBorneDiseaseModel(ABC):
         # Read parameters
         self.params = self.config_dict[disease_name]['PARAMETERS']
 
+        self.logger.info(f"\n\nParameters for model: {self.params}\n")
+
         # Read initial states
         try:
             with open(self.config_dict['INITIAL_STATES_FILE_PATH'], 'r') as in_file:
@@ -51,8 +53,6 @@ class VectorBorneDiseaseModel(ABC):
 
         # SORT entire initial states dictionary
         self.initial_states = dict(sorted(self.initial_states.items(), key=lambda x: x[1]['position']))
-
-        # TODO log info about compartments once they are loaded
 
         # EXTRACT initial states order names
         self.state_names_order = dict(zip(self.initial_states.keys(),
@@ -67,6 +67,8 @@ class VectorBorneDiseaseModel(ABC):
         self.initial_states = dict(zip(self.initial_states.keys(),
                                        [list(self.initial_states.values())[i]['value']
                                        for i in range(len(self.initial_states.values()))]))
+
+        self.logger.info(f"\n\nInitial states for model: {self.initial_states}\n")
 
         error_check_initial_states(self)
 
