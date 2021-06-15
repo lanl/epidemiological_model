@@ -25,8 +25,8 @@ class DengueSEIRModel(vbdm.VectorBorneDiseaseModel):
 
     """
 
-    def __init__(self, config_file):
-        self.logger = create_logger(__name__, vbdm.args.config_file)
+    def __init__(self, config_file, args):
+        self.logger = create_logger(__name__, args.config_file)
 
         super().__init__(config_file, 'DENGUE')
 

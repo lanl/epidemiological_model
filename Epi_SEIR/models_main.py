@@ -10,7 +10,9 @@ given paramters from config.yaml configuration file.
 
 from dengue import DengueSEIRModel
 from wnv import WNVSEIRModel
-import vbdm
+#import vbdm
+from utils import create_arg_parser
+import sys
 
 
 def main():
@@ -18,17 +20,21 @@ def main():
 
     Instaniates each disease from configuration file
     """
-    config_file = vbdm.args.config_file
-    disease_name = vbdm.args.disease_name.lower()
+    if not sys.argv[0].endswith('sphinx-build'):
+        parser = create_arg_parser()
+        args = parser.parse_args()
+
+    config_file = args.config_file
+    disease_name = args.disease_name.lower()
 
     if disease_name == 'dengue':
-        den = DengueSEIRModel(config_file)
+        den = DengueSEIRModel(config_file, args)
         den.logger.info(den)
         den.run_model()
         den.save_output(disease_name)
         den.logger.info('SUCCESS')
     elif disease_name == 'wnv':
-        wnv = WNVSEIRModel(config_file)
+        wnv = WNVSEIRModel(config_file, args)
         wnv.logger.info(wnv)
         wnv.run_model()
         wnv.save_output(disease_name)

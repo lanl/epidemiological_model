@@ -37,13 +37,15 @@ def create_arg_parser():
             parser.error('Specify [wnv] or [dengue]')
         else:
             return arg
-
+    import sys
+    print('\033[7m' + 'FLAG -------- ' + str(sys.argv) + '\033[0m')
     parser = argparse.ArgumentParser()
     parser.add_argument('-c', '--config_file', action='store',
                         type=lambda x: is_valid_file(parser, x),
-                        default='config/config.yaml')
+                        default='config/local_test_config.yaml')
     parser.add_argument('-d', '--disease_name', action='store',
-                        type=lambda x: is_disease(parser, x))
+                        type=lambda x: is_disease(parser, x),
+                        default='dengue')
 
     return parser
 

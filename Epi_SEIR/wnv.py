@@ -28,8 +28,8 @@ class WNVSEIRModel(vbdm.VectorBorneDiseaseModel):
 
     """
 
-    def __init__(self, config_file):
-        self.logger = create_logger(__name__, vbdm.args.config_file)
+    def __init__(self, config_file, args):
+        self.logger = create_logger(__name__, args.config_file)
         self.day_counter = 0
 
         super().__init__(config_file, 'WNV')

@@ -9,7 +9,7 @@ in root configuration file.
 import numpy as np
 import yaml
 import os
-import sys
+#import sys
 import pandas as pd
 import pyarrow as pa
 import pyarrow.parquet as pq
@@ -145,8 +145,3 @@ class VectorBorneDiseaseModel(ABC):
             pq.write_table(pa.Table.from_pandas(df), output_path)
 
         self.logger.info(f'Output saved to {output_path}')
-
-
-if not sys.argv[0].endswith('sphinx-build'):
-    parser = create_arg_parser()
-    args = parser.parse_args()
