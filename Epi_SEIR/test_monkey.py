@@ -11,26 +11,29 @@ arg_list = [('config/local_test_config.yaml', 'wnv'),
 
 
 @pytest.fixture
-def setup():
+# @pytest.mark.parametrize("config_file, disease_name", arg_list)
+def setup(config_file, disease_name):
+    #with monkeypatch.context() as m:
+    #    m.setattr(sys, 'argv', ['models_main', '-c', config_file, '-d', disease_name])
+
     if not sys.argv[0].endswith('sphinx-build'):
         parser = create_arg_parser()
-        args = parser.parse_args()
+        args, unknown = parser.parse_known_args()
 
     config_file = args.config_file
     disease_name = args.disease_name.lower()
 
     if disease_name == 'dengue':
-        den = DengueSEIRModel(config_file, args)
-        den.logger.info(den)
-        den.run_model()
-        den.save_output(disease_name)
-        den.logger.info('SUCCESS')
+        disease = DengueSEIRModel(config_file, args)
     elif disease_name == 'wnv':
-        wnv = WNVSEIRModel(config_file, args)
-        wnv.logger.info(wnv)
-        wnv.run_model()
-        wnv.save_output(disease_name)
-        wnv.logger.info('SUCCESS')
+        disease = WNVSEIRModel(config_file, args)
+
+    disease.logger.info(disease)
+    disease.run_model()
+    disease.save_output(disease_name)
+    disease.logger.info('SUCCESS')
+
+    return disease
 
 
 # @pytest.mark.skip
@@ -39,4 +42,5 @@ def test_monkey(setup, monkeypatch, config_file, disease_name):
     with monkeypatch.context() as m:
         m.setattr(sys, 'argv', ['models_main', '-c', config_file, '-d', disease_name])
         # models_main.main()
+
         assert True

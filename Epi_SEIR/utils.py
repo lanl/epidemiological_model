@@ -37,8 +37,8 @@ def create_arg_parser():
             parser.error('Specify [wnv] or [dengue]')
         else:
             return arg
-    # import sys
-    # print('\033[7m' + 'FLAG -------- ' + str(sys.argv) + '\033[0m')
+    import sys
+    print('\033[7m' + 'ARGUMENTS -------- ' + str(sys.argv) + '\033[0m')
     parser = argparse.ArgumentParser()
     parser.add_argument('-c', '--config_file', action='store',
                         type=lambda x: is_valid_file(parser, x),
@@ -99,97 +99,3 @@ def timer(func):
         self.logger.info(f'Finished {func.__name__!r} in {run_time:.4f} seconds')
         return value
     return wrapper_timer
-
-
-def error_check_state_names(self):
-    # check if compartment names field is string type
-    try:
-        if not all(isinstance(_, str) for _ in self.state_names_order):
-            raise TypeError('Initial state names must be strings')
-    except TypeError as e:
-        self.logger.exception('Initial state names must be strings')
-        raise e
-
-
-def error_check_positions(self):
-    # EXTRACT list of position
-    positions = [list(self.initial_states.values())[i]['position'] for i in
-                 range(len(self.initial_states.values()))]
-
-    # check if position array is unique
-    try:
-        if len(positions) != len(np.unique(positions)):
-            raise ValueError('Position values must be unique')
-    except ValueError as e:
-        self.logger.exception('Position values must be unique')
-        raise e
-
-    # check if position array is int type
-    try:
-        if not all(isinstance(_, int) for _ in positions):
-            raise TypeError('Position values must be integers')
-    except TypeError as e:
-        self.logger.exception('Position values must be integers')
-        raise e
-
-    # check if positions array is positive
-    try:
-        if not all(_ >= 0 for _ in positions):
-            raise ValueError('Position values must be positive')
-    except ValueError as e:
-        self.logger.exception('Position values must be positive')
-        raise e
-
-
-def error_check_initial_states(self):
-    # check if initial states are positive
-    try:
-        if not all(_ >= 0 for _ in self.initial_states.values()):
-            raise ValueError('Model initial states must be positive')
-    except ValueError as e:
-        self.logger.exception('Model initial states must be positive')
-        raise e
-    except TypeError as e:
-        self.logger.exception('Initial states must be numerical values.'
-                              ' Initialize all initial states.')
-        raise e
-
-
-def error_check_mosq_initial_states(self):
-    # check if mosquito initial states are positive
-    try:
-        if not all(_ >= 0 for _ in self.mosq):
-            raise ValueError('Mosquito initial states must be positive')
-    except ValueError as e:
-        self.logger.exception('Mosquito initial states must be positive')
-        raise e
-    except TypeError as e:
-        self.logger.exception('Mosquito initial states must be numerical values.'
-                              ' Initialize all mosquito initial states.')
-        raise e
-
-    # check if duration is positive
-    try:
-        if not self.config_dict['DURATION'] > 0:
-            raise ValueError('Simulation duration must be positive')
-    except ValueError as e:
-        self.logger.exception('Simulation duration must be positive')
-        raise e
-
-    # check if a long enough mosquito population vector is supplied
-    try:
-        if self.config_dict['DURATION'] > len(self.mosq):
-            raise ValueError('Simulation duration exceeds days of'
-                             ' available mosquito population data.')
-    except ValueError as e:
-        self.logger.exception('Simulation duration exceeds days of'
-                              ' available mosquito population data.')
-        raise e
-
-    # check if resolution is positive
-    try:
-        if not self.config_dict['RESOLUTION'] > 0:
-            raise ValueError('Simulation resolution must be positive')
-    except ValueError as e:
-        self.logger.exception('Simulation resolution must be positive')
-        raise e

@@ -22,7 +22,7 @@ def main():
     """
     if not sys.argv[0].endswith('sphinx-build'):
         parser = create_arg_parser()
-        args = parser.parse_args()
+        args, unknown = parser.parse_known_args()
 
     config_file = args.config_file
     disease_name = args.disease_name.lower()
