@@ -30,7 +30,7 @@ class DengueSEIRModel(vbdm.VectorBorneDiseaseModel):
 
         super().__init__(config_file, 'DENGUE')
 
-    def model_func(self, y, t):
+    def model_func(self, t, y):
         """Defines system of ODEs for dengue model.
 
         Initial State Names:

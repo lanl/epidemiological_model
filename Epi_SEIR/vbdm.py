@@ -14,7 +14,7 @@ import pandas as pd
 import pyarrow as pa
 import pyarrow.parquet as pq
 from utils import create_arg_parser, timer
-from scipy.integrate import odeint
+from scipy.integrate import solve_ivp
 from abc import ABC, abstractmethod
 
 
@@ -108,13 +108,15 @@ class VectorBorneDiseaseModel(ABC):
         keys = list(self.initial_states.keys())
         self.model_output = np.empty([0, len(keys)])
 
-        t = np.linspace(0, 1, self.config_dict['RESOLUTION'] + 1)
+        t = (0, 1)
+        t_eval = np.linspace(0, 1, self.config_dict['RESOLUTION'] + 1)
 
         for i in range(0, self.config_dict['DURATION']):
             self.initial_states['Sv'] = self.mosq[i]
 
             try:
-                out = odeint(self.model_func, list(self.initial_states.values()), t)
+                sol = solve_ivp(self.model_func, t, list(self.initial_states.values()), t_eval=t_eval)
+                out = sol.y.T
             except Exception as e:
                 self.logger.exception('Exception occured running model')
                 raise e
