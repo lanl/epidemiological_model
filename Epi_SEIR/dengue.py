@@ -30,6 +30,26 @@ class DengueSEIRModel(vbdm.VectorBorneDiseaseModel):
 
         super().__init__(config_file, 'DENGUE')
 
+    def _population_sizes(self):
+        self.Nh = sum([self.states['Sh'], self.states['Eh'], self.states['Iha'], self.states['Ihs'], self.states['Rh']])
+        self.Nv = sum([self.states['Sv'], self.states['Ev'], self.states['Iv']])
+
+    # Biting rate
+    def _biting_rate(self):
+        b = self.params['sigma_h'] * self.params['sigma_v'] / \
+            (self.params['sigma_h'] * self.Nh + self.params['sigma_v'] * self.Nv)
+        self.b_h = b * self.Nv
+        self.b_v = b * self.Nh
+
+        # return b_h, b_v
+
+    # Force of infection
+    def _force_of_infection(self):
+        self.lambda_h = self.b_h * self.params['beta_h'] * self.states['Iv'] / self.Nv
+        self.lambda_v = self.b_v * self.params['beta_v'] * (self.states['Iha'] + self.states['Ihs']) / self.Nh
+
+        # return lambda_h, lambda_v
+
     def model_func(self, t, y):
         """Defines system of ODEs for dengue model.
 
@@ -60,36 +80,36 @@ class DengueSEIRModel(vbdm.VectorBorneDiseaseModel):
 
         """
         ddt = self.initial_states.copy()
-        states = dict(zip(self.initial_states.keys(), y))
+        self.states = dict(zip(self.initial_states.keys(), y))
 
-        Nh = sum([states['Sh'], states['Eh'], states['Iha'], states['Ihs'], states['Rh']])
-        Nv = sum([states['Sv'], states['Ev'], states['Iv']])
+        # Find population size
+        # Nh, Nv = self._population_sizes(states)
+        self._population_sizes()
 
-        # Biting rate
-        b = self.params['sigma_h'] * self.params['sigma_v'] / \
-            (self.params['sigma_h'] * Nh + self.params['sigma_v'] * Nv)
-        b_h = b * Nv
-        b_v = b * Nh
 
-        # Force of infecton
-        lambda_h = b_h * self.params['beta_h'] * states['Iv'] / Nv
-        lambda_v = b_v * self.params['beta_v'] * (states['Iha'] + states['Ihs']) / Nh
+        # Find biting rate
+        # b_h, b_v = self._biting_rate(Nh, Nv)
+        self._biting_rate()
+
+        # Find force of infection
+        # lambda_h, lambda_v = self._force_of_infection(states, Nh, Nv, b_h, b_v)
+        self._force_of_infection()
 
         # System of equations
-        ddt['Sh'] = -lambda_h * states['Sh']
-        ddt['Eh'] = lambda_h * states['Sh'] - \
-            self.params['nu_h'] * states['Eh']
-        ddt['Iha'] = self.params['psi'] * self.params['nu_h'] * states['Eh'] - \
-            self.params['gamma_h'] * states['Iha']
-        ddt['Ihs'] = (1 - self.params['psi']) * self.params['nu_h'] * states['Eh'] - \
-            self.params['gamma_h'] * states['Ihs']
-        ddt['Rh'] = self.params['gamma_h'] * (states['Iha'] + states['Ihs'])
-        ddt['Sv'] = -lambda_v * states['Sv'] - \
-            self.params['mu_v'] * states['Sv']
-        ddt['Ev'] = lambda_v * states['Sv'] - \
-            self.params['nu_v'] * states['Ev'] - \
-            self.params['mu_v'] * states['Ev']
-        ddt['Iv'] = self.params['nu_v'] * states['Ev'] - \
-            self.params['mu_v'] * states['Iv']
+        ddt['Sh'] = -self.lambda_h * self.states['Sh']
+        ddt['Eh'] = self.lambda_h * self.states['Sh'] - \
+            self.params['nu_h'] * self.states['Eh']
+        ddt['Iha'] = self.params['psi'] * self.params['nu_h'] * self.states['Eh'] - \
+            self.params['gamma_h'] * self.states['Iha']
+        ddt['Ihs'] = (1 - self.params['psi']) * self.params['nu_h'] * self.states['Eh'] - \
+            self.params['gamma_h'] * self.states['Ihs']
+        ddt['Rh'] = self.params['gamma_h'] * (self.states['Iha'] + self.states['Ihs'])
+        ddt['Sv'] = -self.lambda_v * self.states['Sv'] - \
+            self.params['mu_v'] * self.states['Sv']
+        ddt['Ev'] = self.lambda_v * self.states['Sv'] - \
+            self.params['nu_v'] * self.states['Ev'] - \
+            self.params['mu_v'] * self.states['Ev']
+        ddt['Iv'] = self.params['nu_v'] * self.states['Ev'] - \
+            self.params['mu_v'] * self.states['Iv']
 
         return tuple(ddt.values())
