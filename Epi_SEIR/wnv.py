@@ -28,11 +28,19 @@ class WNVSEIRModel(vbdm.VectorBorneDiseaseModel):
 
     """
 
-    def __init__(self, config_file, args):
-        self.logger = create_logger(__name__, args.config_file)
+    def __init__(self, config_file):
+        self.logger = create_logger(__name__, config_file)
         self.day_counter = 0
 
         super().__init__(config_file, 'WNV')
+
+    def _population_sizes(self):
+        self.Nv = sum([self.states['Sv'], self.states['Iv']])
+        self.Nb = sum([self.states['Sb'], self.states['Ib']])
+
+    def _force_of_infection(self, t):
+        self.beta = self.params['A'] + (self.params['K'] - self.params['A']) / \
+            (1 + math.exp(-self.params['r'] * (t - self.params['t0'])))
 
     def model_func(self, t, y):
         """Defines system of ODEs for dengue model
@@ -63,29 +71,30 @@ class WNVSEIRModel(vbdm.VectorBorneDiseaseModel):
 
         """
         ddt = self.initial_states.copy()
-        states = dict(zip(self.initial_states.keys(), y))
 
-        Nv = sum([states['Sv'], states['Iv']])
-        Nb = sum([states['Sb'], states['Ib']])
+        self.states = dict(zip(self.initial_states.keys(), y))
+
+        # Find population size
+        self._population_sizes()
+
+        # Find force of infection
+        self._force_of_infection(t)
 
         self.day_counter += 1
         if self.day_counter >= 200:
             self.params['alpha'] = 0
 
-        beta = self.params['A'] + (self.params['K'] - self.params['A']) / \
-            (1 + math.exp(-self.params['r'] * (t - self.params['t0'])))
-
-        ddt['Sv'] = self.params['mu_v'] * Nv - \
-            beta * states['Sv'] * states['Ib'] / Nb - \
-            (self.params['mu_v'] + self.params['alpha']) * states['Sv']
-        ddt['Iv'] = beta * states['Sv'] * states['Ib'] / Nb - \
-            self.params['mu_v'] * states['Iv'] + \
-            self.params['alpha'] * states['Sv']
-        ddt['Sb'] = -beta * states['Iv'] * states['Sb'] / Nb
-        ddt['Ib'] = beta * states['Iv'] * states['Sb'] / Nb - \
-            states['Ib'] / self.params['delta_b']
+        ddt['Sv'] = self.params['mu_v'] * self.Nv - \
+            self.beta * self.states['Sv'] * self.states['Ib'] / self.Nb - \
+            (self.params['mu_v'] + self.params['alpha']) * self.states['Sv']
+        ddt['Iv'] = self.beta * self.states['Sv'] * self.states['Ib'] / self.Nb - \
+            self.params['mu_v'] * self.states['Iv'] + \
+            self.params['alpha'] * self.states['Sv']
+        ddt['Sb'] = -self.beta * self.states['Iv'] * self.states['Sb'] / self.Nb
+        ddt['Ib'] = self.beta * self.states['Iv'] * self.states['Sb'] / self.Nb - \
+            self.states['Ib'] / self.params['delta_b']
 
         rng = np.random.default_rng()
-        ddt['Ih'] = rng.poisson(lam=self.params['eta'] * states['Iv'])
+        ddt['Ih'] = rng.poisson(lam=self.params['eta'] * self.states['Iv'])
 
         return tuple(ddt.values())

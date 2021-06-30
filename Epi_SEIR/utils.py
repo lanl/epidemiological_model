@@ -41,11 +41,11 @@ def create_arg_parser():
     # print('\033[7m' + 'ARGUMENTS -------- ' + str(sys.argv) + '\033[0m')
     parser = argparse.ArgumentParser()
     parser.add_argument('-c', '--config_file', action='store',
-                        type=lambda x: is_valid_file(parser, x),
-                        default='config/local_test_config.yaml')
+                        type=lambda x: is_valid_file(parser, x))
+                        # default='config/local_test_config.yaml')
     parser.add_argument('-d', '--disease_name', action='store',
-                        type=lambda x: is_disease(parser, x),
-                        default='dengue')
+                        type=lambda x: is_disease(parser, x))
+                        # default='dengue')
 
     return parser
 
@@ -69,6 +69,9 @@ def create_logger(name, config_file):
         logfile_path = yaml.safe_load(in_file)['LOGFILE_PATH']
 
     logger = logging.getLogger(name)
+
+    logger.handlers = []
+
     logger.setLevel(logging.DEBUG)
 
     formatter = logging.Formatter('[%(asctime)s] %(name)s \
