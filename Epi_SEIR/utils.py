@@ -69,6 +69,9 @@ def create_logger(name, config_file):
         logfile_path = yaml.safe_load(in_file)['LOGFILE_PATH']
 
     logger = logging.getLogger(name)
+
+    logger.handlers = []
+
     logger.setLevel(logging.DEBUG)
 
     formatter = logging.Formatter('[%(asctime)s] %(name)s \

@@ -13,6 +13,7 @@ from wnv import WNVSEIRModel
 #import vbdm
 from utils import create_arg_parser
 import sys
+from logging import shutdown
 
 
 def main():
@@ -24,7 +25,7 @@ def main():
         parser = create_arg_parser()
         args, unknown = parser.parse_known_args()
 
-    config_file = args.config_file
+    # config_file = args.config_file
     disease_name = args.disease_name.lower()
 
     if disease_name == 'dengue':
@@ -34,7 +35,7 @@ def main():
         den.save_output(disease_name)
         den.logger.info('SUCCESS')
     elif disease_name == 'wnv':
-        wnv = WNVSEIRModel(config_file, args)
+        wnv = WNVSEIRModel(args.config_file)
         wnv.logger.info(wnv)
         wnv.run_model()
         wnv.save_output(disease_name)
