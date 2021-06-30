@@ -5,7 +5,7 @@ Vector Borne Disease Model class.
 
     Typical usage example:
 
-    den = DengueSEIRModel(<config_file_path>)
+    den = DengueSEIRModel(<config_file_path>, <command_line_arguments>)
 """
 
 from utils import create_logger
@@ -22,33 +22,32 @@ class DengueSEIRModel(vbdm.VectorBorneDiseaseModel):
     Attributes:
         logger: python logging object.
         long_state_names: more compartment values for output.
+        Nh: human population size
+        Nh: vector population size
 
     """
 
-    def __init__(self, config_file, args):
-        self.logger = create_logger(__name__, args.config_file)
+    def __init__(self, config_file):
+        self.logger = create_logger(__name__, config_file)
 
         super().__init__(config_file, 'DENGUE')
 
     def _population_sizes(self):
+        """Calculates population sizes of human and vector compartments"""
         self.Nh = sum([self.states['Sh'], self.states['Eh'], self.states['Iha'], self.states['Ihs'], self.states['Rh']])
         self.Nv = sum([self.states['Sv'], self.states['Ev'], self.states['Iv']])
 
-    # Biting rate
     def _biting_rate(self):
+        """Calculates biting rate"""
         b = self.params['sigma_h'] * self.params['sigma_v'] / \
             (self.params['sigma_h'] * self.Nh + self.params['sigma_v'] * self.Nv)
         self.b_h = b * self.Nv
         self.b_v = b * self.Nh
 
-        # return b_h, b_v
-
-    # Force of infection
     def _force_of_infection(self):
+        """Calculates force of infection"""
         self.lambda_h = self.b_h * self.params['beta_h'] * self.states['Iv'] / self.Nv
         self.lambda_v = self.b_v * self.params['beta_v'] * (self.states['Iha'] + self.states['Ihs']) / self.Nh
-
-        # return lambda_h, lambda_v
 
     def model_func(self, t, y):
         """Defines system of ODEs for dengue model.
@@ -83,16 +82,12 @@ class DengueSEIRModel(vbdm.VectorBorneDiseaseModel):
         self.states = dict(zip(self.initial_states.keys(), y))
 
         # Find population size
-        # Nh, Nv = self._population_sizes(states)
         self._population_sizes()
 
-
         # Find biting rate
-        # b_h, b_v = self._biting_rate(Nh, Nv)
         self._biting_rate()
 
         # Find force of infection
-        # lambda_h, lambda_v = self._force_of_infection(states, Nh, Nv, b_h, b_v)
         self._force_of_infection()
 
         # System of equations

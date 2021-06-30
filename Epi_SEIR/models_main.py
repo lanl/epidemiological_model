@@ -28,7 +28,7 @@ def main():
     disease_name = args.disease_name.lower()
 
     if disease_name == 'dengue':
-        den = DengueSEIRModel(config_file, args)
+        den = DengueSEIRModel(args.config_file)
         den.logger.info(den)
         den.run_model()
         den.save_output(disease_name)

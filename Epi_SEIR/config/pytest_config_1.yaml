@@ -1,0 +1,37 @@
+#------------------------------------------#
+# Vector Borne Disease Model Configuration #
+#------------------------------------------#
+
+PROJECT_ROOT: '/Users/jkeithley/Documents/CIMMID/human/dengue_model/Epi_SEIR'
+LOGFILE_PATH: '/Users/jkeithley/Documents/CIMMID/human/dengue_model/Epi_SEIR/logs'
+MOSQUITOES_FILE_PATH: '/Users/jkeithley/Documents/CIMMID/human/dengue_model/Epi_SEIR/mosquitoes'
+INITIAL_STATES_FILE_PATH: '/Users/jkeithley/Documents/CIMMID/human/dengue_model/Epi_SEIR/initial_states_input/initial_states.yaml'
+OUTPUT_DIR: '/Users/jkeithley/Documents/CIMMID/human/dengue_model/Epi_SEIR/human_model_output'
+
+# Add unit test specification?
+OUTPUT_TYPE: 'csv' # default is .parquet
+
+DURATION: 11 # number of days to run the model
+RESOLUTION: 40 # how many points to run per day
+
+DENGUE:
+  PARAMETERS:
+    psi: 0.5
+    nu_h: 5
+    nu_v: 9
+    gamma_h: 7
+    mu_v: 12
+    beta_h: 0.5
+    beta_v: 0.75
+    sigma_h: 19
+    sigma_v: 0.5
+WNV:
+  PARAMETERS:
+    mu_v: 0.06
+    alpha: 0.0006
+    delta_b: 4.5
+    eta: 0.003
+    A: 0.008
+    K: 0.08
+    r: -0.12
+    t0: 2
