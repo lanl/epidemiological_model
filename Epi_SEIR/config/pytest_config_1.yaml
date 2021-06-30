@@ -3,7 +3,7 @@
 #------------------------------------------#
 
 PROJECT_ROOT: '/Users/jkeithley/Documents/CIMMID/human/dengue_model/Epi_SEIR'
-LOGFILE_PATH: '/Users/jkeithley/Documents/CIMMID/human/dengue_model/Epi_SEIR/logs'
+LOGFILE_PATH: '/Users/jkeithley/Documents/CIMMID/human/dengue_model/Epi_SEIR/logs/logs1'
 MOSQUITOES_FILE_PATH: '/Users/jkeithley/Documents/CIMMID/human/dengue_model/Epi_SEIR/mosquitoes'
 INITIAL_STATES_FILE_PATH: '/Users/jkeithley/Documents/CIMMID/human/dengue_model/Epi_SEIR/initial_states_input/initial_states.yaml'
 OUTPUT_DIR: '/Users/jkeithley/Documents/CIMMID/human/dengue_model/Epi_SEIR/human_model_output'
