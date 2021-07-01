@@ -73,7 +73,7 @@ class DengueSEIRModel(vbdm.VectorBorneDiseaseModel):
             sigma_h: Maximum number of bites a human can support per unit time.\n
             sigma_v: Maximum vector biting rate.\n
             beta_h: Probability of vector to host transmission.\n
-            beta_v: Probability of host tp vector transmission.\n
+            beta_v: Probability of host to vector transmission.\n
             b_h: Biting rate (1 / (day * human))\n
             b_v: Biting rate (1 / (day * mosquito))\n
 
