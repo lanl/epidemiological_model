@@ -12,7 +12,7 @@ value_error_arglist = ['config/unit_testing/positive_duration.yaml',
                        'config/unit_testing/unique_position.yaml',
                        'config/unit_testing/positive_position.yaml',
                        'config/unit_testing/positive_states.yaml']
-type_error_arglist = []
+type_error_arglist = ['config/unit_testing/strings.yaml']
 
 """
 TODO: have set of config files with things that should raise a type of error
@@ -54,6 +54,13 @@ class TestDengue:
             with pytest.raises(ValueError):
                 disease = DengueSEIRModel(config_file)
 
+    @pytest.mark.parametrize("config_file", type_error_arglist)
+    def test_type_error(self, monkeypatch, config_file):
+        with monkeypatch.context() as m:
+            m.setattr(sys, 'argv', ['models_main', '-c', config_file, '-d', 'dengue'])
+            with pytest.raises(TypeError):
+                disease = DengueSEIRModel(config_file)
+
 
 class TestWNV:
     @pytest.fixture
@@ -83,4 +90,11 @@ class TestWNV:
         with monkeypatch.context() as m:
             m.setattr(sys, 'argv', ['models_main', '-c', config_file, '-d', 'wnv'])
             with pytest.raises(ValueError):
+                disease = WNVSEIRModel(config_file)
+
+    @pytest.mark.parametrize("config_file", type_error_arglist)
+    def test_type_error(self, monkeypatch, config_file):
+        with monkeypatch.context() as m:
+            m.setattr(sys, 'argv', ['models_main', '-c', config_file, '-d', 'wnv'])
+            with pytest.raises(TypeError):
                 disease = WNVSEIRModel(config_file)

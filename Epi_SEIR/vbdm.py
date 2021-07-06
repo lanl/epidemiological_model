@@ -152,7 +152,7 @@ class VectorBorneDiseaseModel(ABC):
     def error_check_state_names(self):
         # check if compartment names field is string type
         try:
-            if not all(isinstance(_, str) for _ in self.state_names_order):
+            if not all(isinstance(_, str) for _ in self.state_names_order.values()):
                 raise TypeError('Initial state names must be strings')
         except TypeError as e:
             self.logger.exception('Initial state names must be strings')
