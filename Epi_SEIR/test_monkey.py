@@ -12,7 +12,8 @@ value_error_arglist = ['config/unit_testing/positive_duration.yaml',
                        'config/unit_testing/unique_position.yaml',
                        'config/unit_testing/positive_position.yaml',
                        'config/unit_testing/positive_states.yaml']
-type_error_arglist = ['config/unit_testing/strings.yaml']
+type_error_arglist = ['config/unit_testing/strings.yaml',
+                      'config/unit_testing/position_integers.yaml']
 
 """
 TODO: have set of config files with things that should raise a type of error

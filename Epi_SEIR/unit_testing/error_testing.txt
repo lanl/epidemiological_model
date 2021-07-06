@@ -5,8 +5,8 @@ Error types to unit test and config files to make.
 	- can have the same config file for both diseases.
 
 TypeError
-	INITIAL_STATES: Initial states must be strings
-	INITIAL_STATES: position values must be integers
+	INITIAL_STATES: Initial states must be strings DONE
+	INITIAL_STATES: position values must be integers DONE
 	INITIAL_STATES: initial states must be numerical values
 
 ValueError
