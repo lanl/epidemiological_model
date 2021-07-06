@@ -9,7 +9,8 @@ arg_list = ['config/pytest_config_1.yaml']
 """
 TODO: have set of config files with things that should raise a type of error
 such as IO errors, ValueError, etc. each of these error types gets it own test function
-with the list of these config files that triggers them as an arglist.
+with the list of these config files that triggers them as an arglist. Have each one applicable
+to both diseases.
 """
 
 
