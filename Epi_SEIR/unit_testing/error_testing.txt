@@ -10,12 +10,12 @@ TypeError
 	INITIAL_STATES: initial states must be numerical values
 
 ValueError
-	INITIAL_STATES: position values must be unique
-	INITIAL_STATES: position values must be positive
-	INITIAL_STATES: initial states must be positive
-	CONFIG: duration must be positive
-	CONFIG: duration must be less than available mosquito data
-	CONFIG:	resolution must be positive
+	INITIAL_STATES: position values must be unique DONE
+	INITIAL_STATES: position values must be positive DONE
+	INITIAL_STATES: initial states must be positive DONE
+	CONFIG: duration must be positive DONE
+	CONFIG: duration must be less than available mosquito data DONE
+	CONFIG:	resolution must be positive DONE
 
 ######################
 # UNDER CONSTRUCTION #

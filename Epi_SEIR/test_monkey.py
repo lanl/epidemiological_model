@@ -6,7 +6,12 @@ import sys
 arg_list = ['config/unit_testing/pytest_config_1.yaml']
             #'config/unit_testing/pytest_config_2.yaml']
 
-value_error_arglist = []
+value_error_arglist = ['config/unit_testing/positive_duration.yaml',
+                       'config/unit_testing/positive_resolution.yaml',
+                       'config/unit_testing/duration_le_mosq.yaml',
+                       'config/unit_testing/unique_position.yaml',
+                       'config/unit_testing/positive_position.yaml',
+                       'config/unit_testing/positive_states.yaml']
 type_error_arglist = []
 
 """
@@ -29,7 +34,8 @@ class TestDengue:
 
         return disease
 
-    # @pytest.mark.skip
+    # TESTING BLUEPRINT FUNCTION
+    @pytest.mark.skip
     @pytest.mark.parametrize("config_file", arg_list)
     # def test_dengue(self, setup_dengue, monkeypatch, config_file):
     def test_dengue(self, monkeypatch, config_file):
@@ -40,6 +46,13 @@ class TestDengue:
                 disease = DengueSEIRModel(config_file)
             # models_main.main()
             # assert True
+
+    @pytest.mark.parametrize("config_file", value_error_arglist)
+    def test_value_error(self, monkeypatch, config_file):
+        with monkeypatch.context() as m:
+            m.setattr(sys, 'argv', ['models_main', '-c', config_file, '-d', 'dengue'])
+            with pytest.raises(ValueError):
+                disease = DengueSEIRModel(config_file)
 
 
 class TestWNV:
@@ -55,6 +68,7 @@ class TestWNV:
 
         return disease
 
+    # TESTING BLUEPRINT FUNCTION
     @pytest.mark.skip
     @pytest.mark.parametrize("config_file", arg_list)
     def test_wnv(self, setup_wnv, monkeypatch, config_file):
@@ -63,3 +77,10 @@ class TestWNV:
             # print('\033[7m' + "FLAG ----------" + '\033[0m', setup_wnv.states)
 
             assert True
+
+    @pytest.mark.parametrize("config_file", value_error_arglist)
+    def test_value_error(self, monkeypatch, config_file):
+        with monkeypatch.context() as m:
+            m.setattr(sys, 'argv', ['models_main', '-c', config_file, '-d', 'wnv'])
+            with pytest.raises(ValueError):
+                disease = WNVSEIRModel(config_file)
