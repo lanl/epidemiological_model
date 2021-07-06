@@ -9,11 +9,10 @@ in root configuration file.
 import numpy as np
 import yaml
 import os
-#import sys
 import pandas as pd
 import pyarrow as pa
 import pyarrow.parquet as pq
-from utils import create_arg_parser, timer
+from utils import timer
 from scipy.integrate import solve_ivp
 from abc import ABC, abstractmethod
 
@@ -73,7 +72,7 @@ class VectorBorneDiseaseModel(ABC):
 
         # Read mosquito initial states
         try:
-            self.mosq = np.array(pd.read_csv(os.path.join(self.config_dict['MOSQUITOES_FILE_PATH'], 'mosq.csv'))['Sv'])
+            self.mosq = np.array(pd.read_csv(self.config_dict['MOSQUITOES_FILE_PATH'])['Sv'])
         except FileNotFoundError as e:
             self.logger.exception('Mosquito population input file not found.')
             raise e
@@ -147,10 +146,12 @@ class VectorBorneDiseaseModel(ABC):
 
         self.logger.info(f'Output saved to {output_path}')
 
+    # TODO error check output type in config file?
+
     def error_check_state_names(self):
         # check if compartment names field is string type
         try:
-            if not all(isinstance(_, str) for _ in self.state_names_order):
+            if not all(isinstance(_, str) for _ in self.state_names_order.values()):
                 raise TypeError('Initial state names must be strings')
         except TypeError as e:
             self.logger.exception('Initial state names must be strings')
@@ -186,16 +187,22 @@ class VectorBorneDiseaseModel(ABC):
             raise e
 
     def error_check_initial_states(self):
+        # check if initial states are numerical values
+        try:
+            if not all(isinstance(_, (int, float)) for _ in self.initial_states.values()):
+                raise TypeError('Initial states must be numerical values.'
+                                ' Initialize all initial states.')
+        except TypeError as e:
+            self.logger.exception('Initial states must be numerical values.'
+                                  ' Initialize all initial states.')
+            raise e
+
         # check if initial states are positive
         try:
             if not all(_ >= 0 for _ in self.initial_states.values()):
                 raise ValueError('Model initial states must be positive')
         except ValueError as e:
             self.logger.exception('Model initial states must be positive')
-            raise e
-        except TypeError as e:
-            self.logger.exception('Initial states must be numerical values.'
-                                  ' Initialize all initial states.')
             raise e
 
     def error_check_mosq_initial_states(self):
