@@ -9,11 +9,10 @@ in root configuration file.
 import numpy as np
 import yaml
 import os
-#import sys
 import pandas as pd
 import pyarrow as pa
 import pyarrow.parquet as pq
-from utils import create_arg_parser, timer
+from utils import timer
 from scipy.integrate import solve_ivp
 from abc import ABC, abstractmethod
 
@@ -73,7 +72,7 @@ class VectorBorneDiseaseModel(ABC):
 
         # Read mosquito initial states
         try:
-            self.mosq = np.array(pd.read_csv(os.path.join(self.config_dict['MOSQUITOES_FILE_PATH'], 'mosq.csv'))['Sv'])
+            self.mosq = np.array(pd.read_csv(self.config_dict['MOSQUITOES_FILE_PATH'])['Sv'])
         except FileNotFoundError as e:
             self.logger.exception('Mosquito population input file not found.')
             raise e

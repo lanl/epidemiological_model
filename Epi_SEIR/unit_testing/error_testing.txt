@@ -4,6 +4,9 @@ Error types to unit test and config files to make.
 1 configuration file for each error trigger (e.g., negative population, etc.)
 	- can have the same config file for both diseases.
 
+NOTE - INITIAL_STATES error checks also require a configuration file to
+       point to the initial states file
+
 TypeError
 	INITIAL_STATES: Initial states must be strings DONE
 	INITIAL_STATES: position values must be integers DONE
