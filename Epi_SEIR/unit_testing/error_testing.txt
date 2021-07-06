@@ -1,0 +1,25 @@
+Error types to unit test and config files to make.
+
+1 pytest function for each error type.
+1 configuration file for each error trigger (e.g., negative population, etc.)
+	- can have the same config file for both diseases.
+
+TypeError
+	INITIAL_STATES: Initial states must be strings
+	INITIAL_STATES: position values must be integers
+	INITIAL_STATES: initial states must be numerical values
+
+ValueError
+	INITIAL_STATES: position values must be unique
+	INITIAL_STATES: position values must be positive
+	INITIAL_STATES: initial states must be positive
+	CONFIG: duration must be positive
+	CONFIG: duration must be less than available mosquito data
+	CONFIG:	resolution must be positive
+
+######################
+# UNDER CONSTRUCTION #
+######################
+
+- error checking mosquito population input data
+- error checking output type in config file

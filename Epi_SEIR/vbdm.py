@@ -147,6 +147,8 @@ class VectorBorneDiseaseModel(ABC):
 
         self.logger.info(f'Output saved to {output_path}')
 
+    # TODO error check output type in config file?
+
     def error_check_state_names(self):
         # check if compartment names field is string type
         try:

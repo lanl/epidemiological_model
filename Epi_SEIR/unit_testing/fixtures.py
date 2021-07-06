@@ -3,11 +3,8 @@ from dengue import DengueSEIRModel
 from wnv import WNVSEIRModel
 import sys
 
-arg_list = ['config/unit_testing/pytest_config_1.yaml']
-            #'config/unit_testing/pytest_config_2.yaml']
-
-value_error_arglist = []
-type_error_arglist = []
+arg_list = ['config/pytest_config_1.yaml']
+            #'config/pytest_config_2.yaml']
 
 """
 TODO: have set of config files with things that should raise a type of error
