@@ -189,7 +189,7 @@ class VectorBorneDiseaseModel(ABC):
     def error_check_initial_states(self):
         # check if initial states are numerical values
         try:
-            if not all(isinstance(_, (int, float)) for _ in self.initial_states.values()):
+            if not all(isinstance(_, (int, float, np.int64)) for _ in self.initial_states.values()):
                 raise TypeError('Initial states must be numerical values.'
                                 ' Initialize all initial states.')
         except TypeError as e:
@@ -206,16 +206,21 @@ class VectorBorneDiseaseModel(ABC):
             raise e
 
     def error_check_mosq_initial_states(self):
+        # check if mosquito initial states are numerical values
+        # print('\033[7m' + "FLAG ----------" + '\033[0m', type(self.mosq[1]))
+        try:
+            if not all(isinstance(_, (int, float, np.int64)) for _ in self.mosq):
+                raise TypeError('Mosquito initial states must be numerical values.')
+        except TypeError as e:
+            self.logger.exception('Mosquito initial states must be numerical values.')
+            raise e
+
         # check if mosquito initial states are positive
         try:
             if not all(_ >= 0 for _ in self.mosq):
                 raise ValueError('Mosquito initial states must be positive')
         except ValueError as e:
             self.logger.exception('Mosquito initial states must be positive')
-            raise e
-        except TypeError as e:
-            self.logger.exception('Mosquito initial states must be numerical values.'
-                                  ' Initialize all mosquito initial states.')
             raise e
 
         # check if duration is positive
