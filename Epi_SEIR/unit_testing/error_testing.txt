@@ -11,13 +11,13 @@ TypeError
 	INITIAL_STATES: Initial states must be strings DONE
 	INITIAL_STATES: position values must be integers DONE
 	INITIAL_STATES: initial states must be numerical values DONE
-	MOSQ: mosquito initial states must be numerical values
+	MOSQ: mosquito initial states must be numerical values DONE
 
 ValueError
 	INITIAL_STATES: position values must be unique DONE
 	INITIAL_STATES: position values must be positive DONE
 	INITIAL_STATES: initial states must be positive DONE
-	MOSQ: mosquito initial states must be positive
+	MOSQ: mosquito initial states must be positive DONE
 	CONFIG: duration must be positive DONE
 	CONFIG: duration must be less than available mosquito data DONE
 	CONFIG:	resolution must be positive DONE
