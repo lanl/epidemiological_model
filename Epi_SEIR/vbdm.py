@@ -131,25 +131,17 @@ class VectorBorneDiseaseModel(ABC):
     def save_output(self, disease_name):
         """Save output to file"""
         df = pd.DataFrame(dict(zip(list(self.state_names_order.values()), self.model_output.T)))
-        # TODO strip '.' is any exist in output type
-        if self.config_dict['OUTPUT_TYPE'].lower() == 'csv':
+
+        if self.config_dict['OUTPUT_TYPE'] == 'csv':
             output_path = os.path.join(self.config_dict['OUTPUT_DIR'],
                                        f'{disease_name}_model_output.csv')
             df.to_csv(output_path)
         else:
-            if self.config_dict['OUTPUT_TYPE'].lower() != 'parquet':
-                self.logger.error(f'Output file type'
-                                  ' {self.config_dict["OUTPUT_TYPE"].lower()}'
-                                  ' not recognized. Output will be .parquet file')
-
             output_path = os.path.join(self.config_dict['OUTPUT_DIR'],
                                        f'{disease_name}_model_output.parquet')
             pq.write_table(pa.Table.from_pandas(df), output_path)
 
         self.logger.info(f'Output saved to {output_path}')
-
-    # TODO error check output type in config file?
-    # TODO error check if path name is string
 
     def error_check_output_type(self):
         # check if output type is a string
@@ -160,8 +152,9 @@ class VectorBorneDiseaseModel(ABC):
             self.logger.exception('Output type must be a string')
             raise e
 
-        self.config_dict['OUTPUT_TYPE'] = self.config_dict['OUTPUT_TYPE'].strip('.')
+        self.config_dict['OUTPUT_TYPE'] = self.config_dict['OUTPUT_TYPE'].strip('.').lower()
 
+        # check if output type is .csv or .parquet
         try:
             if (self.config_dict['OUTPUT_TYPE'] != 'csv') and (self.config_dict['OUTPUT_TYPE'] != 'parquet'):
                 raise ValueError('Output type must be .csv or .parquet')
