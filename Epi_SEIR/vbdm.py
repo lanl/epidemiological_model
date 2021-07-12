@@ -34,6 +34,8 @@ class VectorBorneDiseaseModel(ABC):
     def __init__(self, config_file, disease_name):
         self._read_config(config_file, disease_name)
 
+        self.error_check_output_type()
+
         # Read parameters
         self.params = self.config_dict[disease_name]['PARAMETERS']
 
@@ -129,7 +131,7 @@ class VectorBorneDiseaseModel(ABC):
     def save_output(self, disease_name):
         """Save output to file"""
         df = pd.DataFrame(dict(zip(list(self.state_names_order.values()), self.model_output.T)))
-
+        # TODO strip '.' is any exist in output type
         if self.config_dict['OUTPUT_TYPE'].lower() == 'csv':
             output_path = os.path.join(self.config_dict['OUTPUT_DIR'],
                                        f'{disease_name}_model_output.csv')
@@ -147,6 +149,15 @@ class VectorBorneDiseaseModel(ABC):
         self.logger.info(f'Output saved to {output_path}')
 
     # TODO error check output type in config file?
+    # TODO error  check if path name is string
+
+    def error_check_output_type(self):
+        try:
+            if not isinstance(self.config_dict['OUTPUT_TYPE'], str):
+                raise TypeError('Output type must be a string')
+        except TypeError as e:
+            self.logger.exception('Output type must be a string')
+            raise e
 
     def error_check_state_names(self):
         # check if compartment names field is string type
