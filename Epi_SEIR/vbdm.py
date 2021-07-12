@@ -34,6 +34,8 @@ class VectorBorneDiseaseModel(ABC):
     def __init__(self, config_file, disease_name):
         self._read_config(config_file, disease_name)
 
+        self.error_check_output_type()
+
         # Read parameters
         self.params = self.config_dict[disease_name]['PARAMETERS']
 
@@ -130,23 +132,35 @@ class VectorBorneDiseaseModel(ABC):
         """Save output to file"""
         df = pd.DataFrame(dict(zip(list(self.state_names_order.values()), self.model_output.T)))
 
-        if self.config_dict['OUTPUT_TYPE'].lower() == 'csv':
+        if self.config_dict['OUTPUT_TYPE'] == 'csv':
             output_path = os.path.join(self.config_dict['OUTPUT_DIR'],
                                        f'{disease_name}_model_output.csv')
             df.to_csv(output_path)
         else:
-            if self.config_dict['OUTPUT_TYPE'].lower() != 'parquet':
-                self.logger.error(f'Output file type'
-                                  ' {self.config_dict["OUTPUT_TYPE"].lower()}'
-                                  ' not recognized. Output will be .parquet file')
-
             output_path = os.path.join(self.config_dict['OUTPUT_DIR'],
                                        f'{disease_name}_model_output.parquet')
             pq.write_table(pa.Table.from_pandas(df), output_path)
 
         self.logger.info(f'Output saved to {output_path}')
 
-    # TODO error check output type in config file?
+    def error_check_output_type(self):
+        # check if output type is a string
+        try:
+            if not isinstance(self.config_dict['OUTPUT_TYPE'], str):
+                raise TypeError('Output type must be a string')
+        except TypeError as e:
+            self.logger.exception('Output type must be a string')
+            raise e
+
+        self.config_dict['OUTPUT_TYPE'] = self.config_dict['OUTPUT_TYPE'].strip('.').lower()
+
+        # check if output type is .csv or .parquet
+        try:
+            if (self.config_dict['OUTPUT_TYPE'] != 'csv') and (self.config_dict['OUTPUT_TYPE'] != 'parquet'):
+                raise ValueError('Output type must be .csv or .parquet')
+        except ValueError as e:
+            self.logger.exception('Output type must be .csv or .parquet')
+            raise e
 
     def error_check_state_names(self):
         # check if compartment names field is string type

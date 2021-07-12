@@ -4,12 +4,12 @@
 
 PROJECT_ROOT: '/Users/jkeithley/Documents/CIMMID/human/dengue_model/Epi_SEIR'
 LOGFILE_PATH: '/Users/jkeithley/Documents/CIMMID/human/dengue_model/Epi_SEIR/logs'
-MOSQUITOES_FILE_PATH: '/Users/jkeithley/Documents/CIMMID/human/dengue_model/Epi_SEIR/mosquitoes/mosq.csv'
+MOSQUITOES_FILE_PATH: '/Users/jkeithley/Documents/CIMMID/human/dengue_model/Epi_SEIR/mosquitoes/unit_testing/pytest_mosq.csv'
 INITIAL_STATES_FILE_PATH: '/Users/jkeithley/Documents/CIMMID/human/dengue_model/Epi_SEIR/initial_states_input/initial_states.yaml'
 OUTPUT_DIR: '/Users/jkeithley/Documents/CIMMID/human/dengue_model/Epi_SEIR/human_model_output'
 
 # Add unit test specification?
-OUTPUT_TYPE: '.csv' # default is .parquet
+OUTPUT_TYPE: 2 # default is .parquet
 
 DURATION: 10 # number of days to run the model
 RESOLUTION: 50 # how many points to run per day

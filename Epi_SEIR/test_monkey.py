@@ -11,10 +11,14 @@ value_error_arglist = ['config/unit_testing/positive_duration.yaml',
                        'config/unit_testing/duration_le_mosq.yaml',
                        'config/unit_testing/unique_position.yaml',
                        'config/unit_testing/positive_position.yaml',
-                       'config/unit_testing/positive_states.yaml']
+                       'config/unit_testing/positive_states.yaml',
+                       'config/unit_testing/mosq_positive.yaml',
+                       'config/unit_testing/output_types.yaml']
 type_error_arglist = ['config/unit_testing/strings.yaml',
                       'config/unit_testing/position_integers.yaml',
-                      'config/unit_testing/numerical_states.yaml']
+                      'config/unit_testing/numerical_states.yaml',
+                      'config/unit_testing/mosq_numerical.yaml',
+                      'config/unit_testing/output_is_string.yaml']
 
 """
 TODO: have set of config files with things that should raise a type of error
@@ -35,19 +39,6 @@ class TestDengue:
         disease.logger.info('SUCCESS')
 
         return disease
-
-    # TESTING BLUEPRINT FUNCTION
-    @pytest.mark.skip
-    @pytest.mark.parametrize("config_file", arg_list)
-    # def test_dengue(self, setup_dengue, monkeypatch, config_file):
-    def test_dengue(self, monkeypatch, config_file):
-        with monkeypatch.context() as m:
-            m.setattr(sys, 'argv', ['models_main', '-c', config_file, '-d', 'dengue'])
-            # print('\033[7m' + "FLAG ----------" + '\033[0m', setup_dengue.states)
-            with pytest.raises(ValueError):
-                disease = DengueSEIRModel(config_file)
-            # models_main.main()
-            # assert True
 
     @pytest.mark.parametrize("config_file", value_error_arglist)
     def test_value_error(self, monkeypatch, config_file):
@@ -76,16 +67,6 @@ class TestWNV:
         disease.logger.info('SUCCESS')
 
         return disease
-
-    # TESTING BLUEPRINT FUNCTION
-    @pytest.mark.skip
-    @pytest.mark.parametrize("config_file", arg_list)
-    def test_wnv(self, setup_wnv, monkeypatch, config_file):
-        with monkeypatch.context() as m:
-            m.setattr(sys, 'argv', ['models_main', '-c', config_file, '-d', 'wnv'])
-            # print('\033[7m' + "FLAG ----------" + '\033[0m', setup_wnv.states)
-
-            assert True
 
     @pytest.mark.parametrize("config_file", value_error_arglist)
     def test_value_error(self, monkeypatch, config_file):
