@@ -175,7 +175,7 @@
 Vector Borne Disease Model class.</p>
 <blockquote>
 <div><p>Typical usage example:</p>
-<p>den = DengueSEIRModel(&lt;config_file_path&gt;)</p>
+<p>den = DengueSEIRModel(&lt;config_file_path&gt;, &lt;command_line_arguments&gt;)</p>
 </div></blockquote>
 <dl class="py class">
 <dt id="dengue.DengueSEIRModel">
@@ -185,12 +185,15 @@ Vector Borne Disease Model class.</p>
 <p>Inherits from the VectorBorneDiseaseModel class. Solves ODE system
 of equations and plots the resulting curves.</p>
 <dl class="simple">
-<dt>Attributes:</dt><dd><p>logger: python logging object</p>
+<dt>Attributes:</dt><dd><p>logger: python logging object.
+long_state_names: more compartment values for output.
+Nh: human population size
+Nh: vector population size</p>
 </dd>
 </dl>
 <dl class="py method">
 <dt id="dengue.DengueSEIRModel.model_func">
-<code class="sig-name descname">model_func</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">t</span></em><span class="sig-paren">)</span><a class="headerlink" href="#dengue.DengueSEIRModel.model_func" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">model_func</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">t</span></em>, <em class="sig-param"><span class="n">y</span></em><span class="sig-paren">)</span><a class="headerlink" href="#dengue.DengueSEIRModel.model_func" title="Permalink to this definition">¶</a></dt>
 <dd><p>Defines system of ODEs for dengue model.</p>
 <dl>
 <dt>Initial State Names:</dt><dd><p>Sh: Susceptible human population.</p>
@@ -212,17 +215,11 @@ of equations and plots the resulting curves.</p>
 <p>sigma_h: Maximum number of bites a human can support per unit time.</p>
 <p>sigma_v: Maximum vector biting rate.</p>
 <p>beta_h: Probability of vector to host transmission.</p>
-<p>beta_v: Probability of host tp vector transmission.</p>
+<p>beta_v: Probability of host to vector transmission.</p>
 <p>b_h: Biting rate (1 / (day * human))</p>
 <p>b_v: Biting rate (1 / (day * mosquito))</p>
 </dd>
 </dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="dengue.DengueSEIRModel.set_y0">
-<code class="sig-name descname">set_y0</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dengue.DengueSEIRModel.set_y0" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sets initial states to be passed into model_func</p>
 </dd></dl>
 
 </dd></dl>

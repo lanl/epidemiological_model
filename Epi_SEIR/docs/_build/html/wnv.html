@@ -183,9 +183,15 @@ Vector Borne Disease Model class.</p>
 <p>Models the spread of WNV.</p>
 <p>Inherits from the VectorBorneDiseaseModel class. Solves ODE system
 of equations and plots the resulting curves.</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><p>logger: python logging object.
+long_state_names: more compartment values for output.
+day_counter: keeps track of time passed to determine alpha.</p>
+</dd>
+</dl>
 <dl class="py method">
 <dt id="wnv.WNVSEIRModel.model_func">
-<code class="sig-name descname">model_func</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">t</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wnv.WNVSEIRModel.model_func" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">model_func</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">t</span></em>, <em class="sig-param"><span class="n">y</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wnv.WNVSEIRModel.model_func" title="Permalink to this definition">¶</a></dt>
 <dd><p>Defines system of ODEs for dengue model</p>
 <dl>
 <dt>Initial State Names:</dt><dd><p>Sv: Susceptible mosquito population.</p>
@@ -196,7 +202,7 @@ of equations and plots the resulting curves.</p>
 <p>Nb: Bird population.</p>
 <p>Ih: Infectious human population.</p>
 </dd>
-<dt>Parameters:</dt><dd><p>mu_m: Mosquito birth/death rate.</p>
+<dt>Parameters:</dt><dd><p>mu_v: Mosquito birth/death rate.</p>
 <dl class="simple">
 <dt>beta: Contact rate, probability of transmission between birds and</dt><dd><p>mosquitoes at time t.</p>
 </dd>
@@ -216,12 +222,6 @@ of equations and plots the resulting curves.</p>
 <p>t0: Inflection point for beta.</p>
 </dd>
 </dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="wnv.WNVSEIRModel.set_y0">
-<code class="sig-name descname">set_y0</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wnv.WNVSEIRModel.set_y0" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sets initial states to be passed into model_func</p>
 </dd></dl>
 
 </dd></dl>
