@@ -135,7 +135,7 @@ class VectorBorneDiseaseModel(ABC):
         if self.config_dict['OUTPUT_TYPE'] == 'csv':
             output_path = os.path.join(self.config_dict['OUTPUT_DIR'],
                                        f'{disease_name}_model_output.csv')
-            df.to_csv(output_path)
+            df.to_csv(output_path, index=False)
         else:
             output_path = os.path.join(self.config_dict['OUTPUT_DIR'],
                                        f'{disease_name}_model_output.parquet')
