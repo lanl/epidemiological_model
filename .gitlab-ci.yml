@@ -1,9 +1,9 @@
 default:
   image: python:3.8
-  before_script:
-    - apt-get update
-    - apt-get install -y python3-pip
-    - pip install -r requirements.txt
+    #  before_script:
+    #- apt-get update
+    #- apt-get install -y python3-pip
+    #- pip install -r requirements.txt
 test:
   script:
     pytest
