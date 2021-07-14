@@ -1,7 +1,6 @@
 pytest:
   stage: test
   script:
-    - cd Epi_SEIR
     - pwd
     - pytest --junitxml=Epi_SEIR/unit_testing/report.xml
     - pwd
