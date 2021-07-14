@@ -1,4 +1,8 @@
-test:
+pytest:
   stage: test
   script:
-    - echo "This job tests something"
+    - pytest --junitxml=report.xml
+  artifacts:
+    when: always
+    reports:
+      junit: report.xml
