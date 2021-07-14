@@ -7,7 +7,7 @@ default:
       #- pip install -r requirements.txt
 test:
   script:
-    pytest
+    pytest --junitxml=Epi_SEIR/unit_testing/report.xml
   artifacts:
     when: always
     reports:
