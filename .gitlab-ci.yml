@@ -7,11 +7,12 @@ default:
       #- pip install -r requirements.txt
 test:
   script:
-    pytest --junitxml=Epi_SEIR/unit_testing/report.xml
+    cd Epi_SEIR
+    pytest --junitxml=report.xml
   artifacts:
     when: always
     reports:
-      junit: Epi_SEIR/unit_testing/report.xml
+      junit: report.xml
 #pytest:
 #  stage: test
 #  script:
