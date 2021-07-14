@@ -11,7 +11,7 @@ test:
   artifacts:
     when: always
     reports:
-      junit: report.xml
+      junit: Epi_SEIR/report.xml
 #pytest:
 #  stage: test
 #  script:
