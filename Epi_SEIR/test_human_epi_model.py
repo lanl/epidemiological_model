@@ -33,13 +33,13 @@ class TestDengue:
     def setup_dengue(self, config_file):
         disease = DengueSEIRModel(config_file)
 
-        disease.logger.info(disease)
-        disease.run_model()
-        disease.save_output('dengue')
-        disease.logger.info('SUCCESS')
-
         return disease
 
+    # @pytest.mark.parametrize("config_file", ['config/local_test_config.yaml'])
+    # def test_stuff():
+    #     assert True
+
+    # test ValueError response
     @pytest.mark.parametrize("config_file", value_error_arglist)
     def test_value_error(self, monkeypatch, config_file):
         with monkeypatch.context() as m:
@@ -47,6 +47,7 @@ class TestDengue:
             with pytest.raises(ValueError):
                 disease = DengueSEIRModel(config_file)
 
+    # test TypeError response
     @pytest.mark.parametrize("config_file", type_error_arglist)
     def test_type_error(self, monkeypatch, config_file):
         with monkeypatch.context() as m:
@@ -68,6 +69,7 @@ class TestWNV:
 
         return disease
 
+    # test ValueError response
     @pytest.mark.parametrize("config_file", value_error_arglist)
     def test_value_error(self, monkeypatch, config_file):
         with monkeypatch.context() as m:
@@ -75,6 +77,7 @@ class TestWNV:
             with pytest.raises(ValueError):
                 disease = WNVSEIRModel(config_file)
 
+    # test TypeError response
     @pytest.mark.parametrize("config_file", type_error_arglist)
     def test_type_error(self, monkeypatch, config_file):
         with monkeypatch.context() as m:

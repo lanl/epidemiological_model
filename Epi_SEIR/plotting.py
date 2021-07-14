@@ -5,6 +5,9 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 
+# TODO remove hardcoded stuff
+# TODO move to vbdm to be a class method?
+
 
 def load_output():
     df = pd.read_csv("human_model_output/dengue_model_output.csv")
