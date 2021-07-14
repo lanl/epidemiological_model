@@ -2,8 +2,8 @@ pytest:
   stage: test
   script:
     - cd Epi_SEIR
-    - pytest --junitxml=report.xml
+    - pytest --junitxml=Epi_SEIR/unit_testing/report.xml
   artifacts:
     when: always
     reports:
-      junit: report.xml
+      junit: Epi_SEIR/unit_testing/report.xml
