@@ -1,6 +1,7 @@
 pytest:
   stage: test
   script:
+    - cd Epi_SEIR
     - pytest --junitxml=report.xml
   artifacts:
     when: always
