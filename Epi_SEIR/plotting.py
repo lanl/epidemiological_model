@@ -3,13 +3,28 @@
 """
 
 import matplotlib.pyplot as plt
+import pandas as pd
+
+# TODO remove hardcoded stuff
+# TODO move to vbdm to be a class method?
 
 
-def graph_model(self):
+def load_output():
+    df = pd.read_csv("human_model_output/dengue_model_output.csv")
+    Iha = df['Asymptomatic Infected Humans'].tolist()
+    Ihs = df['Symptomatic Infected Humans'].tolist()
+    Sh = df['Susceptible Humans'].tolist()
+    Rh = df['Recovered Humans'].tolist()
+
+    return Iha, Ihs, Sh, Rh
+
+
+def graph_model():
     """Plots output of WNV model"""
-    Sh, Eh, Iha, Ihs, Rh, Sv, Ev, Iv = self.model_output.T
+    # Sh, Eh, Iha, Ihs, Rh, Sv, Ev, Iv = self.model_output.T
+    Iha, Ihs, Sh, Rh = load_output()
 
-    fig = plt.figure(facecolor='w', figsize=[2*6.4, 2*4.8])
+    fig = plt.figure(facecolor='w', figsize=[1.5 * 6.4, 4.8])
     ax = fig.add_subplot(111, facecolor='#dddddd', axisbelow=True)
     ax.set_xlabel('Time (days)')
     ax.set_ylabel('Cases')
@@ -20,11 +35,21 @@ def graph_model(self):
     for spine in ('top', 'right', 'bottom', 'left'):
         ax.spines[spine].set_visible(False)
 
-    ax.plot(self.t, Sh, 'b', alpha=0.5, lw=2, label='Susceptible Humans')
-    ax.plot(self.t, Iha+Ihs, 'r', alpha=0.5, lw=2, label='Infected Humans')
-    ax.plot(self.t, Iv, 'k', alpha=0.5, lw=2, label='Infected Vectors')
+    t = list(range(len(Iha)))
+    ax.plot(t, Sh, alpha=0.5, lw=2, label='Susceptible Humans')
+    ax.plot(t, Iha, alpha=0.5, lw=2, label='Asymptomatic Infected Humans')
+    ax.plot(t, Ihs, alpha=0.5, lw=2, label='Symptomatic Infected Humans')
+    ax.plot(t, Rh, alpha=0.5, lw=2, label='Recovered Humans')
     legend = ax.legend()
     legend.get_frame().set_alpha(0.5)
-    plt.title("WNV Incidence")
+    plt.title("Dengue Incidence")
 
     plt.show()
+
+
+def main():
+    graph_model()
+
+
+if __name__ == "__main__":
+    main()
