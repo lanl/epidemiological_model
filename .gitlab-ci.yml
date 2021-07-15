@@ -8,7 +8,7 @@ test:
   script:
     - cd Epi_SEIR
     - pwd
-    - ls
+    - ls config/unit_testing
     - pytest --junitxml=report.xml
   artifacts:
     when: always
