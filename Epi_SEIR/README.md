@@ -1,3 +1,18 @@
+### *Standard Workflow*
+- Configure conda environment (below)
+- Pull changes
+	- `git pull`
+- Create new git branch
+	- `git branch <branch_name>`
+	- `git checkout <branch_name>`
+- Develop changes
+- Commit changes `git commit -m <commit_message>`
+- Verify continuous integration job passed
+	- left sidebar -> CI/CD -> Pipelines
+- Merge branch with master
+	- `git checkout master`
+	- `git merge <branch_name>`
+
 ### *Conda Environment Creation*
 To create environment from text file specification, run
 - `conda create --name human-epi-env --file conda_environment/human-epi-env.txt`
