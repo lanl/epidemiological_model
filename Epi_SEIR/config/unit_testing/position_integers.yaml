@@ -2,11 +2,11 @@
 # Vector Borne Disease Model Configuration #
 #------------------------------------------#
 
-PROJECT_ROOT: '/Users/jkeithley/Documents/CIMMID/human/dengue_model/Epi_SEIR'
-LOGFILE_PATH: '/Users/jkeithley/Documents/CIMMID/human/dengue_model/Epi_SEIR/logs'
-MOSQUITOES_FILE_PATH: '/Users/jkeithley/Documents/CIMMID/human/dengue_model/Epi_SEIR/mosquitoes/unit_testing/pytest_mosq.csv'
-INITIAL_STATES_FILE_PATH: '/Users/jkeithley/Documents/CIMMID/human/dengue_model/Epi_SEIR/initial_states_input/unit_testing/position_integers_init_state.yaml'
-OUTPUT_DIR: '/Users/jkeithley/Documents/CIMMID/human/dengue_model/Epi_SEIR/human_model_output'
+PROJECT_ROOT: '.'
+LOGFILE_PATH: 'logs'
+MOSQUITOES_FILE_PATH: 'mosquitoes/unit_testing/pytest_mosq.csv'
+INITIAL_STATES_FILE_PATH: 'initial_states_input/unit_testing/position_integers_init_state.yaml'
+OUTPUT_DIR: 'human_model_output'
 
 # Add unit test specification?
 OUTPUT_TYPE: 'csv' # default is .parquet
