@@ -14,11 +14,3 @@ test:
     when: always
     reports:
       junit: Epi_SEIR/report.xml
-#pytest:
-#  stage: test
-#  script:
-#    - pytest --junitxml=Epi_SEIR/unit_testing/report.xml
-#  artifacts:
-#    when: always
-#    reports:
-#      junit: Epi_SEIR/unit_testing/report.xml
