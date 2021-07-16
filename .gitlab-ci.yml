@@ -20,8 +20,8 @@ test:
       junit: Epi_SEIR/report.xml
 
 docs:
-  - stage: docs
-  - script:
+  stage: docs
+  script:
     - cd Epi_SEIR/docs
     - make clean
     - make html
