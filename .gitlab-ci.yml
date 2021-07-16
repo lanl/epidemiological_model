@@ -12,3 +12,8 @@ test:
     when: always
     reports:
       junit: Epi_SEIR/report.xml
+docs:
+  - script:
+    - cd Epi_SEIR/docs
+    - make clean
+    - make html
