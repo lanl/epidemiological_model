@@ -23,5 +23,6 @@ docs:
   stage: docs
   script:
     - cd Epi_SEIR/docs
+    - pip install sphinx-rtd-theme
     - make clean
     - make html
