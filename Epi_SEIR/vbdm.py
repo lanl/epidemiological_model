@@ -144,7 +144,8 @@ class VectorBorneDiseaseModel(ABC):
         self.logger.info(f'Output saved to {output_path}')
 
     def error_check_output_type(self):
-        # check if output type is a string
+        """check if output type is a string.
+        check if output type is .csv or .parquet"""
         try:
             if not isinstance(self.config_dict['OUTPUT_TYPE'], str):
                 raise TypeError('Output type must be a string')
