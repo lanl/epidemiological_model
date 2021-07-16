@@ -10,3 +10,5 @@ epi_seir
    utils
    vbdm
    wnv
+   generate_inputs
+   test_human_epi_model

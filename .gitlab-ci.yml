@@ -4,7 +4,13 @@ default:
       - apt-get update
       - apt-get install -y python3-pip
       - pip install -r requirements.txt
+
+stages:
+  - test
+  - docs
+
 test:
+  stage: test
   script:
     - cd Epi_SEIR
     - pytest --junitxml=report.xml
@@ -12,3 +18,11 @@ test:
     when: always
     reports:
       junit: Epi_SEIR/report.xml
+
+docs:
+  stage: docs
+  script:
+    - cd Epi_SEIR/docs
+    - pip install sphinx-rtd-theme
+    - make clean
+    - make html

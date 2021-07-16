@@ -144,7 +144,9 @@ class VectorBorneDiseaseModel(ABC):
         self.logger.info(f'Output saved to {output_path}')
 
     def error_check_output_type(self):
-        # check if output type is a string
+        """Check if output type is a string.
+
+        Check if output type is .csv or .parquet"""
         try:
             if not isinstance(self.config_dict['OUTPUT_TYPE'], str):
                 raise TypeError('Output type must be a string')
@@ -154,7 +156,6 @@ class VectorBorneDiseaseModel(ABC):
 
         self.config_dict['OUTPUT_TYPE'] = self.config_dict['OUTPUT_TYPE'].strip('.').lower()
 
-        # check if output type is .csv or .parquet
         try:
             if (self.config_dict['OUTPUT_TYPE'] != 'csv') and (self.config_dict['OUTPUT_TYPE'] != 'parquet'):
                 raise ValueError('Output type must be .csv or .parquet')
@@ -163,7 +164,7 @@ class VectorBorneDiseaseModel(ABC):
             raise e
 
     def error_check_state_names(self):
-        # check if compartment names field is string type
+        """Check if compartment names field is string type."""
         try:
             if not all(isinstance(_, str) for _ in self.state_names_order.values()):
                 raise TypeError('Initial state names must be strings')
@@ -172,11 +173,16 @@ class VectorBorneDiseaseModel(ABC):
             raise e
 
     def error_check_positions(self):
+        """Check if position array is unique.
+
+        Check if position array is int type.
+
+        Check if positions array is positive."""
+
         # EXTRACT list of position
         positions = [list(self.initial_states.values())[i]['position'] for i in
                      range(len(self.initial_states.values()))]
 
-        # check if position array is unique
         try:
             if len(positions) != len(np.unique(positions)):
                 raise ValueError('Position values must be unique')
@@ -184,7 +190,6 @@ class VectorBorneDiseaseModel(ABC):
             self.logger.exception('Position values must be unique')
             raise e
 
-        # check if position array is int type
         try:
             if not all(isinstance(_, int) for _ in positions):
                 raise TypeError('Position values must be integers')
@@ -192,7 +197,6 @@ class VectorBorneDiseaseModel(ABC):
             self.logger.exception('Position values must be integers')
             raise e
 
-        # check if positions array is positive
         try:
             if not all(_ >= 0 for _ in positions):
                 raise ValueError('Position values must be positive')
@@ -201,7 +205,10 @@ class VectorBorneDiseaseModel(ABC):
             raise e
 
     def error_check_initial_states(self):
-        # check if initial states are numerical values
+        """Check if initial states are numerical values.
+
+        Check if initial states are positive."""
+
         try:
             if not all(isinstance(_, (int, float, np.int64)) for _ in self.initial_states.values()):
                 raise TypeError('Initial states must be numerical values.'
@@ -211,7 +218,6 @@ class VectorBorneDiseaseModel(ABC):
                                   ' Initialize all initial states.')
             raise e
 
-        # check if initial states are positive
         try:
             if not all(_ >= 0 for _ in self.initial_states.values()):
                 raise ValueError('Model initial states must be positive')
@@ -220,8 +226,16 @@ class VectorBorneDiseaseModel(ABC):
             raise e
 
     def error_check_mosq_initial_states(self):
-        # check if mosquito initial states are numerical values
-        # print('\033[7m' + "FLAG ----------" + '\033[0m', type(self.mosq[1]))
+        """Check if mosquito initial states are numerical values.
+
+        Check if mosquito initial states are positive.
+
+        Check if simulation duration is positive.
+
+        Check if simulation does not exceed available mosquito population data.
+
+        Check if simulation daily resolution is positive."""
+
         try:
             if not all(isinstance(_, (int, float, np.int64)) for _ in self.mosq):
                 raise TypeError('Mosquito initial states must be numerical values.')
@@ -229,7 +243,6 @@ class VectorBorneDiseaseModel(ABC):
             self.logger.exception('Mosquito initial states must be numerical values.')
             raise e
 
-        # check if mosquito initial states are positive
         try:
             if not all(_ >= 0 for _ in self.mosq):
                 raise ValueError('Mosquito initial states must be positive')
@@ -237,7 +250,6 @@ class VectorBorneDiseaseModel(ABC):
             self.logger.exception('Mosquito initial states must be positive')
             raise e
 
-        # check if duration is positive
         try:
             if not self.config_dict['DURATION'] > 0:
                 raise ValueError('Simulation duration must be positive')
@@ -245,7 +257,6 @@ class VectorBorneDiseaseModel(ABC):
             self.logger.exception('Simulation duration must be positive')
             raise e
 
-        # check if a long enough mosquito population vector is supplied
         try:
             if self.config_dict['DURATION'] > len(self.mosq):
                 raise ValueError('Simulation duration exceeds days of'
@@ -255,7 +266,6 @@ class VectorBorneDiseaseModel(ABC):
                                   ' available mosquito population data.')
             raise e
 
-        # check if resolution is positive
         try:
             if not self.config_dict['RESOLUTION'] > 0:
                 raise ValueError('Simulation resolution must be positive')
