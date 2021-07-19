@@ -96,5 +96,6 @@ class WNVSEIRModel(vbdm.VectorBorneDiseaseModel):
 
         rng = np.random.default_rng()
         ddt['Ih'] = rng.poisson(lam=self.params['eta'] * self.states['Iv'])
+        # will insert normal dist.
 
         return tuple(ddt.values())
