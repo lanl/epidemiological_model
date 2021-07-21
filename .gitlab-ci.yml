@@ -1,6 +1,8 @@
 default:
-  image: continuumio/miniconda3
+  image: continuumio/miniconda3:latest
   before_script:
+      - apt-get update -q -y
+      - apt-get install -y build-essential
       - conda env create --file human-epi-env.yml
       - conda init bash
       - source ~/.bashrc
