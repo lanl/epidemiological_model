@@ -3,6 +3,7 @@ default:
   before_script:
       - apt-get update -q -y
       - apt-get install -y build-essential
+      - pwd
       - conda env create --file human-epi-env.yml
       - conda init bash
       - source ~/.bashrc
