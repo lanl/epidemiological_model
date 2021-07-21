@@ -26,3 +26,6 @@ docs:
     - pip install sphinx-rtd-theme
     - make clean
     - make html
+  artifacts:
+    paths:
+      - docs
