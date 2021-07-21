@@ -28,4 +28,4 @@ docs:
     - make html
   artifacts:
     paths:
-      - docs
+      - Epi_SEIR/docs/_build/html
