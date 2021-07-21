@@ -1,5 +1,5 @@
 default:
-  image: continuumio/miniconda:latest
+  image: continuumio/miniconda3
   before_script:
       - conda env create --file human-epi-env.yml
       - conda init bash
