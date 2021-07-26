@@ -1,14 +1,14 @@
-epi_seir
+Epi_SEIR
 ========
 
 .. toctree::
    :maxdepth: 4
 
    dengue
+   generate_inputs
    models_main
    plotting
+   test_human_epi_model
    utils
    vbdm
    wnv
-   generate_inputs
-   test_human_epi_model

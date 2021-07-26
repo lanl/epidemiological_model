@@ -12,7 +12,8 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('/Users/jkeithley/Documents/CIMMID/human/dengue_model/Epi_SEIR'))
+# sys.path.insert(0, os.path.abspath('/Users/jkeithley/Documents/CIMMID/human/human_epi_models/Epi_SEIR'))
+sys.path.insert(0, os.path.relpath('..', ))
 
 
 # -- Project information -----------------------------------------------------
