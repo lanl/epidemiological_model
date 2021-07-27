@@ -10,6 +10,7 @@ stages:
 test:
   stage: test
   script:
+    - pwd
     - cd Epi_SEIR
     - pytest --junitxml=report.xml
   artifacts:
