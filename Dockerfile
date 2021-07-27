@@ -4,7 +4,7 @@ FROM continuumio/miniconda3
 SHELL ["/bin/bash", "--login", "-c"]
 
 # install build essentials, which will include things like gcc (needed to build the R smooth package below)
-RUN apt-get update
+RUN apt-get update && apt-get install -y build-essential
 
 # configure the proxy
 RUN echo "export HTTP_PROXY=http://proxyout.lanl.gov:8080" >> ~/.bashrc

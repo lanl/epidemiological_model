@@ -1,12 +1,11 @@
-default:
-  image: gitlab.lanl.gov:5050/cimmid/disease_and_human_modeling/human_epi_models:latest
-  before_script:
-      - cat ~/.bashrc
-      - source ~/.bashrc
-
 stages:
   - test
   - docs
+
+default:
+  image: gitlab.lanl.gov:5050/cimmid/disease_and_human_modeling/human_epi_models:latest
+  before_script:
+      - source ~/.bashrc
 
 test:
   stage: test
