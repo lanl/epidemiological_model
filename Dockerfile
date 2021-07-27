@@ -17,4 +17,5 @@ RUN echo "export NO_PROXY=localhost" >> ~/.bashrc
 RUN conda init bash
 RUN conda create -y -n human-epi-env
 RUN echo "conda activate human-epi-env" >> ~/.bashrc
+SHELL ["/bin/bash", "--login", "-c"]
 RUN conda install -y -c conda-forge numpy pyyaml pandas scipy pyarrow matplotlib sphinx pytest
