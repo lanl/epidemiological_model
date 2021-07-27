@@ -32,6 +32,23 @@ To create environment manually, run the following
 ### *Unit Testing*
 UNDER CONSTRUCTION
 
+### *Gitlab Continuous Integration*
+#### *SETUP: Building and Pushing the Image*
+- Install [Docker Desktop](https://www.docker.com/products/docker-desktop).
+- Create a GitLab personal access token. [This documentation](https://gitlab.lanl.gov/help/user/profile/personal_access_tokens) walks you through the process. In short, visit https://gitlab.lanl.gov/profile/personal_access_tokens, and create a new personal access token that has `read_registry` and `write_registry` permissions. Copy this token.
+- Open a terminal, and change directories to the root of this project.
+- Login using your newly-created personal access token: `docker login gitlab.lanl.gov:5050`
+    * Your username is your LANL moniker (identical to your GitLab username), and your password is the token.
+    * To have Docker remember your credentials locally on a Mac, edit `~/.docker/config.json` to modify the `credsStore` setting to be `osxkeychain` prior to logging in (alternatively, log out using `docker logout gitlab.lanl.gov:5050` and log back in after modifying this setting).
+- There is a known [Docker issue](https://github.com/docker/for-mac/issues/2723) where NO_PROXY is not honored. You will need to enable the manual proxy in Docker Desktop when building the image, and disable it before pushing the image. Details are below.
+- Go to Docker Desktop GUI -> settings -> resources -> proxies.
+- Toggle the "Manual proxy configuration" switch
+- Enter "http://proxyout.lanl.gov:8080" for the first two boxes and "\*.lanl.gov" for the third box.
+- Build the image: `docker build -t gitlab.lanl.gov:5050/cimmid/disease_and_human_modeling/human_epi_models .`
+- Toggle the "Manual proxy configuration" switch again
+- Push the image: `docker push gitlab.lanl.gov:5050/cimmid/disease_and_human_modeling/human_epi_models`
+- Verify that the image is now present at gitlab.lanl.gov/cimmid/disease_and_human_modeling/human_epi_models/container_registry.
+
 ### *Files*
 
 #### Python Scripts
