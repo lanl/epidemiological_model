@@ -33,7 +33,7 @@ To create environment manually, run the following
 UNDER CONSTRUCTION
 
 ### *Gitlab Continuous Integration*
-#### *SETUP: Building and Pushing the Image*
+#### SETUP: Building and Pushing the Image
 - Install [Docker Desktop](https://www.docker.com/products/docker-desktop).
 - Create a GitLab personal access token. [This documentation](https://gitlab.lanl.gov/help/user/profile/personal_access_tokens) walks you through the process. In short, visit https://gitlab.lanl.gov/profile/personal_access_tokens, and create a new personal access token that has `read_registry` and `write_registry` permissions. Copy this token.
 - Open a terminal, and change directories to the root of this project.
@@ -48,6 +48,11 @@ UNDER CONSTRUCTION
 - Toggle the "Manual proxy configuration" switch again
 - Push the image: `docker push gitlab.lanl.gov:5050/cimmid/disease_and_human_modeling/human_epi_models`
 - Verify that the image is now present at gitlab.lanl.gov/cimmid/disease_and_human_modeling/human_epi_models/container_registry.
+#### Adding a package to the environment
+NOTE: There is probably a better way to do this, but this works for now.
+- Edit *Dockerfile* in the *human_epi_models* directory.
+- Add the name of the package to be added in the `conda install` line of the file.
+- Build the image and push it to the container registry as outlined in the **SETUP** steps above.
 
 ### *Files*
 
