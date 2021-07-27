@@ -10,7 +10,6 @@ default:
 test:
   stage: test
   script:
-    - conda info
     - cd Epi_SEIR
     - pytest --junitxml=report.xml
   artifacts:
