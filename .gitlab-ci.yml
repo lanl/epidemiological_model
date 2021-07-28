@@ -24,3 +24,6 @@ docs:
     - pip install sphinx-rtd-theme
     - make clean
     - make html
+  artifacts:
+    paths:
+      - Epi_SEIR/docs/_build/html

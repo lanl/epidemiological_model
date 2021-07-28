@@ -20,7 +20,7 @@ To create environment from text file specification, run
 To create environment manually, run the following  
 - `conda create --name human-epi-env python=3.8.3`
 - `conda activate human-epi-env`
-- `conda install --channel conda-forge numpy pyyaml pandas scipy pyarrow matplotlib sphinx`
+- `conda install --channel conda-forge numpy pyyaml pandas scipy pyarrow matplotlib sphinx pytest`
 
 ### *Running Model*
 - `./run_human_epi_model.sh <config_file_path> <[1 to run clean script]|[0 to not run clean script]>`
