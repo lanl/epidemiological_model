@@ -30,7 +30,8 @@ To create environment manually, run the following
 - `./build_docs.sh`
 
 ### *Unit Testing*
-UNDER CONSTRUCTION
+- `pytest` is used for unit testing the code.
+- run the command `pytest` from the *Epi_SEIR* directory.
 
 ### *Gitlab Continuous Integration*
 #### SETUP: Building and Pushing the Image

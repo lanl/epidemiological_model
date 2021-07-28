@@ -80,7 +80,8 @@ class WNVSEIRModel(vbdm.VectorBorneDiseaseModel):
         # Find force of infection
         self._force_of_infection(t)
 
-        self.day_counter += 1
+        self.day_counter = int(t) + 1
+
         if self.day_counter >= 200:
             self.params['alpha'] = 0
 
