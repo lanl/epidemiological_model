@@ -23,7 +23,3 @@ ValueError
 	CONFIG: duration must be less than available mosquito data DONE
 	CONFIG:	resolution must be positive DONE
 	OUTPUT_TYPE: must be 'csv' or 'parquet' DONE
-
-######################
-# UNDER CONSTRUCTION #
-######################
