@@ -9,6 +9,11 @@ import argparse
 
 
 def main():
+    """Generates dummy input for code testing.
+
+    FOR TESTING ONLY.
+    """
+
     parser = argparse.ArgumentParser()
     parser.add_argument('-c', '--config_file', action='store',
                         default='config/config.yaml')
@@ -24,6 +29,8 @@ def main():
     arr = np.random.randint(4000, 4001, size=n)
     df = pd.DataFrame({'Sv': arr})
     df.to_csv(output_path)
+
+    # UNCOMMENT FOLLOWING BLOCK FOR PARQUET FORMAT
     #pq.write_table(pa.Table.from_pandas(df), os.path.join(output_path,
     #                                                          'mosq.parquet'))
 

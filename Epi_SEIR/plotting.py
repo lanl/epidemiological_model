@@ -10,6 +10,7 @@ import pandas as pd
 
 
 def load_output():
+    """Read model output into the program."""
     df = pd.read_csv("human_model_output/dengue_model_output.csv")
     Iha = df['Asymptomatic Infected Humans'].tolist()
     Ihs = df['Symptomatic Infected Humans'].tolist()

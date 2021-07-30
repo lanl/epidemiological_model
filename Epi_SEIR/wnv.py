@@ -22,9 +22,9 @@ class WNVSEIRModel(vbdm.VectorBorneDiseaseModel):
     of equations and plots the resulting curves.
 
     Attributes:
-        logger: python logging object.
-        long_state_names: more compartment values for output.
-        day_counter: keeps track of time passed to determine alpha.
+        logger: python logging object.\n
+        long_state_names: more compartment values for output.\n
+        day_counter: keeps track of time passed to determine alpha.\n
 
     """
 
@@ -35,10 +35,12 @@ class WNVSEIRModel(vbdm.VectorBorneDiseaseModel):
         super().__init__(config_file, 'WNV')
 
     def _population_sizes(self):
+        """Calculates population sizes of human and vector compartments"""
         self.Nv = sum([self.states['Sv'], self.states['Iv']])
         self.Nb = sum([self.states['Sb'], self.states['Ib']])
 
     def _force_of_infection(self, t):
+        """Calculates force of infection"""
         self.beta = self.params['A'] + (self.params['K'] - self.params['A']) / \
             (1 + math.exp(-self.params['r'] * (t - self.params['t0'])))
 

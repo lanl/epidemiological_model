@@ -20,10 +20,10 @@ class DengueSEIRModel(vbdm.VectorBorneDiseaseModel):
     of equations and plots the resulting curves.
 
     Attributes:
-        logger: python logging object.
-        long_state_names: more compartment values for output.
-        Nh: human population size
-        Nh: vector population size
+        logger: python logging object.\n
+        long_state_names: more compartment values for output.\n
+        Nh: human population size.\n
+        Nh: vector population size.\n
 
     """
 

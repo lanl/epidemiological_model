@@ -37,8 +37,7 @@ def create_arg_parser():
             parser.error('Specify [wnv] or [dengue]')
         else:
             return arg
-    # import sys
-    # print('\033[7m' + 'ARGUMENTS -------- ' + str(sys.argv) + '\033[0m')
+
     parser = argparse.ArgumentParser()
     parser.add_argument('-c', '--config_file', action='store',
                         type=lambda x: is_valid_file(parser, x))
