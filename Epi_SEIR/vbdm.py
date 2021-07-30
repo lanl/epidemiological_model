@@ -33,6 +33,7 @@ class VectorBorneDiseaseModel(ABC):
 
     def __init__(self, config_file, disease_name):
         self._read_config(config_file, disease_name)
+        self.dc_zip_tie = list(range(self.config_dict['DURATION'], -1, -1))
 
         self.error_check_output_type()
 
@@ -108,6 +109,23 @@ class VectorBorneDiseaseModel(ABC):
         """Runs ODE solver to generate model output"""
         keys = list(self.initial_states.keys())
         self.model_output = np.empty([0, len(keys)])
+        self.initial_states['Sv'] = self.mosq[0]
+
+        t = (0, self.config_dict['DURATION'])
+        t_eval = np.linspace(0, self.config_dict['DURATION'], self.config_dict['DURATION'] * self.config_dict['RESOLUTION'])
+
+        try:
+            sol = solve_ivp(self.model_func, t, list(self.initial_states.values()), t_eval=t_eval)
+            self.model_output = sol.y.T
+        except Exception as e:
+            self.logger.exception('Exception occured running model')
+            raise e
+
+    @timer
+    def OLD_run_model(self):
+        """Runs ODE solver to generate model output"""
+        keys = list(self.initial_states.keys())
+        self.model_output = np.empty([0, len(keys)])
 
         t = (0, 1)
         t_eval = np.linspace(0, 1, self.config_dict['RESOLUTION'] + 1)
@@ -135,7 +153,7 @@ class VectorBorneDiseaseModel(ABC):
         if self.config_dict['OUTPUT_TYPE'] == 'csv':
             output_path = os.path.join(self.config_dict['OUTPUT_DIR'],
                                        f'{disease_name}_model_output.csv')
-            df.to_csv(output_path, index=False)
+            df.to_csv(output_path)
         else:
             output_path = os.path.join(self.config_dict['OUTPUT_DIR'],
                                        f'{disease_name}_model_output.parquet')

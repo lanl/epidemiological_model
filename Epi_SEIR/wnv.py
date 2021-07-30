@@ -30,7 +30,7 @@ class WNVSEIRModel(vbdm.VectorBorneDiseaseModel):
 
     def __init__(self, config_file):
         self.logger = create_logger(__name__, config_file)
-        self.day_counter = 0
+        self.day_counter = -1
 
         super().__init__(config_file, 'WNV')
 
@@ -73,14 +73,17 @@ class WNVSEIRModel(vbdm.VectorBorneDiseaseModel):
         ddt = self.initial_states.copy()
 
         self.states = dict(zip(self.initial_states.keys(), y))
+        print(t)
+        if (self.dc_zip_tie[-1] == int(t)) and (len(self.dc_zip_tie) > 1):
+            self.day_counter += 1
+            self.dc_zip_tie.pop()
+            self.states['Sv'] = self.mosq[self.day_counter]
 
         # Find population size
         self._population_sizes()
 
         # Find force of infection
         self._force_of_infection(t)
-
-        self.day_counter = int(t)
 
         if self.day_counter >= 199:
             self.params['alpha'] = 0
@@ -97,7 +100,8 @@ class WNVSEIRModel(vbdm.VectorBorneDiseaseModel):
 
         rng = np.random.default_rng()
         try:
-            ddt['Ih'] = rng.poisson(lam=self.params['eta'] * self.states['Iv'])
+            #ddt['Ih'] = rng.poisson(lam=self.params['eta'] * self.states['Iv'])
+            ddt['Ih'] = self.params['eta'] * self.states['Iv']
         except ValueError:
             self.logger.exception(f"Used Normal distribution, lam = {math.trunc(self.params['eta']*self.states['Iv'])}")
             ddt['Ih'] = math.trunc(rng.normal(loc = self.params['eta']*self.states['Iv'], scale = math.sqrt(self.params['eta']*self.states['Iv'])))
