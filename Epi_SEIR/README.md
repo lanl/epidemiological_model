@@ -66,6 +66,7 @@ NOTE: There is probably a better way to do this, but this works for now.
 - **generate_inputs.py**: for testing purposes - generates dummy input for mosquito and human population inputs.
 - **plotting.py**: CURRENTLY UNDEVELOPED - for plotting the output of model run.
 - **test_human_epi_model.py**: contains code for unit testing the model.
+- **Toronto_PBMtoLogistic.py**:  fits the mosquito PBM output to time-varying logistic parameters for Toronto
 
 #### Directories
 - **config**: contains main configuration files and unit testing configuration files.
