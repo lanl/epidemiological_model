@@ -14,7 +14,7 @@ from scipy.optimize import leastsq
 
 # note: I'm not sure where this data is on Darwin, but I can send over the CSV if needed- Marina
 # import data
-df = pd.read_csv("MosqPBM_out.csv")
+df = pd.read_csv("/Users/mbarnard/Documents/MosqPBM_out.csv")
 
 # find column names
 col_names = list(df.columns)
