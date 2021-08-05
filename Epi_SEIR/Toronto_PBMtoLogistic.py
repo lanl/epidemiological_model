@@ -219,7 +219,7 @@ def mosq_fit_param_data():
         K_s = (Kv_max - Kv_min)/2
         K_b = Kv_min + K_s
         
-        mosq_param_data = mosq_param_data.append({'start_date' : T_date_sub[0], 'start_date_num' : season_start[0], 'end_date': T_date_sub[-1], 'end_date_num': season_end[0], 'r_s' : r_s, 'r_b': r_b, 'K_s' : K_s, 'K_b' : K_b}, ignore_index = True)
+        mosq_param_data = mosq_param_data.append({'start_date' : T_date_sub[0], 'start_date_num' : season_start[i], 'end_date': T_date_sub[-1], 'end_date_num': season_end[i], 'r_s' : r_s, 'r_b': r_b, 'K_s' : K_s, 'K_b' : K_b}, ignore_index = True)
         
     return(mosq_param_data)  
 
