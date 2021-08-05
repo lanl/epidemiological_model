@@ -204,4 +204,4 @@ def plot_together():
     for i in n:
         plt.plot(np.arange(season_start[i],season_end[i]), fit_array[i][0:fit_length[i]], 'b', linewidth = 3)
 
-plot_together()
+#plot_together()
