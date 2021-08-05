@@ -107,7 +107,8 @@ def cost(init_params, mosq): # pass in initial paramter values, mosquito data
     res = model - mosq
     return res.flatten()
 
-def fit_data(init_params, mosq): # pass in initial paramter values, mosquito data
+#adding an option to turn of the plot, default is to plot
+def fit_data(init_params, mosq, plot = True): # pass in initial paramter values, mosquito data
 
     fitted_params = leastsq(cost, init_params, args = mosq)[0]
     print('fitted min r_v = ', fitted_params[0])
@@ -118,13 +119,14 @@ def fit_data(init_params, mosq): # pass in initial paramter values, mosquito dat
     x0 = list(mosq)[0]
     t = np.arange(0,len(mosq))
     fit_x = odeint(logistic, x0, t, args = tuple(fitted_params))
-
-    plt.plot(t, mosq, 'r', linewidth = 3)
-    plt.plot(t, fit_x, 'b-', linewidth = 3)
-    plt.legend(['Data','Model'], loc = 'best')
-    plt.xlabel('t (days)')
-    plt.ylabel('(Susceptible) Mosquitoes')
-    plt.show()
+    
+    if plot == True:
+        plt.plot(t, mosq, 'r', linewidth = 3)
+        plt.plot(t, fit_x, 'b-', linewidth = 3)
+        plt.legend(['Data','Model'], loc = 'best')
+        plt.xlabel('t (days)')
+        plt.ylabel('(Susceptible) Mosquitoes')
+        plt.show()
     
     return (fit_x, fitted_params)
 
@@ -184,6 +186,48 @@ def fit_subset(i):  # for running one at a time
     print('Mosq season length = ', td_season_end - td_season_start)
     return T_fit[0]
 
+#Martha adding function that will collect start, end, and parameter values for each season
+#first pull dates because we will want that for reference
+T_date = np.array(Toronto_sort['date'])
+def mosq_fit_param_data():
+    #set_up empty dataframe
+    mosq_param_data = pd.DataFrame(columns = ['start_date', 'start_date_num', 'end_date', 'end_date_num', 'r_s', 'r_b', 'K_s', 'K_b'])
+    #loop through each season and fit parameters
+    for i in range(0,(len(season_start)-1)):
+        T_mosq_sub = T_mosq[season_start[i]:season_end[i]]
+        T_date_sub = T_date[season_start[i]:season_end[i]]
+
+        # fit
+        min_rv = -0.07
+        max_rv = 0.07
+        min_K = np.mean(T_mosq_sub) - 100
+        max_K = np.mean(T_mosq_sub) + 100
+
+        T_params = [min_rv, max_rv, min_K, max_K]
+        T_params = np.array(T_params)
+        
+        T_fit = fit_data(T_params, T_mosq_sub, False)
+        
+        # find r_b, r_s, K_b, K_s
+        rv_min = T_fit[1][0]      # rv min
+        rv_max = T_fit[1][1]      # rv max
+        Kv_min = T_fit[1][2]      # Kv min
+        Kv_max = T_fit[1][3]      # Kv max
+
+        r_s = (rv_max - rv_min)/2
+        r_b = rv_min + r_s
+        K_s = (Kv_max - Kv_min)/2
+        K_b = Kv_min + K_s
+        
+        mosq_param_data = mosq_param_data.append({'start_date' : T_date_sub[0], 'start_date_num' : season_start[0], 'end_date': T_date_sub[-1], 'end_date_num': season_end[0], 'r_s' : r_s, 'r_b': r_b, 'K_s' : K_s, 'K_b' : K_b}, ignore_index = True)
+        
+    return(mosq_param_data)  
+
+#write mosquito parameters to a csv, commenting out for now
+#df = mosq_fit_param_data()
+#df.to_csv("/Users/mbarnard/Documents/Toronto_mosq_params.csv")
+        
+
 def plot_together():
     
     # determine each year's fitting interval
@@ -204,4 +248,4 @@ def plot_together():
     for i in n:
         plt.plot(np.arange(season_start[i],season_end[i]), fit_array[i][0:fit_length[i]], 'b', linewidth = 3)
 
-#plot_together()
+plot_together()
