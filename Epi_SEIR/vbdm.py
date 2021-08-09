@@ -104,29 +104,45 @@ class VectorBorneDiseaseModel(ABC):
         pass
 
     @timer
-    def run_model(self):
+    def run_model(self, disease_name):
         """Runs ODE solver to generate model output"""
-        keys = list(self.initial_states.keys())
-        self.model_output = np.empty([0, len(keys)])
+        if disease_name == 'DENGUE':
+            keys = list(self.initial_states.keys())
+            self.model_output = np.empty([0, len(keys)])
 
-        t = (0, 1)
-        t_eval = np.linspace(0, 1, self.config_dict['RESOLUTION'] + 1)
+            t = (0, 1)
+            t_eval = np.linspace(0, 1, self.config_dict['RESOLUTION'] + 1)
 
-        for i in range(0, self.config_dict['DURATION']):
-            self.initial_states['Sv'] = self.mosq[i]
+            for i in range(0, self.config_dict['DURATION']):
+                self.initial_states['Sv'] = self.mosq[i]
 
+                try:
+                    sol = solve_ivp(self.model_func, t, list(self.initial_states.values()), t_eval=t_eval)
+                    out = sol.y.T
+                except Exception as e:
+                    self.logger.exception('Exception occurred running model')
+                    raise e
+
+                self.initial_states = dict(zip(keys, out[-1]))
+
+                out = out[:-1]
+
+                self.model_output = np.concatenate((self.model_output, out))
+    
+        elif disease_name == 'WNV':
+            keys = list(self.initial_states.keys())
+            self.model_output = np.empty([0, len(keys)])
+            
+            t = (0, self.config_dict['DURATION'])
+            t_eval = np.linspace(0, self.config_dict['DURATION'], self.config_dict['DURATION']*self.config_dict['RESOLUTION'] + 1)
+            
             try:
                 sol = solve_ivp(self.model_func, t, list(self.initial_states.values()), t_eval=t_eval)
                 out = sol.y.T
             except Exception as e:
                 self.logger.exception('Exception occurred running model')
                 raise e
-
-            self.initial_states = dict(zip(keys, out[-1]))
-
-            out = out[:-1]
-
-            self.model_output = np.concatenate((self.model_output, out))
+            self.model_output = out
 
     def save_output(self, disease_name):
         """Save output to file"""
