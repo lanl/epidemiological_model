@@ -28,10 +28,13 @@ DENGUE:
 WNV:
   PARAMETERS:
     mu_v: 0.06
-    alpha: 0.0006
-    delta_b: 4.5
+    mu_b: 0.20
+    alpha_v: 0.69
+    alpha_b: 0.74
+    beta_b: 0.44
     eta: 0.003
-    A: 0.008
-    K: 0.08
-    r: -0.12
-    t0: 2
+    K_b: 9596.401 # from Toronto 2004 season fitting
+    K_s: 8946.468
+    r_b: 0.00438 
+    r_s: 0.00976
+    nu_v: 0.10
