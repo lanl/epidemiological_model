@@ -91,7 +91,7 @@ class WNVSEIRModel(vbdm.VectorBorneDiseaseModel):
         self._force_of_infection()
 
         #Find mosquito carrying capacity and growth rate
-        self.mosq_population_values(t)
+        self._mosq_population_values(t)
 
         ddt['Sv'] = self.params['r_v'] * (1 - (self.Nv / self.params['K_v'])) * self.Nv - \
             self.lambda_v * self.states['Sv'] * self.states['Ib'] - \
