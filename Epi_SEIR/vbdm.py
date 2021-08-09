@@ -134,7 +134,7 @@ class VectorBorneDiseaseModel(ABC):
             self.model_output = np.empty([0, len(keys)])
             
             t = (0, self.config_dict['DURATION'])
-            t_eval = np.linspace(0, self.config_dict['DURATION'], self.config_dict['DURATION']*self.config_dict['RESOLUTION'] + 1)
+            t_eval = np.linspace(0, self.config_dict['DURATION'], self.config_dict['DURATION']*self.config_dict['RESOLUTION'])
             
             try:
                 sol = solve_ivp(self.model_func, t, list(self.initial_states.values()), t_eval=t_eval)
