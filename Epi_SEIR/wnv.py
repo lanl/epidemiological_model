@@ -67,12 +67,12 @@ class WNVSEIRModel(vbdm.VectorBorneDiseaseModel):
             beta_b: Biting rate under frequency dependence. \n
             alpha_v: Probability of virus transmission to mosquito per infectious bite.\n
             alpha_b: Probability of virus transmission to bird,per infectious bit.\n
-            K_b: ASK MARINA.\n
-            K_s: ASK MARINA.\n
-            K_v: Carrying capacity for mosquitoes.\n
-            r_b: ASK MARINA.\n
-            r_s: ASK MARINA.\n
-            r_v: Growth rate for mosquitoes.\n
+            K_b: For K_v function, baseline mosquito carrying capacity.\n
+            K_s: For K_v function, scaling factor for the mosquito carrying capacity.\n
+            K_v: Time varying carrying capacity for mosquitoes.\n
+            r_b: For r_v function, baseline mosquito growth rate.\n
+            r_s: For r_v function, scaling factor for mosquito growth rate.\n
+            r_v: Time varying growth rate for mosquitoes.\n
             lambda_v: Mosquito force of infection. \n
             lambda_b: Bird force of infection. \n
             nu_v: Mosquito latent period. \n
@@ -93,7 +93,7 @@ class WNVSEIRModel(vbdm.VectorBorneDiseaseModel):
         #Find mosquito carrying capacity and growth rate
         self._mosq_population_values(t)
 
-        ddt['Sv'] = self.params['r_v'] * (1 - (self.Nv / self.params['K_v'])) * self.Nv - \
+        ddt['Sv'] = self.r_v * (1 - (self.Nv / self.K_v)) * self.Nv - \
             self.lambda_v * self.states['Sv'] * self.states['Ib'] - \
             self.params['mu_v'] * self.states['Sv']
         ddt['Ev'] = self.lambda_v * self.states['Sv'] * self.states['Ib'] - \
