@@ -49,7 +49,7 @@ WNV:
     position: 1
   Iv:
     name: 'Infected Vectors'
-    value: 0
+    value: 20
     position: 2
   Sb:
     name: 'Susceptible Birds'
@@ -57,7 +57,7 @@ WNV:
     position: 3
   Ib:
     name: 'Infected Birds'
-    value: 0
+    value: 5
     position: 4
   Ih:
     name: 'Infected Humans'
