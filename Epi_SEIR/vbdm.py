@@ -106,7 +106,7 @@ class VectorBorneDiseaseModel(ABC):
     @timer
     def run_model(self, disease_name):
         """Runs ODE solver to generate model output"""
-        if disease_name == 'DENGUE':
+        if disease_name == 'dengue':
             keys = list(self.initial_states.keys())
             self.model_output = np.empty([0, len(keys)])
 
@@ -129,7 +129,7 @@ class VectorBorneDiseaseModel(ABC):
 
                 self.model_output = np.concatenate((self.model_output, out))
     
-        elif disease_name == 'WNV':
+        elif disease_name == 'wnv':
             keys = list(self.initial_states.keys())
             self.model_output = np.empty([0, len(keys)])
             
