@@ -32,7 +32,7 @@ def main():
         disease = WNVSEIRModel(args.config_file)
 
     disease.logger.info(disease)
-    disease.run_model()
+    disease.run_model(disease_name)
     disease.save_output(disease_name)
     disease.logger.info('SUCCESS')
 
