@@ -13,6 +13,8 @@
   
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
 
   
   
@@ -29,6 +31,7 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
@@ -87,7 +90,7 @@
               
             
             
-              <p class="caption"><span class="caption-text">Contents:</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">Epi_SEIR</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">dengue module</a></li>
@@ -179,8 +182,8 @@ Vector Borne Disease Model class.</p>
 <p>den = DengueSEIRModel(&lt;config_file_path&gt;, &lt;command_line_arguments&gt;)</p>
 </div></blockquote>
 <dl class="py class">
-<dt id="dengue.DengueSEIRModel">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">dengue.</span></code><code class="sig-name descname"><span class="pre">DengueSEIRModel</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dengue.DengueSEIRModel" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="dengue.DengueSEIRModel">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">dengue.</span></span><span class="sig-name descname"><span class="pre">DengueSEIRModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dengue.DengueSEIRModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="vbdm.html#vbdm.VectorBorneDiseaseModel" title="vbdm.VectorBorneDiseaseModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">vbdm.VectorBorneDiseaseModel</span></code></a></p>
 <p>Models the spread of dengue.</p>
 <p>Inherits from the VectorBorneDiseaseModel class. Solves ODE system
@@ -193,8 +196,8 @@ of equations and plots the resulting curves.</p>
 </dd>
 </dl>
 <dl class="py method">
-<dt id="dengue.DengueSEIRModel.model_func">
-<code class="sig-name descname"><span class="pre">model_func</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dengue.DengueSEIRModel.model_func" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="dengue.DengueSEIRModel.model_func">
+<span class="sig-name descname"><span class="pre">model_func</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dengue.DengueSEIRModel.model_func" title="Permalink to this definition">¶</a></dt>
 <dd><p>Defines system of ODEs for dengue model.</p>
 <dl>
 <dt>Initial State Names:</dt><dd><p>Sh: Susceptible human population.</p>
