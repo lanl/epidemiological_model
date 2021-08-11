@@ -118,7 +118,7 @@ def fit_data(init_params, mosq): # pass in initial paramter values, mosquito dat
     x0 = list(mosq)[0]
     t = np.arange(0,len(mosq))
     fit_x = odeint(logistic, x0, t, args = tuple(fitted_params))
-
+    
     plt.plot(t, mosq, 'r', linewidth = 3)
     plt.plot(t, fit_x, 'b-', linewidth = 3)
     plt.legend(['Data','Model'], loc = 'best')
@@ -183,7 +183,7 @@ def fit_subset(i):  # for running one at a time
     # Mosq season length
     print('Mosq season length = ', td_season_end - td_season_start)
     return T_fit[0]
-
+        
 def plot_together():
     
     # determine each year's fitting interval

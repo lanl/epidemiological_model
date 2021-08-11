@@ -13,6 +13,8 @@
   
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
 
   
   
@@ -29,6 +31,7 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
@@ -87,7 +90,7 @@
               
             
             
-              <p class="caption"><span class="caption-text">Contents:</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">Epi_SEIR</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="dengue.html">dengue module</a></li>
@@ -175,13 +178,13 @@
 <p>Contains unit tests for CIMMID Human Epi code.</p>
 <p>usage: pytest</p>
 <dl class="py class">
-<dt id="test_human_epi_model.TestDengue">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">test_human_epi_model.</span></code><code class="sig-name descname"><span class="pre">TestDengue</span></code><a class="headerlink" href="#test_human_epi_model.TestDengue" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="test_human_epi_model.TestDengue">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">test_human_epi_model.</span></span><span class="sig-name descname"><span class="pre">TestDengue</span></span><a class="headerlink" href="#test_human_epi_model.TestDengue" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Defines a class to test dengue code.</p>
 <dl class="py method">
-<dt id="test_human_epi_model.TestDengue.test_type_error">
-<code class="sig-name descname"><span class="pre">test_type_error</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">monkeypatch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#test_human_epi_model.TestDengue.test_type_error" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="test_human_epi_model.TestDengue.test_type_error">
+<span class="sig-name descname"><span class="pre">test_type_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">monkeypatch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#test_human_epi_model.TestDengue.test_type_error" title="Permalink to this definition">¶</a></dt>
 <dd><p>tests TypeError exceptions.</p>
 <dl class="simple">
 <dt>attributes:</dt><dd><p>type_error_arglist: list of configuration file with values to trip TypeError.</p>
@@ -190,8 +193,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt id="test_human_epi_model.TestDengue.test_value_error">
-<code class="sig-name descname"><span class="pre">test_value_error</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">monkeypatch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#test_human_epi_model.TestDengue.test_value_error" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="test_human_epi_model.TestDengue.test_value_error">
+<span class="sig-name descname"><span class="pre">test_value_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">monkeypatch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#test_human_epi_model.TestDengue.test_value_error" title="Permalink to this definition">¶</a></dt>
 <dd><p>tests ValueError exceptions.</p>
 <dl class="simple">
 <dt>attributes:</dt><dd><p>value_error_arglist: list of configuration file with values to trip ValueError.</p>
@@ -202,13 +205,13 @@
 </dd></dl>
 
 <dl class="py class">
-<dt id="test_human_epi_model.TestWNV">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">test_human_epi_model.</span></code><code class="sig-name descname"><span class="pre">TestWNV</span></code><a class="headerlink" href="#test_human_epi_model.TestWNV" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="test_human_epi_model.TestWNV">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">test_human_epi_model.</span></span><span class="sig-name descname"><span class="pre">TestWNV</span></span><a class="headerlink" href="#test_human_epi_model.TestWNV" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Defines a class to test WNV code.</p>
 <dl class="py method">
-<dt id="test_human_epi_model.TestWNV.test_type_error">
-<code class="sig-name descname"><span class="pre">test_type_error</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">monkeypatch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#test_human_epi_model.TestWNV.test_type_error" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="test_human_epi_model.TestWNV.test_type_error">
+<span class="sig-name descname"><span class="pre">test_type_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">monkeypatch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#test_human_epi_model.TestWNV.test_type_error" title="Permalink to this definition">¶</a></dt>
 <dd><p>tests TypeError exceptions.</p>
 <dl class="simple">
 <dt>attributes:</dt><dd><p>type_error_arglist: list of configuration file with values to trip TypeError.</p>
@@ -217,8 +220,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt id="test_human_epi_model.TestWNV.test_value_error">
-<code class="sig-name descname"><span class="pre">test_value_error</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">monkeypatch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#test_human_epi_model.TestWNV.test_value_error" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="test_human_epi_model.TestWNV.test_value_error">
+<span class="sig-name descname"><span class="pre">test_value_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">monkeypatch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#test_human_epi_model.TestWNV.test_value_error" title="Permalink to this definition">¶</a></dt>
 <dd><p>Tests ValueError exceptions.</p>
 <dl class="simple">
 <dt>Attributes:</dt><dd><p>value_error_arglist: list of configuration file with values to trip ValueError.</p>

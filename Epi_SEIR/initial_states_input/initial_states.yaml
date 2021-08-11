@@ -41,21 +41,26 @@ DENGUE:
 WNV:
   Sv:
     name: 'Susceptible Vectors'
-    value: 0 # INITIALIZE BUT REPLACE
+    value: 4000
     position: 0
-  Iv:
-    name: 'Infected Vectors'
+  Ev:
+    name: 'Exposed Vectors'
     value: 0
     position: 1
+  Iv:
+    name: 'Infected Vectors'
+    value: 20
+    position: 2
   Sb:
     name: 'Susceptible Birds'
     value: 500
-    position: 2
+    position: 3
   Ib:
     name: 'Infected Birds'
-    value: 0
-    position: 3
+    value: 5
+    position: 4
   Ih:
     name: 'Infected Humans'
     value: 0
-    position: 4
+    position: 5
+

@@ -13,6 +13,8 @@
   
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
 
   
   
@@ -29,6 +31,7 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
@@ -86,7 +89,7 @@
               
             
             
-              <p class="caption"><span class="caption-text">Contents:</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">Epi_SEIR</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="dengue.html">dengue module</a></li>
@@ -178,8 +181,8 @@ Vector Borne Disease Model class.</p>
 <p>wnv = WNVSEIRModel(&lt;config_file_path&gt;)</p>
 </div></blockquote>
 <dl class="py class">
-<dt id="wnv.WNVSEIRModel">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wnv.</span></code><code class="sig-name descname"><span class="pre">WNVSEIRModel</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wnv.WNVSEIRModel" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wnv.WNVSEIRModel">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">wnv.</span></span><span class="sig-name descname"><span class="pre">WNVSEIRModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wnv.WNVSEIRModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="vbdm.html#vbdm.VectorBorneDiseaseModel" title="vbdm.VectorBorneDiseaseModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">vbdm.VectorBorneDiseaseModel</span></code></a></p>
 <p>Models the spread of WNV.</p>
 <p>Inherits from the VectorBorneDiseaseModel class. Solves ODE system
@@ -191,11 +194,12 @@ of equations and plots the resulting curves.</p>
 </dd>
 </dl>
 <dl class="py method">
-<dt id="wnv.WNVSEIRModel.model_func">
-<code class="sig-name descname"><span class="pre">model_func</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wnv.WNVSEIRModel.model_func" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wnv.WNVSEIRModel.model_func">
+<span class="sig-name descname"><span class="pre">model_func</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wnv.WNVSEIRModel.model_func" title="Permalink to this definition">¶</a></dt>
 <dd><p>Defines system of ODEs for dengue model</p>
 <dl>
 <dt>Initial State Names:</dt><dd><p>Sv: Susceptible mosquito population.</p>
+<p>Ev: Exposed mosquito population.</p>
 <p>Iv: Infected mosquito population.</p>
 <p>Nv: Mosquito population.</p>
 <p>Sb: Susceptible bird population.</p>
@@ -203,24 +207,21 @@ of equations and plots the resulting curves.</p>
 <p>Nb: Bird population.</p>
 <p>Ih: Infectious human population.</p>
 </dd>
-<dt>Parameters:</dt><dd><p>mu_v: Mosquito birth/death rate.</p>
-<dl class="simple">
-<dt>beta: Contact rate, probability of transmission between birds and</dt><dd><p>mosquitoes at time t.</p>
-</dd>
-<dt>alpha: Rate of WNV seeding into the local model domain before day</dt><dd><ol class="arabic simple" start="200">
-<li></li>
-</ol>
-</dd>
-</dl>
-<p>delta_b: Recovery rate of birds.</p>
-<dl class="simple">
-<dt>eta: Contact rate, probability of transmission from mosquitoes to</dt><dd><p>humans.</p>
-</dd>
-</dl>
-<p>A: Lower asymptote for beta.</p>
-<p>K: Upper asymptote for beta.</p>
-<p>r: Growth rate for beta.</p>
-<p>t0: Inflection point for beta.</p>
+<dt>Parameters:</dt><dd><p>mu_v: Mosquito death rate.</p>
+<p>mu_b: Bird death/recovery rate.</p>
+<p>beta_b: Biting rate under frequency dependence.</p>
+<p>alpha_v: Probability of virus transmission to mosquito per infectious bite.</p>
+<p>alpha_b: Probability of virus transmission to bird,per infectious bit.</p>
+<p>K_b: For K_v function, baseline mosquito carrying capacity.</p>
+<p>K_s: For K_v function, scaling factor for the mosquito carrying capacity.</p>
+<p>K_v: Time varying carrying capacity for mosquitoes.</p>
+<p>r_b: For r_v function, baseline mosquito growth rate.</p>
+<p>r_s: For r_v function, scaling factor for mosquito growth rate.</p>
+<p>r_v: Time varying growth rate for mosquitoes.</p>
+<p>lambda_v: Mosquito force of infection.</p>
+<p>lambda_b: Bird force of infection.</p>
+<p>nu_v: Mosquito latent period.</p>
+<p>eta: Contact rate * probability of transmission to humans</p>
 </dd>
 </dl>
 </dd></dl>

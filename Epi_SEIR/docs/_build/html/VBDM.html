@@ -13,6 +13,8 @@
   
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
 
   
   
@@ -29,6 +31,7 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
@@ -87,7 +90,7 @@
               
             
             
-              <p class="caption"><span class="caption-text">Contents:</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">Epi_SEIR</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="dengue.html">dengue module</a></li>
@@ -176,8 +179,8 @@
 class VectorBorneDiseaseModel. Also contains methods to read
 in root configuration file.</p>
 <dl class="py class">
-<dt id="vbdm.VectorBorneDiseaseModel">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">vbdm.</span></code><code class="sig-name descname"><span class="pre">VectorBorneDiseaseModel</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">disease_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#vbdm.VectorBorneDiseaseModel" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="vbdm.VectorBorneDiseaseModel">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">vbdm.</span></span><span class="sig-name descname"><span class="pre">VectorBorneDiseaseModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">disease_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#vbdm.VectorBorneDiseaseModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
 <p>Defines a general vector borne disease model.</p>
 <p>Reads root config file and sets parameters.</p>
@@ -189,15 +192,15 @@ in root configuration file.</p>
 </dd>
 </dl>
 <dl class="py method">
-<dt id="vbdm.VectorBorneDiseaseModel.error_check_initial_states">
-<code class="sig-name descname"><span class="pre">error_check_initial_states</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#vbdm.VectorBorneDiseaseModel.error_check_initial_states" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="vbdm.VectorBorneDiseaseModel.error_check_initial_states">
+<span class="sig-name descname"><span class="pre">error_check_initial_states</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#vbdm.VectorBorneDiseaseModel.error_check_initial_states" title="Permalink to this definition">¶</a></dt>
 <dd><p>check if initial states are numerical values.</p>
 <p>check if initial states are positive.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="vbdm.VectorBorneDiseaseModel.error_check_mosq_initial_states">
-<code class="sig-name descname"><span class="pre">error_check_mosq_initial_states</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#vbdm.VectorBorneDiseaseModel.error_check_mosq_initial_states" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="vbdm.VectorBorneDiseaseModel.error_check_mosq_initial_states">
+<span class="sig-name descname"><span class="pre">error_check_mosq_initial_states</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#vbdm.VectorBorneDiseaseModel.error_check_mosq_initial_states" title="Permalink to this definition">¶</a></dt>
 <dd><p>check if mosquito initial states are numerical values.</p>
 <p>check if mosquito initial states are positive.</p>
 <p>check if duration is positive.</p>
@@ -206,40 +209,40 @@ in root configuration file.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="vbdm.VectorBorneDiseaseModel.error_check_output_type">
-<code class="sig-name descname"><span class="pre">error_check_output_type</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#vbdm.VectorBorneDiseaseModel.error_check_output_type" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="vbdm.VectorBorneDiseaseModel.error_check_output_type">
+<span class="sig-name descname"><span class="pre">error_check_output_type</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#vbdm.VectorBorneDiseaseModel.error_check_output_type" title="Permalink to this definition">¶</a></dt>
 <dd><p>check if output type is a string.</p>
 <p>check if output type is .csv or .parquet</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="vbdm.VectorBorneDiseaseModel.error_check_positions">
-<code class="sig-name descname"><span class="pre">error_check_positions</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#vbdm.VectorBorneDiseaseModel.error_check_positions" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="vbdm.VectorBorneDiseaseModel.error_check_positions">
+<span class="sig-name descname"><span class="pre">error_check_positions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#vbdm.VectorBorneDiseaseModel.error_check_positions" title="Permalink to this definition">¶</a></dt>
 <dd><p>check if position array is unique.</p>
 <p>check if position array is int type.</p>
 <p>check if positions array is positive.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="vbdm.VectorBorneDiseaseModel.error_check_state_names">
-<code class="sig-name descname"><span class="pre">error_check_state_names</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#vbdm.VectorBorneDiseaseModel.error_check_state_names" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="vbdm.VectorBorneDiseaseModel.error_check_state_names">
+<span class="sig-name descname"><span class="pre">error_check_state_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#vbdm.VectorBorneDiseaseModel.error_check_state_names" title="Permalink to this definition">¶</a></dt>
 <dd><p>check if compartment names field is string type</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="vbdm.VectorBorneDiseaseModel.model_func">
-<em class="property"><span class="pre">abstract</span> </em><code class="sig-name descname"><span class="pre">model_func</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#vbdm.VectorBorneDiseaseModel.model_func" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="vbdm.VectorBorneDiseaseModel.model_func">
+<em class="property"><span class="pre">abstract</span> </em><span class="sig-name descname"><span class="pre">model_func</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#vbdm.VectorBorneDiseaseModel.model_func" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="vbdm.VectorBorneDiseaseModel.run_model">
-<code class="sig-name descname"><span class="pre">run_model</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#vbdm.VectorBorneDiseaseModel.run_model" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="vbdm.VectorBorneDiseaseModel.run_model">
+<span class="sig-name descname"><span class="pre">run_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">disease_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#vbdm.VectorBorneDiseaseModel.run_model" title="Permalink to this definition">¶</a></dt>
 <dd><p>Runs ODE solver to generate model output</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="vbdm.VectorBorneDiseaseModel.save_output">
-<code class="sig-name descname"><span class="pre">save_output</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">disease_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#vbdm.VectorBorneDiseaseModel.save_output" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="vbdm.VectorBorneDiseaseModel.save_output">
+<span class="sig-name descname"><span class="pre">save_output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">disease_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#vbdm.VectorBorneDiseaseModel.save_output" title="Permalink to this definition">¶</a></dt>
 <dd><p>Save output to file</p>
 </dd></dl>
 

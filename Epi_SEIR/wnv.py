@@ -36,19 +36,24 @@ class WNVSEIRModel(vbdm.VectorBorneDiseaseModel):
 
     def _population_sizes(self):
         """Calculates population sizes of human and vector compartments"""
-        self.Nv = sum([self.states['Sv'], self.states['Iv']])
+        self.Nv = sum([self.states['Sv'], self.states['Ev'], self.states['Iv']])
         self.Nb = sum([self.states['Sb'], self.states['Ib']])
 
-    def _force_of_infection(self, t):
+    def _force_of_infection(self):
         """Calculates force of infection"""
-        self.beta = self.params['A'] + (self.params['K'] - self.params['A']) / \
-            (1 + math.exp(-self.params['r'] * (t - self.params['t0'])))
+        self.lambda_v = self.params['alpha_v']*self.params['beta_b']/self.Nb
+        self.lambda_b = self.params['alpha_b']*self.params['beta_b']/self.Nb
+    
+    def _mosq_population_values(self, t):
+        self.K_v = self.params['K_b'] + self.params['K_s'] * math.sin((2 * math.pi / 365) * t - math.pi / 2)
+        self.r_v = self.params['r_b'] + self.params['r_s'] * math.sin((2 * math.pi / 365) * t - math.pi / 2)
 
     def model_func(self, t, y):
         """Defines system of ODEs for dengue model
 
         Initial State Names:
             Sv: Susceptible mosquito population.\n
+            Ev: Exposed mosquito population. \n
             Iv: Infected mosquito population.\n
             Nv: Mosquito population.\n
             Sb: Susceptible bird population.\n
@@ -57,19 +62,22 @@ class WNVSEIRModel(vbdm.VectorBorneDiseaseModel):
             Ih: Infectious human population.\n
 
         Parameters:
-            mu_v: Mosquito birth/death rate.\n
-            beta: Contact rate, probability of transmission between birds and
-                  mosquitoes at time t. \n
-            alpha: Rate of WNV seeding into the local model domain before day
-                   200.\n
-            delta_b: Recovery rate of birds.\n
-            eta: Contact rate, probability of transmission from mosquitoes to
-                 humans.\n
+            mu_v: Mosquito death rate.\n
+            mu_b: Bird death/recovery rate. \n
+            beta_b: Biting rate under frequency dependence. \n
+            alpha_v: Probability of virus transmission to mosquito per infectious bite.\n
+            alpha_b: Probability of virus transmission to bird,per infectious bit.\n
+            K_b: For K_v function, baseline mosquito carrying capacity.\n
+            K_s: For K_v function, scaling factor for the mosquito carrying capacity.\n
+            K_v: Time varying carrying capacity for mosquitoes.\n
+            r_b: For r_v function, baseline mosquito growth rate.\n
+            r_s: For r_v function, scaling factor for mosquito growth rate.\n
+            r_v: Time varying growth rate for mosquitoes.\n
+            lambda_v: Mosquito force of infection. \n
+            lambda_b: Bird force of infection. \n
+            nu_v: Mosquito latent period. \n
+            eta: Contact rate * probability of transmission to humans
 
-            A: Lower asymptote for beta.\n
-            K: Upper asymptote for beta.\n
-            r: Growth rate for beta.\n
-            t0: Inflection point for beta.\n
 
         """
         ddt = self.initial_states.copy()
@@ -79,23 +87,24 @@ class WNVSEIRModel(vbdm.VectorBorneDiseaseModel):
         # Find population size
         self._population_sizes()
 
-        # Find force of infection
-        self._force_of_infection(t)
+        # Find forces of infection
+        self._force_of_infection()
 
-        self.day_counter = int(t)
+        #Find mosquito carrying capacity and growth rate
+        self._mosq_population_values(t)
 
-        if self.day_counter >= 199:
-            self.params['alpha'] = 0
+        ddt['Sv'] = self.r_v * (1 - (self.Nv / self.K_v)) * self.Nv - \
+            self.lambda_v * self.states['Sv'] * self.states['Ib'] - \
+            self.params['mu_v'] * self.states['Sv']
+        ddt['Ev'] = self.lambda_v * self.states['Sv'] * self.states['Ib'] - \
+            self.params['nu_v'] * self.states['Ev'] - \
+            self.params['mu_v'] * self.states['Ev']
+        ddt['Iv'] = self.params['nu_v'] * self.states['Ev'] - \
+            self.params['mu_v'] * self.states['Iv']
+        ddt['Sb'] = -self.lambda_b * self.states['Iv'] * self.states['Sb']
+        ddt['Ib'] = self.lambda_b * self.states['Iv'] * self.states['Sb'] - \
+            self.params['mu_b'] * self.states['Ib']
 
-        ddt['Sv'] = self.params['mu_v'] * self.Nv - \
-            self.beta * self.states['Sv'] * self.states['Ib'] / self.Nb - \
-            (self.params['mu_v'] + self.params['alpha']) * self.states['Sv']
-        ddt['Iv'] = self.beta * self.states['Sv'] * self.states['Ib'] / self.Nb - \
-            self.params['mu_v'] * self.states['Iv'] + \
-            self.params['alpha'] * self.states['Sv']
-        ddt['Sb'] = -self.beta * self.states['Iv'] * self.states['Sb'] / self.Nb
-        ddt['Ib'] = self.beta * self.states['Iv'] * self.states['Sb'] / self.Nb - \
-            self.states['Ib'] / self.params['delta_b']
 
         rng = np.random.default_rng()
         try:
