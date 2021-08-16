@@ -34,7 +34,7 @@ class DengueSEIRModel(vbdm.VectorBorneDiseaseModel):
 
     def _population_sizes(self):
         """Calculates population sizes of human and vector compartments"""
-        self.Nh = sum([self.states['Sh'], self.states['Eh'], self.states['Iha'], self.states['Ihs'], self.states['Rh']])
+        self.Nh = sum([self.states['Sh'], self.states['Eh'], self.states['Ih'], self.states['Rh']])
         self.Nv = sum([self.states['Sv'], self.states['Ev'], self.states['Iv']])
 
     def _biting_rate(self):
@@ -47,7 +47,11 @@ class DengueSEIRModel(vbdm.VectorBorneDiseaseModel):
     def _force_of_infection(self):
         """Calculates force of infection"""
         self.lambda_h = self.b_h * self.params['beta_h'] * self.states['Iv'] / self.Nv
-        self.lambda_v = self.b_v * self.params['beta_v'] * (self.states['Iha'] + self.states['Ihs']) / self.Nh
+        self.lambda_v = self.b_v * self.params['beta_v'] * (self.states['Ih']) / self.Nh
+        
+    def _birth_rate(self):
+        """Caclualtes vector natural birth rate"""
+        self.psi_v = self.params['r_v'] + self.params['mu_v']
 
     def model_func(self, t, y):
         """Defines system of ODEs for dengue model.
@@ -67,9 +71,11 @@ class DengueSEIRModel(vbdm.VectorBorneDiseaseModel):
             lambda_v: Vector force of infection.\n
             nu_h: Human latent period.\n
             nu_v: Vector latent period.\n
-            psi: Proportion of infections reported.\n
             gamma_h: Human infectious period.\n
-            mu_v: Vector life expectancy.\n
+            psi_v: Vector natural birth rate .\n
+            mu_v: Vector natural death rate.\n
+            r_v: Vector instrinsic growth rate.\n
+            K_v: Vector carrying capacity.\n
             sigma_h: Maximum number of bites a human can support per unit time.\n
             sigma_v: Maximum vector biting rate.\n
             beta_h: Probability of vector to host transmission.\n
@@ -89,17 +95,19 @@ class DengueSEIRModel(vbdm.VectorBorneDiseaseModel):
 
         # Find force of infection
         self._force_of_infection()
+        
+        # Find vector natural birth rate
+        self._birth_rate()
 
         # System of equations
         ddt['Sh'] = -self.lambda_h * self.states['Sh']
         ddt['Eh'] = self.lambda_h * self.states['Sh'] - \
             self.params['nu_h'] * self.states['Eh']
-        ddt['Iha'] = self.params['psi'] * self.params['nu_h'] * self.states['Eh'] - \
+        ddt['Ih'] = self.params['nu_h'] * self.states['Eh'] - \
             self.params['gamma_h'] * self.states['Iha']
-        ddt['Ihs'] = (1 - self.params['psi']) * self.params['nu_h'] * self.states['Eh'] - \
-            self.params['gamma_h'] * self.states['Ihs']
-        ddt['Rh'] = self.params['gamma_h'] * (self.states['Iha'] + self.states['Ihs'])
-        ddt['Sv'] = -self.lambda_v * self.states['Sv'] - \
+        ddt['Rh'] = self.params['gamma_h'] * self.states['Ih']
+        ddt['Sv'] = (self.psi_v - self.params['r_v'] * self.Nv / self.params['K_v']) * self.Nv - \
+            self.lambda_v * self.states['Sv'] - \
             self.params['mu_v'] * self.states['Sv']
         ddt['Ev'] = self.lambda_v * self.states['Sv'] - \
             self.params['nu_v'] * self.states['Ev'] - \
