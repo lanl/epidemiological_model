@@ -104,7 +104,7 @@ class DengueSEIRModel(vbdm.VectorBorneDiseaseModel):
         ddt['Eh'] = self.lambda_h * self.states['Sh'] - \
             self.params['nu_h'] * self.states['Eh']
         ddt['Ih'] = self.params['nu_h'] * self.states['Eh'] - \
-            self.params['gamma_h'] * self.states['Iha']
+            self.params['gamma_h'] * self.states['Ih']
         ddt['Rh'] = self.params['gamma_h'] * self.states['Ih']
         ddt['Sv'] = (self.psi_v - self.params['r_v'] * self.Nv / self.params['K_v']) * self.Nv - \
             self.lambda_v * self.states['Sv'] - \

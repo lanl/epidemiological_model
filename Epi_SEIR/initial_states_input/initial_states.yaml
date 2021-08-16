@@ -15,7 +15,7 @@ DENGUE:
     value: 0
     position: 1
   Ih:
-    name: 'Asymptomatic Infected Humans'
+    name: 'Infected Humans'
     value: 60
     position: 2
   Rh:
