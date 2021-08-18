@@ -8,36 +8,32 @@
 DENGUE:
   Sh:
     name: 'Susceptible Humans'
-    value: 60
+    value: 41262199 #from latex
     position: 0
   Eh:
     name: 'Exposed Humans'
     value: 0
     position: 1
-  Iha:
-    name: 'Asymptomatic Infected Humans'
-    value: 20
+  Ih:
+    name: 'Infected Humans'
+    value: 60
     position: 2
-  Ihs:
-    name: 'Symptomatic Infected Humans'
-    value: 20
-    position: 3
   Rh:
     name: 'Recovered Humans'
     value: 0
-    position: 4
+    position: 3
   Sv:
     name: 'Susceptible Vectors'
-    value: 0 # INITIALIZE BUT REPLACE
-    position: 5
+    value: 82524398 #from latex
+    position: 4
   Ev:
     name: 'Exposed Vectors'
-    value: 2
-    position: 6
+    value: 0
+    position: 5
   Iv:
     name: 'Infected Vectors'
-    value: 2
-    position: 7
+    value: 0
+    position: 6
 WNV:
   Sv:
     name: 'Susceptible Vectors'
