@@ -22,8 +22,7 @@ DENGUE:
     mu_v: .0714 #(1/14) reverse to make units match with current model
     beta_h: 0.33
     beta_v: 0.33
-    sigma_h: 19
-    sigma_v: 0.5
+    a_v: 1 #total guess for now
     r_v: .2286 #0.3 (from latex) - mu_v
     K_v: 100000000 #based on initial states in the latex
     

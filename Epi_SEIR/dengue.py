@@ -36,18 +36,25 @@ class DengueSEIRModel(vbdm.VectorBorneDiseaseModel):
         """Calculates population sizes of human and vector compartments"""
         self.Nh = sum([self.states['Sh'], self.states['Eh'], self.states['Ih'], self.states['Rh']])
         self.Nv = sum([self.states['Sv'], self.states['Ev'], self.states['Iv']])
-
-    def _biting_rate(self):
-        """Calculates biting rate"""
-        b = self.params['sigma_h'] * self.params['sigma_v'] / \
-            (self.params['sigma_h'] * self.Nh + self.params['sigma_v'] * self.Nv)
-        self.b_h = b * self.Nv
-        self.b_v = b * self.Nh
-
+    
+    #for complex force of infection: will ultimately use this later
+    #def _biting_rate(self):
+        #"""Calculates biting rate"""
+        #b = self.params['sigma_h'] * self.params['sigma_v'] / \
+            #(self.params['sigma_h'] * self.Nh + self.params['sigma_v'] * self.Nv)
+        #self.b_h = b * self.Nv
+        #self.b_v = b * self.Nh
+    
+    #complex force of infection: will ultimately use this later
+    #def _force_of_infection(self):
+        #"""Calculates force of infection"""
+        #self.lambda_h = self.b_h * self.params['beta_h'] * self.states['Iv'] / self.Nv
+        #self.lambda_v = self.b_v * self.params['beta_v'] * (self.states['Ih']) / self.Nh
+    
     def _force_of_infection(self):
         """Calculates force of infection"""
-        self.lambda_h = self.b_h * self.params['beta_h'] * self.states['Iv'] / self.Nv
-        self.lambda_v = self.b_v * self.params['beta_v'] * (self.states['Ih']) / self.Nh
+        self.lambda_h = self.params['a_v'] * self.params['beta_h'] * self.states['Iv'] / self.Nh
+        self.lambda_v = self.params['a_v'] * self.params['beta_v'] * (self.states['Ih']) / self.Nh
         
     def _birth_rate(self):
         """Caclualtes vector natural birth rate"""
@@ -76,12 +83,9 @@ class DengueSEIRModel(vbdm.VectorBorneDiseaseModel):
             mu_v: Vector natural death rate.\n
             r_v: Vector instrinsic growth rate.\n
             K_v: Vector carrying capacity.\n
-            sigma_h: Maximum number of bites a human can support per unit time.\n
-            sigma_v: Maximum vector biting rate.\n
+            a_v: Average number of bites to a human for each mosquito per day.\n
             beta_h: Probability of vector to host transmission.\n
             beta_v: Probability of host to vector transmission.\n
-            b_h: Biting rate (1 / (day * human))\n
-            b_v: Biting rate (1 / (day * mosquito))\n
 
         """
         ddt = self.initial_states.copy()
@@ -91,7 +95,7 @@ class DengueSEIRModel(vbdm.VectorBorneDiseaseModel):
         self._population_sizes()
 
         # Find biting rate
-        self._biting_rate()
+        #self._biting_rate()
 
         # Find force of infection
         self._force_of_infection()
