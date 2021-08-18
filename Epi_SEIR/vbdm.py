@@ -120,20 +120,31 @@ class VectorBorneDiseaseModel(ABC):
             raise e
         self.model_output = out
 
-    def save_output(self, disease_name):
+    def save_output(self, disease_name, sim_labels = 'F'):
         """Save output to file"""
         df = pd.DataFrame(dict(zip(list(self.state_names_order.values()), self.model_output.T)))
 
         if self.config_dict['OUTPUT_TYPE'] == 'csv':
-            output_path = os.path.join(self.config_dict['OUTPUT_DIR'],
-                                       f'{disease_name}_model_output.csv')
-            df.to_csv(output_path, index=False)
+            if sim_labels == 'T':
+                output_path = os.path.join(self.config_dict['OUTPUT_DIR'],
+                                           f'{disease_name}_{self.param_of_interest}_{self.params[self.param_of_interest]}_model_output.csv')
+                df.to_csv(output_path, index=False)
+            else:
+                output_path = os.path.join(self.config_dict['OUTPUT_DIR'],
+                                           f'{disease_name}_model_output.csv')
+                df.to_csv(output_path, index=False)
         else:
-            output_path = os.path.join(self.config_dict['OUTPUT_DIR'],
+            if sim_labels == 'T':
+                output_path = os.path.join(self.config_dict['OUTPUT_DIR'],
+                                           f'{disease_name}_{self.param_of_interest}_{self.params[self.param_of_interest]}_model_output.parquet')
+                pq.write_table(pa.Table.from_pandas(df), output_path)
+            else:
+                output_path = os.path.join(self.config_dict['OUTPUT_DIR'],
                                        f'{disease_name}_model_output.parquet')
-            pq.write_table(pa.Table.from_pandas(df), output_path)
+                pq.write_table(pa.Table.from_pandas(df), output_path)
 
         self.logger.info(f'Output saved to {output_path}')
+
 
     def error_check_output_type(self):
         """check if output type is a string.
