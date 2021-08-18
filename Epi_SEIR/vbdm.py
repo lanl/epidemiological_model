@@ -38,6 +38,14 @@ class VectorBorneDiseaseModel(ABC):
 
         # Read parameters
         self.params = self.config_dict[disease_name]['PARAMETERS']
+        
+        self.param_of_interest = list(self.config_dict[disease_name]['PARAMETER_OF_INTEREST'].keys())[0]
+        
+        self.start_value = self.config_dict[disease_name]['PARAMETER_OF_INTEREST'][self.param_of_interest]['start']
+        
+        self.stop_value = self.config_dict[disease_name]['PARAMETER_OF_INTEREST'][self.param_of_interest]['stop']
+        
+        self.step_value = self.config_dict[disease_name]['PARAMETER_OF_INTEREST'][self.param_of_interest]['step']
 
         self.logger.info(f"\n\nParameters for model: {self.params}\n")
 
