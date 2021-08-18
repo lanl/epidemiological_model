@@ -25,6 +25,12 @@ DENGUE:
     a_v: 1 #total guess for now
     r_v: .2286 #0.3 (from latex) - mu_v
     K_v: 100000000 #based on initial states in the latex
+  PARAMETER_OF_INTEREST:
+    nu_v:
+      start: 8
+      stop: 11
+      step: .5
+
     
 WNV:
   PARAMETERS:
@@ -39,4 +45,9 @@ WNV:
     r_b: 0.00438 
     r_s: 0.00976
     nu_v: 0.10
+  PARAMETER_OF_INTEREST:
+    nu_v:
+      start: 0.2
+      stop: 0.5
+      step: 0.05
 
