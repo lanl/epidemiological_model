@@ -37,6 +37,12 @@ def create_arg_parser():
             parser.error('Specify [wnv] or [dengue]')
         else:
             return arg
+   
+    def is_bool(parser, arg):
+        if arg not in ['F', 'T']:
+            parser.error('Specify [F] or [T]')
+        else:
+            return arg
 
     parser = argparse.ArgumentParser()
     parser.add_argument('-c', '--config_file', action='store',
@@ -45,6 +51,8 @@ def create_arg_parser():
     parser.add_argument('-d', '--disease_name', action='store',
                         type=lambda x: is_disease(parser, x))
                         # default='dengue')
+    parser.add_argument('-l', '--sim_labels', action='store',
+                        type=lambda x: is_bool(parser, x), default='F')
 
     return parser
 
