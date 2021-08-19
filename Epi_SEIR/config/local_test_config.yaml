@@ -1,53 +1,42 @@
-#------------------------------------------#
-# Vector Borne Disease Model Configuration #
-#------------------------------------------#
-
-PROJECT_ROOT: '.'
-LOGFILE_PATH: 'logs'
-MOSQUITOES_FILE_PATH: 'mosquitoes/mosq.csv'
-INITIAL_STATES_FILE_PATH: 'initial_states_input/initial_states.yaml'
-OUTPUT_DIR: 'human_model_output'
-
-# Add unit test specification?
-OUTPUT_TYPE: '.csv' # default is .parquet
-
-DURATION: 10 # number of days to run the model
-RESOLUTION: 50 # how many points to run per day
-
 DENGUE:
   PARAMETERS:
-    nu_h: 0.20 #(1/5) reverse to make units match with current model
-    nu_v: 0.10 #(1/10) reverse to make units match with current model
-    gamma_h: 0.167 #(1/6) reverse to make units match with current model
-    mu_v: .0714 #(1/14) reverse to make units match with current model
+    K_v: 100000000
+    a_v: 1
     beta_h: 0.33
     beta_v: 0.33
-    a_v: 1 #total guess for now
-    r_v: .2286 #0.3 (from latex) - mu_v
-    K_v: 100000000 #based on initial states in the latex
+    gamma_h: 0.167
+    mu_v: 0.0714
+    nu_h: 0.2
+    nu_v: 10.5
+    r_v: 0.2286
   PARAMETER_OF_INTEREST:
     nu_v:
       start: 8
+      step: 0.5
       stop: 11
-      step: .5
-
-    
+DURATION: 10
+INITIAL_STATES_FILE_PATH: initial_states_input/initial_states.yaml
+LOGFILE_PATH: logs
+MOSQUITOES_FILE_PATH: mosquitoes/mosq.csv
+OUTPUT_DIR: human_model_output
+OUTPUT_TYPE: .csv
+PROJECT_ROOT: .
+RESOLUTION: 50
 WNV:
   PARAMETERS:
-    mu_v: 0.06
-    mu_b: 0.20
-    alpha_v: 0.69
+    K_b: 9596.401
+    K_s: 8946.468
     alpha_b: 0.74
+    alpha_v: 0.69
     beta_b: 0.44
     eta: 0.003
-    K_b: 9596.401 # from Toronto 2004 season fitting
-    K_s: 8946.468
-    r_b: 0.00438 
+    mu_b: 0.2
+    mu_v: 0.06
+    nu_v: 0.44999999999999996
+    r_b: 0.00438
     r_s: 0.00976
-    nu_v: 0.10
   PARAMETER_OF_INTEREST:
     nu_v:
       start: 0.2
-      stop: 0.5
       step: 0.05
-
+      stop: 0.5
