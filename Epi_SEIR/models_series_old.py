@@ -12,7 +12,6 @@ from wnv import WNVSEIRModel
 from utils import create_arg_parser
 import sys
 import numpy as np
-import yaml
 
 # TODO remove this comment
 
@@ -26,27 +25,15 @@ def main_params():
         args, unknown = parser.parse_known_args()
 
     disease_name = args.disease_name.lower()
-    
+
     if disease_name == 'dengue':
-        base = DengueSEIRModel(args.config_file)
+        disease = DengueSEIRModel(args.config_file)
     elif disease_name == 'wnv':
-        base = WNVSEIRModel(args.config_file)
+        disease = WNVSEIRModel(args.config_file)
     
-    param_values = np.arange(base.start_value, base.stop_value, base.step_value)
+    param_values = np.arange(disease.start_value, disease.stop_value, disease.step_value)
     
     for k in param_values:
-        with open(args.config_file) as f:
-             list_doc = yaml.safe_load(f)
-
-        list_doc[args.disease_name.upper()]['PARAMETERS'][base.param_of_interest] = k.item()
-
-        with open(args.config_file, "w") as f:
-            yaml.safe_dump(list_doc, f, default_flow_style=False)
-            
-        if disease_name == 'dengue':
-            disease = DengueSEIRModel(args.config_file)
-        elif disease_name == 'wnv':
-            disease = WNVSEIRModel(args.config_file)
         disease.params[disease.param_of_interest] = k
         disease.logger.info(disease)
         disease.run_model(disease_name)
