@@ -135,7 +135,7 @@ class VectorBorneDiseaseModel(ABC):
         if self.config_dict['OUTPUT_TYPE'] == 'csv':
             if sim_labels == 'T':
                 output_path = os.path.join(self.config_dict['OUTPUT_DIR'],
-                                           f'{disease_name}_{self.param_of_interest}_{self.params[self.param_of_interest]}_model_output.csv')
+                                           f'{disease_name}_{self.param_of_interest}_{round(self.params[self.param_of_interest],4)}_model_output.csv')
                 df.to_csv(output_path, index=False)
             else:
                 output_path = os.path.join(self.config_dict['OUTPUT_DIR'],
@@ -144,7 +144,7 @@ class VectorBorneDiseaseModel(ABC):
         else:
             if sim_labels == 'T':
                 output_path = os.path.join(self.config_dict['OUTPUT_DIR'],
-                                           f'{disease_name}_{self.param_of_interest}_{self.params[self.param_of_interest]}_model_output.parquet')
+                                           f'{disease_name}_{self.param_of_interest}_{round(self.params[self.param_of_interest],4)}_model_output.parquet')
                 pq.write_table(pa.Table.from_pandas(df), output_path)
             else:
                 output_path = os.path.join(self.config_dict['OUTPUT_DIR'],
