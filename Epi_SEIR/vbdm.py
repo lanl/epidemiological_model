@@ -38,14 +38,6 @@ class VectorBorneDiseaseModel(ABC):
 
         # Read parameters
         self.params = self.config_dict[disease_name]['PARAMETERS']
-        
-        self.param_of_interest = list(self.config_dict[disease_name]['PARAMETER_OF_INTEREST'].keys())[0]
-        
-        self.start_value = self.config_dict[disease_name]['PARAMETER_OF_INTEREST'][self.param_of_interest]['start']
-        
-        self.stop_value = self.config_dict[disease_name]['PARAMETER_OF_INTEREST'][self.param_of_interest]['stop']
-        
-        self.step_value = self.config_dict[disease_name]['PARAMETER_OF_INTEREST'][self.param_of_interest]['step']
 
         self.logger.info(f"\n\nParameters for model: {self.params}\n")
 
@@ -127,15 +119,29 @@ class VectorBorneDiseaseModel(ABC):
             self.logger.exception('Exception occurred running model')
             raise e
         self.model_output = out
-
-    def save_output(self, disease_name, sim_labels = 'F'):
+        
+    def save_output(self, disease_name, data, sim_labels = 'F'):
         """Save output to file"""
         df = pd.DataFrame(dict(zip(list(self.state_names_order.values()), self.model_output.T)))
+        
+        if sim_labels == 'T':
+            df = pd.DataFrame(dict(zip(list(self.state_names_order.values()), self.model_output.T)))
+            param_keys = data.columns
+            param_values = []
+            for k in param_keys:
+                param_values.append(str(round(self.params[k],4)))
+
+            param_all = []
+            for i in range(0,len(param_keys)):
+                param_all.append(param_keys[i])
+                param_all.append(param_values[i])
+
+            output_names = '_'.join(param_all)
 
         if self.config_dict['OUTPUT_TYPE'] == 'csv':
             if sim_labels == 'T':
                 output_path = os.path.join(self.config_dict['OUTPUT_DIR'],
-                                           f'{disease_name}_{self.param_of_interest}_{round(self.params[self.param_of_interest],4)}_model_output.csv')
+                                           f'{disease_name}_{output_names}_model_output.csv')
                 df.to_csv(output_path, index=False)
             else:
                 output_path = os.path.join(self.config_dict['OUTPUT_DIR'],
@@ -144,7 +150,7 @@ class VectorBorneDiseaseModel(ABC):
         else:
             if sim_labels == 'T':
                 output_path = os.path.join(self.config_dict['OUTPUT_DIR'],
-                                           f'{disease_name}_{self.param_of_interest}_{round(self.params[self.param_of_interest],4)}_model_output.parquet')
+                                           f'{disease_name}_{output_names}_model_output.parquet')
                 pq.write_table(pa.Table.from_pandas(df), output_path)
             else:
                 output_path = os.path.join(self.config_dict['OUTPUT_DIR'],
