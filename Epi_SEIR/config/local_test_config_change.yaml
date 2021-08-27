@@ -1,13 +1,13 @@
 DENGUE:
   PARAMETERS:
     K_v: 100000000
-    a_v: 1
+    a_v: 1.1
     beta_h: 0.33
     beta_v: 0.33
     gamma_h: 0.167
     mu_v: 0.0714
     nu_h: 0.2
-    nu_v: 0.1
+    nu_v: 0.16
     r_v: 0.2286
 DURATION: 10
 INITIAL_STATES_FILE_PATH: initial_states_input/initial_states.yaml
@@ -26,7 +26,7 @@ WNV:
     beta_b: 0.44
     eta: 0.003
     mu_b: 0.2
-    mu_v: 0.0799999999999999
-    nu_v: 0.4000000000000001
+    mu_v: 0.06
+    nu_v: 0.1
     r_b: 0.00438
     r_s: 0.00976
