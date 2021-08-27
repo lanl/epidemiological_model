@@ -125,7 +125,6 @@ class VectorBorneDiseaseModel(ABC):
         df = pd.DataFrame(dict(zip(list(self.state_names_order.values()), self.model_output.T)))
         
         if sim_labels == 'T':
-            df = pd.DataFrame(dict(zip(list(self.state_names_order.values()), self.model_output.T)))
             param_keys = data.columns
             param_values = []
             for k in param_keys:
