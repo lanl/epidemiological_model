@@ -1,11 +1,8 @@
 import pandas as pd
-#import random
 import numpy as np
 import yaml
-#import pyarrow as pa
-#import pyarrow.parquet as pq
 import os
-import argparse
+
 
 
 def param_data(disease_name):
