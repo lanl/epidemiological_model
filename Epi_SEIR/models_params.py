@@ -47,9 +47,9 @@ def main():
             yaml.safe_dump(list_doc, f, default_flow_style=False)
             
         if disease_name == 'dengue':
-            disease = DengueSEIRModel('config/local_test_config_change.yaml')
+            disease = DengueSEIRModel(args.config_file)
         elif disease_name == 'wnv':
-            disease = WNVSEIRModel('config/local_test_config_change.yaml')
+            disease = WNVSEIRModel(args.config_file)
         disease.logger.info(disease)
         disease.run_model(disease_name)
         disease.save_output(disease_name, param_values, args.sim_labels)
