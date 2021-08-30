@@ -32,6 +32,7 @@ class VectorBorneDiseaseModel(ABC):
     """
 
     def __init__(self, config_file, disease_name):
+        
         self._read_config(config_file, disease_name)
 
         self.error_check_output_type()
@@ -83,6 +84,18 @@ class VectorBorneDiseaseModel(ABC):
                              f' with {len(self.mosq)} days available')
 
         self.error_check_mosq_initial_states()
+        
+    @classmethod
+    def param_dict(cls, config_file, disease_name, param_dict):
+        """Takes in a dictionary file that edits the parameter values for the model"""
+        obj = cls(config_file, disease_name)
+        dict_keys = list(param_dict.keys())
+        
+        for k in dict_keys:
+            obj.params[k] = param_dict[k]
+            
+        obj.logger.info(f"\n\nParameters changed: {param_dict}\n")
+        return obj
 
     def _read_config(self, config_file, disease_name):
         """Reads root configuration file"""
@@ -120,11 +133,11 @@ class VectorBorneDiseaseModel(ABC):
             raise e
         self.model_output = out
         
-    def save_output(self, disease_name, data, sim_labels = 'F'):
+    def save_output(self, disease_name, sim_labels = False, data = None):
         """Save output to file"""
         df = pd.DataFrame(dict(zip(list(self.state_names_order.values()), self.model_output.T)))
         
-        if sim_labels == 'T':
+        if sim_labels == True:
             param_keys = data.columns
             param_values = []
             for k in param_keys:
@@ -138,7 +151,7 @@ class VectorBorneDiseaseModel(ABC):
             output_names = '_'.join(param_all)
 
         if self.config_dict['OUTPUT_TYPE'] == 'csv':
-            if sim_labels == 'T':
+            if sim_labels == True:
                 output_path = os.path.join(self.config_dict['OUTPUT_DIR'],
                                            f'{disease_name}_{output_names}_model_output.csv')
                 df.to_csv(output_path, index=False)
@@ -147,7 +160,7 @@ class VectorBorneDiseaseModel(ABC):
                                            f'{disease_name}_model_output.csv')
                 df.to_csv(output_path, index=False)
         else:
-            if sim_labels == 'T':
+            if sim_labels == True:
                 output_path = os.path.join(self.config_dict['OUTPUT_DIR'],
                                            f'{disease_name}_{output_names}_model_output.parquet')
                 pq.write_table(pa.Table.from_pandas(df), output_path)

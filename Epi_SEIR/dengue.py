@@ -27,11 +27,16 @@ class DengueSEIRModel(vbdm.VectorBorneDiseaseModel):
 
     """
 
-    def __init__(self, config_file):
+    def __init__(self, config_file, param_dict = None): 
         self.logger = create_logger(__name__, config_file)
-
+        
         super().__init__(config_file, 'DENGUE')
-
+    
+    @classmethod
+    def param_dict(cls, config_file, param_dict):
+        """Inherit vbdm param_dict class method"""
+        return super(DengueSEIRModel, cls).param_dict(config_file = config_file, disease_name = 'DENGUE', param_dict =  param_dict)
+    
     def _population_sizes(self):
         """Calculates population sizes of human and vector compartments"""
         self.Nh = sum([self.states['Sh'], self.states['Eh'], self.states['Ih'], self.states['Rh']])
