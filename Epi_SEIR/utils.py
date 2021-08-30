@@ -68,27 +68,20 @@ def create_arg_parser_exp():
             parser.error('Specify [wnv] or [dengue]')
         else:
             return arg
-   
-    def is_bool(parser, arg):
-        if arg not in ['F', 'T']:
-            parser.error('Specify [F] or [T]')
-        else:
-            return arg
 
     parser = argparse.ArgumentParser()
     parser.add_argument('-c', '--config_file', action='store',
                         type=lambda x: is_valid_file(parser, x))
     parser.add_argument('-d', '--disease_name', action='store',
                         type=lambda x: is_disease(parser, x))
-    parser.add_argument('-l', '--sim_labels', action='store',
-                        type=lambda x: is_bool(parser, x), default='F')
-    parser.add_argument('-g', '--generate_params', action='store', 
-                        type=lambda x: is_bool(parser, x), default='T')
+    parser.add_argument('-l', '--sim_labels', dest='sim_labels', action='store_true')
+    parser.set_defaults(sim_labels=False)
+    parser.add_argument('-g', '--generate_params', dest='generate_params', action='store_true')
+    parser.set_defaults(generate_params=False)
     parser.add_argument('-p', '--param_data_file', action='store', 
                         type=lambda x: is_valid_file(parser, x))
 
     return parser
-
 
 def create_logger(name, config_file):
     """Configures and instantiates logger object.
