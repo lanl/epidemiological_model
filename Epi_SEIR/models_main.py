@@ -13,7 +13,6 @@ from wnv import WNVSEIRModel
 from utils import create_arg_parser
 import sys
 
-# TODO remove this comment
 
 def main():
     """Runs vector borne disease simulations.
@@ -33,7 +32,7 @@ def main():
 
     disease.logger.info(disease)
     disease.run_model(disease_name)
-    disease.save_output(disease_name, data = 0)
+    disease.save_output(disease_name)
     disease.logger.info('SUCCESS')
 
 
