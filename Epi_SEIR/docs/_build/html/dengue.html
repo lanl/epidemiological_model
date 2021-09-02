@@ -95,7 +95,9 @@
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">Epi_SEIR</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">dengue module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generate_inputs.html">generate_inputs module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generate_param_values.html">generate_param_values module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="models_main.html">models_main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models_params.html">models_params module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plotting.html">plotting module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="test_human_epi_model.html">test_human_epi_model module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="utils.html">utils module</a></li>
@@ -181,9 +183,15 @@ Vector Borne Disease Model class.</p>
 <div><p>Typical usage example:</p>
 <p>den = DengueSEIRModel(&lt;config_file_path&gt;, &lt;command_line_arguments&gt;)</p>
 </div></blockquote>
+<p>Class method param_dict allows you to change parameters values from configuration file inputs 
+by inputting a dictionary of different parameter values</p>
+<blockquote>
+<div><p>Typical usage example:</p>
+<p>den_param_dict = DengueSEIRModel.param_dict(&lt;config_file_path&gt;, &lt;parameter dictionary&gt;)</p>
+</div></blockquote>
 <dl class="py class">
 <dt class="sig sig-object py" id="dengue.DengueSEIRModel">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">dengue.</span></span><span class="sig-name descname"><span class="pre">DengueSEIRModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dengue.DengueSEIRModel" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">dengue.</span></span><span class="sig-name descname"><span class="pre">DengueSEIRModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dengue.DengueSEIRModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="vbdm.html#vbdm.VectorBorneDiseaseModel" title="vbdm.VectorBorneDiseaseModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">vbdm.VectorBorneDiseaseModel</span></code></a></p>
 <p>Models the spread of dengue.</p>
 <p>Inherits from the VectorBorneDiseaseModel class. Solves ODE system
@@ -223,6 +231,12 @@ of equations and plots the resulting curves.</p>
 <p>beta_v: Probability of host to vector transmission.</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dengue.DengueSEIRModel.param_dict">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">param_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param_dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dengue.DengueSEIRModel.param_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inherit vbdm param_dict class method</p>
 </dd></dl>
 
 </dd></dl>

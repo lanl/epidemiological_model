@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>utils module &mdash; Epi-SEIR  documentation</title>
+  <title>generate_param_values module &mdash; Epi-SEIR  documentation</title>
   
 
   
@@ -41,8 +41,8 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="vbdm module" href="vbdm.html" />
-    <link rel="prev" title="test_human_epi_model module" href="test_human_epi_model.html" /> 
+    <link rel="next" title="models_main module" href="models_main.html" />
+    <link rel="prev" title="generate_inputs module" href="generate_inputs.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -95,12 +95,12 @@
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">Epi_SEIR</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="dengue.html">dengue module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generate_inputs.html">generate_inputs module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="generate_param_values.html">generate_param_values module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">generate_param_values module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="models_main.html">models_main module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="models_params.html">models_params module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plotting.html">plotting module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="test_human_epi_model.html">test_human_epi_model module</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">utils module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utils.html">utils module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="vbdm.html">vbdm module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="wnv.html">wnv module</a></li>
 </ul>
@@ -155,13 +155,13 @@
         
           <li><a href="modules.html">Epi_SEIR</a> &raquo;</li>
         
-      <li>utils module</li>
+      <li>generate_param_values module</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
           
-            <a href="_sources/utils.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/generate_param_values.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -174,54 +174,21 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-utils">
-<span id="utils-module"></span><h1>utils module<a class="headerlink" href="#module-utils" title="Permalink to this headline">¶</a></h1>
-<p>Utilities script to create argument parser and loggers</p>
-<p>Typical usage example:</p>
-<p>logger = VBDM.create_logger(logger_name, config_file_name)
-disease = VBDM.DengueSEIRModel(config_file_name, simulation_duration)</p>
+  <div class="section" id="module-generate_param_values">
+<span id="generate-param-values-module"></span><h1>generate_param_values module<a class="headerlink" href="#module-generate_param_values" title="Permalink to this headline">¶</a></h1>
+<p>Script to generate parameter value combinations to sequence through for models_params.py
+Generates parameter values based on values input in local_param_config.yaml
+Outputs a csv of all possible parameter combinations in Epi_SEIR/parameters</p>
+<blockquote>
+<div><p>Typical usage example:</p>
+<p>param_data(&lt;disease_name&gt;)</p>
+<p>Output:</p>
+<p>parameters/&lt;disease_name&gt;_param_values.csv</p>
+</div></blockquote>
 <dl class="py function">
-<dt class="sig sig-object py" id="utils.create_arg_parser">
-<span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">create_arg_parser</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#utils.create_arg_parser" title="Permalink to this definition">¶</a></dt>
-<dd><p>Configures command line argument parser for models_main.py</p>
-<p>Checks if the argument is a valid file.</p>
-<dl class="simple">
-<dt>Returns:</dt><dd><p>parser object.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="utils.create_arg_parser_exp">
-<span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">create_arg_parser_exp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#utils.create_arg_parser_exp" title="Permalink to this definition">¶</a></dt>
-<dd><p>Configures command line argument parser for models_params.py</p>
-<p>Checks if the argument is a valid file.</p>
-<dl class="simple">
-<dt>Returns:</dt><dd><p>parser object.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="utils.create_logger">
-<span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">create_logger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.create_logger" title="Permalink to this definition">¶</a></dt>
-<dd><p>Configures and instantiates logger object.</p>
-<p>Creates logger that prints DEBUG statements and more
-serious statements to log files. Prints ERROR statements
-to console.</p>
-<dl class="simple">
-<dt>Args:</dt><dd><p>name: Name of logger to be created. Typically module name. String.
-config_file: Absolute path to root config file. String.</p>
-</dd>
-<dt>Return:</dt><dd><p>logging object.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="utils.timer">
-<span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">timer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.timer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Print the runtime of the decorated function</p>
+<dt class="sig sig-object py" id="generate_param_values.param_data">
+<span class="sig-prename descclassname"><span class="pre">generate_param_values.</span></span><span class="sig-name descname"><span class="pre">param_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">disease_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#generate_param_values.param_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates input data for sequencing through parameter values</p>
 </dd></dl>
 
 </div>
@@ -232,8 +199,8 @@ config_file: Absolute path to root config file. String.</p>
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="vbdm.html" class="btn btn-neutral float-right" title="vbdm module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-        <a href="test_human_epi_model.html" class="btn btn-neutral float-left" title="test_human_epi_model module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="models_main.html" class="btn btn-neutral float-right" title="models_main module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="generate_inputs.html" class="btn btn-neutral float-left" title="generate_inputs module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>

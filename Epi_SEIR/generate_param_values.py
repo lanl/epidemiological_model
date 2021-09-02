@@ -1,8 +1,21 @@
+"""Script to generate parameter value combinations to sequence through for models_params.py
+Generates parameter values based on values input in local_param_config.yaml
+Outputs a csv of all possible parameter combinations in Epi_SEIR/parameters
+
+    Typical usage example:
+    
+    param_data(<disease_name>)
+    
+    Output: 
+    
+    parameters/<disease_name>_param_values.csv
+    
+"""
+
 import pandas as pd
 import numpy as np
 import yaml
 import os
-
 
 
 def param_data(disease_name):

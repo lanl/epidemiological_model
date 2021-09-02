@@ -95,7 +95,9 @@
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">Epi_SEIR</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="dengue.html">dengue module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generate_inputs.html">generate_inputs module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generate_param_values.html">generate_param_values module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="models_main.html">models_main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models_params.html">models_params module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plotting.html">plotting module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="test_human_epi_model.html">test_human_epi_model module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="utils.html">utils module</a></li>
@@ -235,6 +237,12 @@ in root configuration file.</p>
 <dd></dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="vbdm.VectorBorneDiseaseModel.param_dict">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">param_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">disease_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param_dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#vbdm.VectorBorneDiseaseModel.param_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes in a dictionary file that edits the parameter values for the model</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="vbdm.VectorBorneDiseaseModel.run_model">
 <span class="sig-name descname"><span class="pre">run_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">disease_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#vbdm.VectorBorneDiseaseModel.run_model" title="Permalink to this definition">¶</a></dt>
 <dd><p>Runs ODE solver to generate model output</p>
@@ -242,7 +250,7 @@ in root configuration file.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="vbdm.VectorBorneDiseaseModel.save_output">
-<span class="sig-name descname"><span class="pre">save_output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">disease_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#vbdm.VectorBorneDiseaseModel.save_output" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">save_output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">disease_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sim_labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#vbdm.VectorBorneDiseaseModel.save_output" title="Permalink to this definition">¶</a></dt>
 <dd><p>Save output to file</p>
 </dd></dl>
 

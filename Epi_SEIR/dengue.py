@@ -6,6 +6,13 @@ Vector Borne Disease Model class.
     Typical usage example:
 
     den = DengueSEIRModel(<config_file_path>, <command_line_arguments>)
+    
+Class method param_dict allows you to change parameters values from configuration file inputs 
+by inputting a dictionary of different parameter values
+    
+    Typical usage example:
+    
+    den_param_dict = DengueSEIRModel.param_dict(<config_file_path>, <parameter dictionary>)
 """
 
 from utils import create_logger
