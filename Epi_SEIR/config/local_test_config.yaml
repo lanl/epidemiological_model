@@ -16,15 +16,15 @@ RESOLUTION: 50 # how many points to run per day
 
 DENGUE:
   PARAMETERS:
-    nu_h: 0.20 #(1/5) reverse to make units match with current model
-    nu_v: 0.10 #(1/10) reverse to make units match with current model
-    gamma_h: 0.167 #(1/6) reverse to make units match with current model
-    mu_v: .0714 #(1/14) reverse to make units match with current model
+    nu_h: 0.164 
+    nu_v: 0.164 
+    gamma_h: 0.167 
+    mu_v: .0714 
     beta_h: 0.33
     beta_v: 0.33
-    a_v: 1 #total guess for now
+    a_v: 0.75
     r_v: .2286 #0.3 (from latex) - mu_v
-    K_v: 100000000 #based on initial states in the latex
+    K_v: 200000 #based on initial states in the latex
     
 WNV:
   PARAMETERS:
@@ -39,3 +39,4 @@ WNV:
     r_b: 0.00438 
     r_s: 0.00976
     nu_v: 0.10
+    nu_b: 0.20 #guess for now

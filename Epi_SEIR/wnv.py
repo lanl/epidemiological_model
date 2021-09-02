@@ -67,6 +67,7 @@ class WNVSEIRModel(vbdm.VectorBorneDiseaseModel):
             Iv: Infected mosquito population.\n
             Nv: Mosquito population.\n
             Sb: Susceptible bird population.\n
+            Eb: Susceptible bird population.\n
             Ib: Infected bird population.\n
             Nb: Bird population.\n
             Ih: Infectious human population.\n
@@ -86,6 +87,7 @@ class WNVSEIRModel(vbdm.VectorBorneDiseaseModel):
             lambda_v: Mosquito force of infection. \n
             lambda_b: Bird force of infection. \n
             nu_v: Mosquito latent period. \n
+            nu_b: Bird latent period. \n
             eta: Contact rate * probability of transmission to humans
 
 
@@ -112,7 +114,9 @@ class WNVSEIRModel(vbdm.VectorBorneDiseaseModel):
         ddt['Iv'] = self.params['nu_v'] * self.states['Ev'] - \
             self.params['mu_v'] * self.states['Iv']
         ddt['Sb'] = -self.lambda_b * self.states['Iv'] * self.states['Sb']
-        ddt['Ib'] = self.lambda_b * self.states['Iv'] * self.states['Sb'] - \
+        ddt['Eb'] = self.lambda_b * self.states['Iv'] * self.states['Sb'] - \
+            self.params['nu_b'] * self.states['Eb']
+        ddt['Ib'] = self.params['nu_b'] * self.states['Eb'] - \
             self.params['mu_b'] * self.states['Ib']
 
 

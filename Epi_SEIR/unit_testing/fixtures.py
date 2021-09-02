@@ -8,15 +8,15 @@ arg_list = ['config/unit_testing/pytest_config_1.yaml']
 
 value_error_arglist = ['config/unit_testing/positive_duration.yaml',
                        'config/unit_testing/positive_resolution.yaml',
-                       'config/unit_testing/duration_le_mosq.yaml',
+                       #'config/unit_testing/duration_le_mosq.yaml',
                        'config/unit_testing/unique_position.yaml',
                        'config/unit_testing/positive_position.yaml',
-                       'config/unit_testing/positive_states.yaml',
-                       'config/unit_testing/mosq_positive.yaml']
+                       'config/unit_testing/positive_states.yaml']
+                       #'config/unit_testing/mosq_positive.yaml'
 type_error_arglist = ['config/unit_testing/strings.yaml',
                       'config/unit_testing/position_integers.yaml',
-                      'config/unit_testing/numerical_states.yaml',
-                      'config/unit_testing/mosq_numerical.yaml']
+                      'config/unit_testing/numerical_states.yaml']
+                      #'config/unit_testing/mosq_numerical.yaml'
 
 """
 TODO: have set of config files with things that should raise a type of error
