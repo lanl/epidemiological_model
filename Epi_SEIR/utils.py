@@ -18,7 +18,7 @@ import time
 
 
 def create_arg_parser():
-    """Configures command line argument parser.
+    """Configures command line argument parser for models_main.py
 
     Checks if the argument is a valid file.
 
@@ -48,6 +48,40 @@ def create_arg_parser():
 
     return parser
 
+def create_arg_parser_exp():
+    """Configures command line argument parser for models_params.py
+
+    Checks if the argument is a valid file.
+
+    Returns:
+        parser object.
+    """
+
+    def is_valid_file(parser, arg):
+        if not os.path.isfile(arg):
+            parser.error(f'File {arg} not found.')
+        else:
+            return arg
+
+    def is_disease(parser, arg):
+        if arg.lower() not in ['wnv', 'dengue']:
+            parser.error('Specify [wnv] or [dengue]')
+        else:
+            return arg
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-c', '--config_file', action='store',
+                        type=lambda x: is_valid_file(parser, x))
+    parser.add_argument('-d', '--disease_name', action='store',
+                        type=lambda x: is_disease(parser, x))
+    parser.add_argument('-l', '--sim_labels', dest='sim_labels', action='store_true')
+    parser.set_defaults(sim_labels=False)
+    parser.add_argument('-g', '--generate_params', dest='generate_params', action='store_true')
+    parser.set_defaults(generate_params=False)
+    parser.add_argument('-p', '--param_data_file', action='store', 
+                        type=lambda x: is_valid_file(parser, x))
+
+    return parser
 
 def create_logger(name, config_file):
     """Configures and instantiates logger object.

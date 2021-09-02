@@ -6,6 +6,13 @@ Vector Borne Disease Model class.
     Typical usage example:
 
     den = DengueSEIRModel(<config_file_path>, <command_line_arguments>)
+    
+Class method param_dict allows you to change parameters values from configuration file inputs 
+by inputting a dictionary of different parameter values
+    
+    Typical usage example:
+    
+    den_param_dict = DengueSEIRModel.param_dict(<config_file_path>, <parameter dictionary>)
 """
 
 from utils import create_logger
@@ -27,11 +34,16 @@ class DengueSEIRModel(vbdm.VectorBorneDiseaseModel):
 
     """
 
-    def __init__(self, config_file):
+    def __init__(self, config_file, param_dict = None): 
         self.logger = create_logger(__name__, config_file)
-
+        
         super().__init__(config_file, 'DENGUE')
-
+    
+    @classmethod
+    def param_dict(cls, config_file, param_dict):
+        """Inherit vbdm param_dict class method"""
+        return super(DengueSEIRModel, cls).param_dict(config_file = config_file, disease_name = 'DENGUE', param_dict =  param_dict)
+    
     def _population_sizes(self):
         """Calculates population sizes of human and vector compartments"""
         self.Nh = sum([self.states['Sh'], self.states['Eh'], self.states['Ih'], self.states['Rh']])

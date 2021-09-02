@@ -1,0 +1,27 @@
+#------------------------------------------#
+# Sequence Parameter Values Configuration  #
+#------------------------------------------#
+
+PROJECT_ROOT: '.'
+OUTPUT_DIR: 'parameters'
+
+DENGUE:
+  nu_v:
+    start: .06
+    step: 0.05
+    stop: 0.2
+  a_v:
+    start: .2
+    step: 0.3
+    stop: 1.1
+
+WNV:
+  nu_v:
+    start: 0.2
+    step: 0.1
+    stop: 0.5
+  mu_v:
+    start: 0.04
+    step: 0.02
+    stop: 0.1
+

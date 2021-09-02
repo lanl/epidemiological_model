@@ -6,6 +6,13 @@ Vector Borne Disease Model class.
     Typical usage example:
 
     wnv = WNVSEIRModel(<config_file_path>)
+    
+Class method param_dict allows you to change parameters values from configuration file inputs 
+by inputting a dictionary of different parameter values
+    
+    Typical usage example:
+    
+    wnv_param_dict = WNVSEIRModel.param_dict(<config_file_path>, <parameter dictionary>)
 """
 
 from utils import create_logger
@@ -24,15 +31,18 @@ class WNVSEIRModel(vbdm.VectorBorneDiseaseModel):
     Attributes:
         logger: python logging object.\n
         long_state_names: more compartment values for output.\n
-        day_counter: keeps track of time passed to determine alpha.\n
 
     """
 
-    def __init__(self, config_file):
+    def __init__(self, config_file, param_dict = None):
         self.logger = create_logger(__name__, config_file)
-        self.day_counter = 0
 
         super().__init__(config_file, 'WNV')
+        
+    @classmethod
+    def param_dict(cls, config_file, param_dict):
+        """Inherit vbdm param_dict class method"""
+        return super(WNVSEIRModel, cls).param_dict(config_file = config_file, disease_name = 'WNV', param_dict =  param_dict)
 
     def _population_sizes(self):
         """Calculates population sizes of human and vector compartments"""

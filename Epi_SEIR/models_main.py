@@ -13,7 +13,6 @@ from wnv import WNVSEIRModel
 from utils import create_arg_parser
 import sys
 
-# TODO remove this comment
 
 def main():
     """Runs vector borne disease simulations.

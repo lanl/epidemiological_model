@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>utils module &mdash; Epi-SEIR  documentation</title>
+  <title>models_params module &mdash; Epi-SEIR  documentation</title>
   
 
   
@@ -41,8 +41,8 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="vbdm module" href="vbdm.html" />
-    <link rel="prev" title="test_human_epi_model module" href="test_human_epi_model.html" /> 
+    <link rel="next" title="plotting module" href="plotting.html" />
+    <link rel="prev" title="models_main module" href="models_main.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -97,10 +97,10 @@
 <li class="toctree-l2"><a class="reference internal" href="generate_inputs.html">generate_inputs module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generate_param_values.html">generate_param_values module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="models_main.html">models_main module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="models_params.html">models_params module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">models_params module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plotting.html">plotting module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="test_human_epi_model.html">test_human_epi_model module</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">utils module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utils.html">utils module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="vbdm.html">vbdm module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="wnv.html">wnv module</a></li>
 </ul>
@@ -155,13 +155,13 @@
         
           <li><a href="modules.html">Epi_SEIR</a> &raquo;</li>
         
-      <li>utils module</li>
+      <li>models_params module</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
           
-            <a href="_sources/utils.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/models_params.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -174,54 +174,22 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-utils">
-<span id="utils-module"></span><h1>utils module<a class="headerlink" href="#module-utils" title="Permalink to this headline">¶</a></h1>
-<p>Utilities script to create argument parser and loggers</p>
-<p>Typical usage example:</p>
-<p>logger = VBDM.create_logger(logger_name, config_file_name)
-disease = VBDM.DengueSEIRModel(config_file_name, simulation_duration)</p>
+  <div class="section" id="module-models_params">
+<span id="models-params-module"></span><h1>models_params module<a class="headerlink" href="#module-models_params" title="Permalink to this headline">¶</a></h1>
+<p>Script to execute vector borne disease models simulation through a series of parameter values
+Instantiates VBDM (Vector Borne Disease Model)
+given paramters from local_param_config.yaml and config.yaml configuration files.</p>
+<blockquote>
+<div><p>Typical usage example:</p>
+<p>python models_params.py -c &lt;absolute path to config.yaml&gt; -d &lt;disease name
+[dengue][wnv]&gt; -l &lt;rename labels&gt; -g &lt;generate parameter data&gt;
+-p &lt;absolute path to parameter data file, only if no -g&gt;</p>
+</div></blockquote>
 <dl class="py function">
-<dt class="sig sig-object py" id="utils.create_arg_parser">
-<span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">create_arg_parser</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#utils.create_arg_parser" title="Permalink to this definition">¶</a></dt>
-<dd><p>Configures command line argument parser for models_main.py</p>
-<p>Checks if the argument is a valid file.</p>
-<dl class="simple">
-<dt>Returns:</dt><dd><p>parser object.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="utils.create_arg_parser_exp">
-<span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">create_arg_parser_exp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#utils.create_arg_parser_exp" title="Permalink to this definition">¶</a></dt>
-<dd><p>Configures command line argument parser for models_params.py</p>
-<p>Checks if the argument is a valid file.</p>
-<dl class="simple">
-<dt>Returns:</dt><dd><p>parser object.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="utils.create_logger">
-<span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">create_logger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.create_logger" title="Permalink to this definition">¶</a></dt>
-<dd><p>Configures and instantiates logger object.</p>
-<p>Creates logger that prints DEBUG statements and more
-serious statements to log files. Prints ERROR statements
-to console.</p>
-<dl class="simple">
-<dt>Args:</dt><dd><p>name: Name of logger to be created. Typically module name. String.
-config_file: Absolute path to root config file. String.</p>
-</dd>
-<dt>Return:</dt><dd><p>logging object.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="utils.timer">
-<span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">timer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.timer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Print the runtime of the decorated function</p>
+<dt class="sig sig-object py" id="models_params.main">
+<span class="sig-prename descclassname"><span class="pre">models_params.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#models_params.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs vector borne disease simulations.</p>
+<p>Instaniates each disease from configuration file</p>
 </dd></dl>
 
 </div>
@@ -232,8 +200,8 @@ config_file: Absolute path to root config file. String.</p>
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="vbdm.html" class="btn btn-neutral float-right" title="vbdm module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-        <a href="test_human_epi_model.html" class="btn btn-neutral float-left" title="test_human_epi_model module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="plotting.html" class="btn btn-neutral float-right" title="plotting module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="models_main.html" class="btn btn-neutral float-left" title="models_main module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>
