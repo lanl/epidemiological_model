@@ -74,14 +74,15 @@ class VectorBorneDiseaseModel(ABC):
         self.error_check_initial_states()
 
         # Read mosquito initial states
-        try:
-            self.mosq = np.array(pd.read_csv(self.config_dict['MOSQUITOES_FILE_PATH'])['Sv'])
-        except FileNotFoundError as e:
-            self.logger.exception('Mosquito population input file not found.')
-            raise e
-        else:
-            self.logger.info('Mosquito population data successfully opened'
-                             f' with {len(self.mosq)} days available')
+        # Comment out for now since mosquito file and model loop is removed
+#         try:
+#             self.mosq = np.array(pd.read_csv(self.config_dict['MOSQUITOES_FILE_PATH'])['Sv'])
+#         except FileNotFoundError as e:
+#             self.logger.exception('Mosquito population input file not found.')
+#             raise e
+#         else:
+#             self.logger.info('Mosquito population data successfully opened'
+#                              f' with {len(self.mosq)} days available')
 
         self.error_check_mosq_initial_states()
         
@@ -261,6 +262,7 @@ class VectorBorneDiseaseModel(ABC):
             self.logger.exception('Model initial states must be positive')
             raise e
 
+    #commenting out portions refering to mosquito file since model loop is removed
     def error_check_mosq_initial_states(self):
         """check if mosquito initial states are numerical values.
 
@@ -273,19 +275,19 @@ class VectorBorneDiseaseModel(ABC):
         check if resolution is positive.
 
         """
-        try:
-            if not all(isinstance(_, (int, float, np.int64)) for _ in self.mosq):
-                raise TypeError('Mosquito initial states must be numerical values.')
-        except TypeError as e:
-            self.logger.exception('Mosquito initial states must be numerical values.')
-            raise e
+#         try:
+#             if not all(isinstance(_, (int, float, np.int64)) for _ in self.mosq):
+#                 raise TypeError('Mosquito initial states must be numerical values.')
+#         except TypeError as e:
+#             self.logger.exception('Mosquito initial states must be numerical values.')
+#             raise e
 
-        try:
-            if not all(_ >= 0 for _ in self.mosq):
-                raise ValueError('Mosquito initial states must be positive')
-        except ValueError as e:
-            self.logger.exception('Mosquito initial states must be positive')
-            raise e
+#         try:
+#             if not all(_ >= 0 for _ in self.mosq):
+#                 raise ValueError('Mosquito initial states must be positive')
+#         except ValueError as e:
+#             self.logger.exception('Mosquito initial states must be positive')
+#             raise e
 
         try:
             if not self.config_dict['DURATION'] > 0:
@@ -294,14 +296,14 @@ class VectorBorneDiseaseModel(ABC):
             self.logger.exception('Simulation duration must be positive')
             raise e
 
-        try:
-            if self.config_dict['DURATION'] > len(self.mosq):
-                raise ValueError('Simulation duration exceeds days of'
-                                 ' available mosquito population data.')
-        except ValueError as e:
-            self.logger.exception('Simulation duration exceeds days of'
-                                  ' available mosquito population data.')
-            raise e
+#         try:
+#             if self.config_dict['DURATION'] > len(self.mosq):
+#                 raise ValueError('Simulation duration exceeds days of'
+#                                  ' available mosquito population data.')
+#         except ValueError as e:
+#             self.logger.exception('Simulation duration exceeds days of'
+#                                   ' available mosquito population data.')
+#             raise e
 
         try:
             if not self.config_dict['RESOLUTION'] > 0:
