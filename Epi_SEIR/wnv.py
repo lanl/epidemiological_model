@@ -55,8 +55,8 @@ class WNVSEIRModel(vbdm.VectorBorneDiseaseModel):
         self.lambda_b = self.params['alpha_b']*self.params['beta_b']/self.Nb
     
     def _mosq_population_values(self, t):
-        self.K_v = self.params['K_b'] + self.params['K_s'] * math.sin((2 * math.pi / 365) * t - math.pi / 2)
-        self.r_v = self.params['r_b'] + self.params['r_s'] * math.sin((2 * math.pi / 365) * t - math.pi / 2)
+        self.K_v = self.params['K'] + self.params['K_s'] * math.sin((2 * math.pi / 365) * t - math.pi / 2)
+        self.r_v = self.params['r'] + self.params['r_s'] * math.sin((2 * math.pi / 365) * t - math.pi / 2)
 
     def model_func(self, t, y):
         """Defines system of ODEs for dengue model
@@ -78,11 +78,11 @@ class WNVSEIRModel(vbdm.VectorBorneDiseaseModel):
             beta_b: Biting rate under frequency dependence. \n
             alpha_v: Probability of virus transmission to mosquito per infectious bite.\n
             alpha_b: Probability of virus transmission to bird,per infectious bit.\n
-            K_b: For K_v function, baseline mosquito carrying capacity.\n
-            K_s: For K_v function, scaling factor for the mosquito carrying capacity.\n
+            K: For K_v(t), baseline mosquito carrying capacity.\n
+            K_s: For K_v(t), scaling factor for the mosquito carrying capacity.\n
             K_v: Time varying carrying capacity for mosquitoes.\n
-            r_b: For r_v function, baseline mosquito growth rate.\n
-            r_s: For r_v function, scaling factor for mosquito growth rate.\n
+            r: For r_v(t), baseline mosquito growth rate.\n
+            r_s: For r_v(t), scaling factor for mosquito growth rate.\n
             r_v: Time varying growth rate for mosquitoes.\n
             lambda_v: Mosquito force of infection. \n
             lambda_b: Bird force of infection. \n
