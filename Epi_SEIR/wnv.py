@@ -47,7 +47,7 @@ class WNVSEIRModel(vbdm.VectorBorneDiseaseModel):
     def _population_sizes(self):
         """Calculates population sizes of human and vector compartments"""
         self.Nv = sum([self.states['Sv'], self.states['Ev'], self.states['Iv']])
-        self.Nb = sum([self.states['Sb'], self.states['Ib']])
+        self.Nb = sum([self.states['Sb'], self.states['Eb'], self.states['Ib']])
 
     def _force_of_infection(self):
         """Calculates force of infection"""
@@ -67,7 +67,7 @@ class WNVSEIRModel(vbdm.VectorBorneDiseaseModel):
             Iv: Infected mosquito population.\n
             Nv: Mosquito population.\n
             Sb: Susceptible bird population.\n
-            Eb: Susceptible bird population.\n
+            Eb: Exposed bird population.\n
             Ib: Infected bird population.\n
             Nb: Bird population.\n
             Ih: Infectious human population.\n
