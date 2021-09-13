@@ -124,10 +124,10 @@ class VectorBorneDiseaseModel(ABC):
         self.model_output = np.empty([0, len(keys)])
             
         t = (0, self.config_dict['DURATION'])
-        t_eval = np.linspace(0, self.config_dict['DURATION'], self.config_dict['DURATION']*self.config_dict['RESOLUTION'])
+        self.t_eval = np.linspace(0, self.config_dict['DURATION'], self.config_dict['DURATION']*self.config_dict['RESOLUTION'])
             
         try:
-            sol = solve_ivp(self.model_func, t, list(self.initial_states.values()), t_eval=t_eval)
+            sol = solve_ivp(self.model_func, t, list(self.initial_states.values()), t_eval=self.t_eval)
             out = sol.y.T
         except Exception as e:
             self.logger.exception('Exception occurred running model')
@@ -137,6 +137,7 @@ class VectorBorneDiseaseModel(ABC):
     def save_output(self, disease_name, sim_labels = False, data = None):
         """Save output to file"""
         df = pd.DataFrame(dict(zip(list(self.state_names_order.values()), self.model_output.T)))
+        df['Time'] = self.t_eval
         
         if sim_labels == True:
             param_keys = data.columns
