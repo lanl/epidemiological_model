@@ -34,9 +34,11 @@ WNV:
     alpha_b: 0.74
     beta_b: 0.44
     eta: 0.003
-    K: 9596.401 # from Toronto 2004 season fitting
-    K_s: 8946.468
-    r: 0.00438 
-    r_s: 0.00976
+    #K: 9596.401 # from Toronto 2004 season fitting
+    #K_s: 8946.468
+    #r: 0.00438 
+    #r_s: 0.00976
+    K_v: 15000
+    r_v: 0.2286
     nu_v: 0.10
     nu_b: 0.20 #guess for now
