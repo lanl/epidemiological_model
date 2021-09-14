@@ -127,9 +127,9 @@ class WNVSEIRModel(vbdm.VectorBorneDiseaseModel):
         ddt['Ib'] = self.params['nu_b'] * self.states['Eb'] - \
             self.params['mu_b'] * self.states['Ib']
         ddt['Rb'] = self.params['mu_b'] * self.states['Ib']
-
-
-        rng = np.random.default_rng()
+        
+        
+        rng = np.random.default_rng(5)
         try:
             ddt['Ih'] = rng.poisson(lam=self.params['eta'] * self.states['Iv'])
         except ValueError:
