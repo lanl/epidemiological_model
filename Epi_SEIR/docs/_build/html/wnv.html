@@ -205,30 +205,28 @@ of equations and plots the resulting curves.</p>
 <span class="sig-name descname"><span class="pre">model_func</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wnv.WNVSEIRModel.model_func" title="Permalink to this definition">¶</a></dt>
 <dd><p>Defines system of ODEs for dengue model</p>
 <dl>
-<dt>Initial State Names:</dt><dd><p>Sv: Susceptible mosquito population.</p>
-<p>Ev: Exposed mosquito population.</p>
-<p>Iv: Infected mosquito population.</p>
-<p>Nv: Mosquito population.</p>
+<dt>Initial State Names:</dt><dd><p>Sv: Susceptible vector population.</p>
+<p>Ev: Exposed vector population.</p>
+<p>Iv: Infected vector population.</p>
+<p>Nv: Vector population.</p>
 <p>Sb: Susceptible bird population.</p>
-<p>Eb: Susceptible bird population.</p>
+<p>Eb: Exposed bird population.</p>
 <p>Ib: Infected bird population.</p>
+<p>Rb: Recovered bird population.</p>
 <p>Nb: Bird population.</p>
 <p>Ih: Infectious human population.</p>
 </dd>
-<dt>Parameters:</dt><dd><p>mu_v: Mosquito death rate.</p>
+<dt>Parameters:</dt><dd><p>mu_v: Vector death rate.</p>
 <p>mu_b: Bird death/recovery rate.</p>
 <p>beta_b: Biting rate under frequency dependence.</p>
-<p>alpha_v: Probability of virus transmission to mosquito per infectious bite.</p>
-<p>alpha_b: Probability of virus transmission to bird,per infectious bit.</p>
-<p>K_b: For K_v function, baseline mosquito carrying capacity.</p>
-<p>K_s: For K_v function, scaling factor for the mosquito carrying capacity.</p>
-<p>K_v: Time varying carrying capacity for mosquitoes.</p>
-<p>r_b: For r_v function, baseline mosquito growth rate.</p>
-<p>r_s: For r_v function, scaling factor for mosquito growth rate.</p>
-<p>r_v: Time varying growth rate for mosquitoes.</p>
-<p>lambda_v: Mosquito force of infection.</p>
+<p>alpha_v: Probability of virus transmission to vector, per infectious bite.</p>
+<p>alpha_b: Probability of virus transmission to bird, per infectious bit.</p>
+<p>psi_v: Vector birth rate.</p>
+<p>K_v: Vector carrying capacity.</p>
+<p>r_v: Vector birth rate.</p>
+<p>lambda_v: vector force of infection.</p>
 <p>lambda_b: Bird force of infection.</p>
-<p>nu_v: Mosquito latent period.</p>
+<p>nu_v: Vector latent period.</p>
 <p>nu_b: Bird latent period.</p>
 <p>eta: Contact rate * probability of transmission to humans</p>
 </dd>

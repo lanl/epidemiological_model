@@ -78,12 +78,13 @@ class DengueSEIRModel(vbdm.VectorBorneDiseaseModel):
         Initial State Names:
             Sh: Susceptible human population.\n
             Eh: Exposed human population.\n
-            Iha: Asymptomatic infectious human population.\n
-            Ihs: Symptomatic infectious human population\n
+            Ih: Infectious human population.\n
             Rh: Recovered human population.\n
+            Nh: Human population.\n
             Sv: Susceptible vector population.\n
             Ev: Exposed vector population.\n
             Iv: Infectious vector population.\n
+            Nv: Vector population.\n
 
         Parameters:
             lambda_h: Human force of infection.\n
