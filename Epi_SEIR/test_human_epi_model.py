@@ -104,8 +104,10 @@ class TestDengue:
             assert len(run1.columns) == len(run2.columns)
             assert sum(run1.columns == run2.columns) == len(run1.columns)
             assert len(run1.index) == len(run2.index)
-            for k in range(0, len(run1.columns)):
-                           assert sum(run1.iloc[:,k] == run2.iloc[:,k]) == len(run1.index)
+            
+            col_names = list(run1.columns)
+            for k in col_names:
+                assert sum(run1[k] == run2[k]) == len(run1.index)
         
         @pytest.mark.parametrize("param_dict", param_dict_list_dengue)
         def test_same_model_out_param_dict(self, param_dict):
@@ -127,8 +129,10 @@ class TestDengue:
             assert len(run1.columns) == len(run2.columns)
             assert sum(run1.columns == run2.columns) == len(run1.columns)
             assert len(run1.index) == len(run2.index)
-            for k in range(0, len(run1.columns)):
-                           assert sum(run1.iloc[:,k] == run2.iloc[:,k]) == len(run1.index)
+            
+            col_names = list(run1.columns)
+            for k in col_names:
+                assert sum(run1[k] == run2[k]) == len(run1.index)
         
 
 class TestWNV:
@@ -165,8 +169,7 @@ class TestWNV:
     class TestModelOutput:
         """
             Tests for `run_model()` and corresponding output for WNVSEIRModel and WNVSEIRModel.param_dict.
-        """ 
-        #this one behaves weirdly as well                      
+        """                     
         def test_same_model_out(self):
             """
                 For identical model runs, check that each output has correct dimensions and that the outputs are identical 
@@ -186,10 +189,10 @@ class TestWNV:
             assert len(run1.columns) == len(run2.columns)
             assert sum(run1.columns == run2.columns) == len(run1.columns)
             assert len(run1.index) == len(run2.index)
-            #changed to -1 for now so Ih is not included
-            #BELOW ARE THE LINES THAT ARE HAVING ISSUES
-            for k in range(0, (len(run1.columns)-1)):
-                           assert sum(run1.iloc[:,k] == run2.iloc[:,k]) == len(run1.index)
+            
+            col_names = list(run1.columns)
+            for k in col_names:
+                assert sum(run1[k] == run2[k]) == len(run1.index)
         
         @pytest.mark.parametrize("param_dict", param_dict_list_wnv)
         def test_same_model_out_param_dict(self, param_dict):
@@ -211,32 +214,7 @@ class TestWNV:
             assert len(run1.columns) == len(run2.columns)
             assert sum(run1.columns == run2.columns) == len(run1.columns)
             assert len(run1.index) == len(run2.index)
-            #changed to -1 for now so Ih is not included
-            #BELOW ARE THE LINES THAT ARE HAVING ISSUES
-            for k in range(0, (len(run1.columns)-1)):
-                           assert sum(run1.iloc[:,k] == run2.iloc[:,k]) == len(run1.index)
-                    
-
-# Code I was using to evaluate pytest failures in WNV
-# for param_dict in param_dict_list_wnv:
-#     disease1 = WNVSEIRModel.param_dict('config/local_test_config.yaml', param_dict)
-#     disease1.run_model('wnv')
-#     disease2 = WNVSEIRModel.param_dict('config/local_test_config.yaml', param_dict)
-#     disease2.run_model('wnv')
-#     run1 = pd.DataFrame(dict(zip(list(disease1.state_names_order.values()), disease1.model_output.T)))
-#     run2 = pd.DataFrame(dict(zip(list(disease2.state_names_order.values()), disease2.model_output.T)))
-#     for k in range(0, (len(run1.columns)-1)):
-#         if (sum(run1.iloc[:,k] == run2.iloc[:,k]) == len(run1.index)) == False:
-#             print(param_dict)
-#             data = pd.concat((run1.iloc[:,1], run2.iloc[:,1]), axis = 1)
-#             data.to_csv(f"diff_res_{k}.csv", index = False)
-
-# def test_norm():
-#     disease1 = WNVSEIRModel('config/local_test_config.yaml')
-#     disease1.run_model('wnv')
-#     disease2 = WNVSEIRModel('config/local_test_config.yaml')
-#     disease2.run_model('wnv')
-#     run1 = pd.DataFrame(dict(zip(list(disease1.state_names_order.values()), disease1.model_output.T)))
-#     run2 = pd.DataFrame(dict(zip(list(disease2.state_names_order.values()), disease2.model_output.T)))
-#     for k in range(0, (len(run1.columns)-1)):
-#             print(sum(run1.iloc[:,k] == run2.iloc[:,k]) == len(run1.index))
+            
+            col_names = list(run1.columns)
+            for k in col_names:
+                assert sum(run1[k] == run2[k]) == len(run1.index)
