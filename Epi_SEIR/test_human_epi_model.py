@@ -11,6 +11,7 @@ from dengue import DengueSEIRModel
 from wnv import WNVSEIRModel
 import sys
 import pandas as pd
+import numpy as np
 
 value_error_arglist = ['config/unit_testing/positive_duration.yaml',
                        'config/unit_testing/positive_resolution.yaml',
@@ -26,15 +27,25 @@ type_error_arglist = ['config/unit_testing/strings.yaml',
                       #'config/unit_testing/mosq_numerical.yaml',
                       'config/unit_testing/output_is_string.yaml']
 
-param_dict_list_dengue = [{'nu_h': 0.1}, {'nu_v': 0.1}, {'gamma_h': 0.1}, {'mu_v': 0.05}, 
-                          {'beta_h': 0.5}, {'beta_v': 0.5}, {'a_v': 0.5}, {'r_v': 0.1},
-                          {'K_v': 200005}, {'nu_h': 0.1, 'nu_v': 0.1, 'gamma_h': 0.1, 'mu_v': 0.05,
-                          'beta_h': 0.5, 'beta_v': 0.5, 'a_v': 0.5, 'r_v': 0.1, 'K_v': 200005}]
-param_dict_list_wnv = [{'nu_b': 0.1}, {'nu_v': 0.15}, {'mu_b': 0.1}, {'mu_v': 0.05}, {'beta_b': 0.5}, 
-                       {'alpha_b': 0.5}, {'alpha_v': 0.5}, {'eta': .005}, {'r_b': 0.005}, {'r_s':0.010},
-                       {'K_b': 9500}, {'K_s': 8950}, {'nu_b': 0.1, 'nu_v': 0.15, 'mu_b': 0.1, 'mu_v': 0.05,
-                       'beta_b': 0.5, 'alpha_b': 0.5, 'alpha_v': 0.5, 'eta': .005, 'r_b': 0.005, 'r_s':0.010,
-                       'K_b': 9500, 'K_s': 8950}]
+# Create parameter value lise to sequence through
+def gen_new_params(disease_name):
+    if disease_name == 'dengue':
+        params = DengueSEIRModel('config/local_test_config.yaml').params
+    elif disease_name == 'wnv':
+        params = WNVSEIRModel('config/local_test_config.yaml').params
+    rng = np.random.default_rng()
+    scalars = rng.uniform(low = .75, high = 1.25, size = len(params))
+    
+    param_dict_list = []
+    for i in range(0, len(params)):
+        val = {list(params.keys())[i]: (list(params.values()) * scalars)[i]}
+        param_dict_list.append(val)
+
+    param_dict_list.append(dict(zip(list(params.keys()), list(params.values()) * scalars)))
+    return(param_dict_list)
+
+param_dict_list_dengue = gen_new_params('dengue')
+param_dict_list_wnv = gen_new_params('wnv')
 
 
 class TestDengue:
@@ -87,9 +98,7 @@ class TestDengue:
            
             #check that we have the correct number of columns and rows
             assert len(run1.columns) == len(disease1.initial_states)
-            assert len(run2.columns) == len(disease2.initial_states)
             assert len(run1.index) == disease1.config_dict['DURATION'] * disease1.config_dict['RESOLUTION']
-            assert len(run2.index) == disease2.config_dict['DURATION'] * disease2.config_dict['RESOLUTION']
             
             #check that both model run outputs are the same
             assert len(run1.columns) == len(run2.columns)
@@ -112,9 +121,7 @@ class TestDengue:
             
             #check that we have the correct number of columns and rows
             assert len(run1.columns) == len(disease1.initial_states)
-            assert len(run2.columns) == len(disease2.initial_states)
             assert len(run1.index) == disease1.config_dict['DURATION'] * disease1.config_dict['RESOLUTION']
-            assert len(run2.index) == disease2.config_dict['DURATION'] * disease2.config_dict['RESOLUTION']
             
             #check that both model run outputs are the same
             assert len(run1.columns) == len(run2.columns)
@@ -158,7 +165,8 @@ class TestWNV:
     class TestModelOutput:
         """
             Tests for `run_model()` and corresponding output for WNVSEIRModel and WNVSEIRModel.param_dict.
-        """                       
+        """ 
+        #this one can behave weirdly as well 
         def test_same_model_out(self):
             """
                 For identical model runs, check that each output has correct dimensions and that the outputs are identical 
@@ -172,15 +180,14 @@ class TestWNV:
             
             #check that we have the correct number of columns and rows
             assert len(run1.columns) == len(disease1.initial_states)
-            assert len(run2.columns) == len(disease2.initial_states)
             assert len(run1.index) == disease1.config_dict['DURATION'] * disease1.config_dict['RESOLUTION']
-            assert len(run2.index) == disease2.config_dict['DURATION'] * disease2.config_dict['RESOLUTION']
             
             #check that both model run outputs are the same
             assert len(run1.columns) == len(run2.columns)
             assert sum(run1.columns == run2.columns) == len(run1.columns)
             assert len(run1.index) == len(run2.index)
             #changed to -1 for now so Ih is not included
+            #BELOW ARE THE LINES THAT ARE HAVING ISSUES
             for k in range(0, (len(run1.columns)-1)):
                            assert sum(run1.iloc[:,k] == run2.iloc[:,k]) == len(run1.index)
         
@@ -198,14 +205,38 @@ class TestWNV:
             
             #check that we have the correct number of columns and rows
             assert len(run1.columns) == len(disease1.initial_states)
-            assert len(run2.columns) == len(disease2.initial_states)
             assert len(run1.index) == disease1.config_dict['DURATION'] * disease1.config_dict['RESOLUTION']
-            assert len(run2.index) == disease2.config_dict['DURATION'] * disease2.config_dict['RESOLUTION']
             
             #check that both model run outputs are the same
             assert len(run1.columns) == len(run2.columns)
             assert sum(run1.columns == run2.columns) == len(run1.columns)
             assert len(run1.index) == len(run2.index)
             #changed to -1 for now so Ih is not included
+            #BELOW ARE THE LINES THAT ARE HAVING ISSUES
             for k in range(0, (len(run1.columns)-1)):
                            assert sum(run1.iloc[:,k] == run2.iloc[:,k]) == len(run1.index)
+                    
+
+# Code I was using to evaluate pytest failures in WNV
+# for param_dict in param_dict_list_wnv:
+#     disease1 = WNVSEIRModel.param_dict('config/local_test_config.yaml', param_dict)
+#     disease1.run_model('wnv')
+#     disease2 = WNVSEIRModel.param_dict('config/local_test_config.yaml', param_dict)
+#     disease2.run_model('wnv')
+#     run1 = pd.DataFrame(dict(zip(list(disease1.state_names_order.values()), disease1.model_output.T)))
+#     run2 = pd.DataFrame(dict(zip(list(disease2.state_names_order.values()), disease2.model_output.T)))
+#     for k in range(0, (len(run1.columns)-1)):
+#         if (sum(run1.iloc[:,k] == run2.iloc[:,k]) == len(run1.index)) == False:
+#             print(param_dict)
+#             data = pd.concat((run1.iloc[:,1], run2.iloc[:,1]), axis = 1)
+#             data.to_csv(f"diff_res_{k}.csv", index = False)
+
+# def test_norm():
+#     disease1 = WNVSEIRModel('config/local_test_config.yaml')
+#     disease1.run_model('wnv')
+#     disease2 = WNVSEIRModel('config/local_test_config.yaml')
+#     disease2.run_model('wnv')
+#     run1 = pd.DataFrame(dict(zip(list(disease1.state_names_order.values()), disease1.model_output.T)))
+#     run2 = pd.DataFrame(dict(zip(list(disease2.state_names_order.values()), disease2.model_output.T)))
+#     for k in range(0, (len(run1.columns)-1)):
+#             print(sum(run1.iloc[:,k] == run2.iloc[:,k]) == len(run1.index))
