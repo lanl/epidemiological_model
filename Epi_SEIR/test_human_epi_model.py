@@ -166,7 +166,7 @@ class TestWNV:
         """
             Tests for `run_model()` and corresponding output for WNVSEIRModel and WNVSEIRModel.param_dict.
         """ 
-        #this one can behave weirdly as well 
+        #this one behaves weirdly as well                      
         def test_same_model_out(self):
             """
                 For identical model runs, check that each output has correct dimensions and that the outputs are identical 
