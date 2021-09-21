@@ -6,13 +6,13 @@ PROJECT_ROOT: '.'
 LOGFILE_PATH: 'logs'
 MOSQUITOES_FILE_PATH: 'mosquitoes/mosq.csv'
 INITIAL_STATES_FILE_PATH: 'initial_states_input/initial_states.yaml'
-OUTPUT_DIR: 'human_model_output'
+OUTPUT_DIR: '/Users/mbarnard/Documents/Dengue_Paper/Sim_Res'
 
 # Add unit test specification?
 OUTPUT_TYPE: '.csv' # default is .parquet
 
-DURATION: 10 # number of days to run the model
-RESOLUTION: 50 # how many points to run per day
+DURATION: 500 # number of days to run the model
+RESOLUTION: 1 # how many points to run per day
 
 DENGUE:
   PARAMETERS:
