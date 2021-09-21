@@ -34,6 +34,7 @@ def main():
     elif args.generate_params == False:
         param_values = pd.read_csv(args.param_data_file)
     
+    data_list = list()
     for k in range(0,len(param_values.index)):
         params_k = param_values.iloc[k,].to_dict()
             
@@ -43,9 +44,19 @@ def main():
             disease = WNVSEIRModel.param_dict(config_file = args.config_file, param_dict =  params_k)
         disease.logger.info(disease)
         disease.run_model(disease_name)
-        disease.save_output(disease_name, args.sim_labels, param_values)
         disease.logger.info('SUCCESS')
-
+        
+        out = disease.get_data()
+        final_size = out['Recovered Humans'][len(out['Recovered Humans']) -1]
+        R0 = disease.params['nu_v'] / (disease.params['mu_v'] + disease.params['nu_v']) * \
+            (((disease.params['a_v']**2) * disease.params['beta_v'] * disease.params['beta_h'] * disease.params['K_v'] * final_size) / \
+            (disease.params['gamma_h'] * disease.params['mu_v'] * (100000**2)))
+        data_list.append(pd.DataFrame(np.array([[R0]]).T, columns = ['R0'], index = [k]))
+        
+        #disease.save_output(disease_name, args.sim_labels, param_values)
+        
+    final_data = pd.concat(data_list)
+    final_data.to_csv('/Users/mbarnard/Documents/Dengue_Paper/global_sense_9_12_2021.csv', index=False)
 
 if __name__ == "__main__":
     main()

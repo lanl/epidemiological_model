@@ -134,6 +134,9 @@ class VectorBorneDiseaseModel(ABC):
             raise e
         self.model_output = out
         
+    def get_data(self):
+        return pd.DataFrame(dict(zip(list(self.state_names_order.values()), self.model_output.T)))
+        
     def save_output(self, disease_name, sim_labels = False, data = None):
         """Save output to file"""
         df = pd.DataFrame(dict(zip(list(self.state_names_order.values()), self.model_output.T)))
