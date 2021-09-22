@@ -177,7 +177,7 @@ class VectorBorneDiseaseModel(ABC):
 
         self.logger.info(f'Output saved to {output_path}')
         
-    def plot_output(self, disease_name, sim_labels = False):
+    def plot_output(self, disease_name, sim_labels = False, save_figure = False):
         human_vec = [x for x in self.df.columns if "Human" in x or "Time" in x]
         vector_vec = [x for x in self.df.columns if "Vector" in x or "Time" in x]
     
@@ -198,11 +198,14 @@ class VectorBorneDiseaseModel(ABC):
             k = data[list(data.keys())[i]]
             n_plot = len(k.columns) -1
             k.plot(x='Time',subplots=True, figsize=(7.5,n_plot*2.5))
-            plt.ioff()
-            if sim_labels == True:
-                plt.savefig(f'plots/{disease_name}_{self.output_names}_{list(data.keys())[i]}.png')
-            else:
-                plt.savefig(f'plots/{disease_name}_{list(data.keys())[i]}.png') 
+            if save_figure == False:
+                plt.show()
+            elif save_figure == True:
+                plt.ioff() #this turns interactive environment off...does not seem to be stopping plot from opening
+                if sim_labels == True:
+                    plt.savefig(f'plots/{disease_name}_{self.output_names}_{list(data.keys())[i]}.png')
+                else:
+                    plt.savefig(f'plots/{disease_name}_{list(data.keys())[i]}.png') 
         
 
 

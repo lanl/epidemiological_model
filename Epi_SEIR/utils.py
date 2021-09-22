@@ -45,6 +45,10 @@ def create_arg_parser():
     parser.add_argument('-d', '--disease_name', action='store',
                         type=lambda x: is_disease(parser, x))
                         # default='dengue')
+    parser.add_argument('-f', '--figure', dest='figure', action='store_true')
+    parser.set_defaults(figure=False)
+    parser.add_argument('-sf', '--save_figure', dest='save_figure', action='store_true')
+    parser.set_defaults(save_figure=False)
 
     return parser
 
@@ -80,6 +84,11 @@ def create_arg_parser_exp():
     parser.set_defaults(generate_params=False)
     parser.add_argument('-p', '--param_data_file', action='store', 
                         type=lambda x: is_valid_file(parser, x))
+    #not giving this one the option, because a billion plots would pop up and that would be terrible
+#     parser.add_argument('-f', '--figure', dest='figure', action='store_true')
+#     parser.set_defaults(figure=False)
+    parser.add_argument('-sf', '--save_figure', dest='save_figure', action='store_true')
+    parser.set_defaults(save_figure=False)
 
     return parser
 
@@ -109,6 +118,10 @@ def create_arg_parser_plot():
                         type=lambda x: is_valid_file(parser, x))
     parser.add_argument('-d', '--disease_name', action='store',
                         type=lambda x: is_disease(parser, x))
+    parser.add_argument('-f', '--figure', dest='figure', action='store_true')
+    parser.set_defaults(figure=False)
+    parser.add_argument('-sf', '--save_figure', dest='save_figure', action='store_true')
+    parser.set_defaults(save_figure=False)
 
     return parser
 

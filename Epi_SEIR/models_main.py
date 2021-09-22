@@ -4,8 +4,8 @@ given paramters from config.yaml configuration file.
 
     Typical usage example:
 
-    python models_main.py -f <absolute path to config.yaml> -d <disease name
-    [dengue][wnv]>
+    python models_main.py -c <absolute path to config.yaml> -d <disease name
+    [dengue][wnv]> -f <show model output figures> -sf <save model output figures>
 """
 
 from dengue import DengueSEIRModel
@@ -33,7 +33,10 @@ def main():
     disease.logger.info(disease)
     disease.run_model(disease_name)
     disease.save_output(disease_name)
-    disease.plot_output(disease_name)
+    if args.figure == True:
+        disease.plot_output(disease_name)
+    if args.save_figure == True:
+        disease.plot_output(disease_name, save_figure = True)
     disease.logger.info('SUCCESS')
 
 

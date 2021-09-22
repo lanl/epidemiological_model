@@ -1,4 +1,11 @@
 """Plotting function for disease model output.
+Typical usage example:
+
+    python plotting.py -c <absolute path model output csv> -d <disease name
+    [dengue][wnv]> -f <show model output figures> -sf <save model output figures>
+    
+    Note: naming of saved figures will only work if output data in /human_model_output and 
+    files created from models_main.py or models_params.py
 
 """
 import sys
@@ -46,32 +53,11 @@ def graph_model():
         k = plot_data[list(plot_data.keys())[i]]
         n_plot = len(k.columns) -1 
         k.plot(x='Time',subplots=True, figsize=(7.5,n_plot*2.5))
-        plt.savefig(f'plots/{name2}{list(plot_data.keys())[i]}.png')
-        
-    
-#     # Sh, Eh, Iha, Ihs, Rh, Sv, Ev, Iv = self.model_output.T
-#     Ih, Sh, Rh = load_output()
-
-#     fig = plt.figure(facecolor='w', figsize=[1.5 * 6.4, 4.8])
-#     ax = fig.add_subplot(111, facecolor='#dddddd', axisbelow=True)
-#     ax.set_xlabel('Time (days)')
-#     ax.set_ylabel('Cases')
-#     ax.yaxis.set_tick_params(length=0)
-#     ax.xaxis.set_tick_params(length=0)
-#     ax.grid(b=True, which='major', c='w', lw=2, ls='-')
-
-#     for spine in ('top', 'right', 'bottom', 'left'):
-#         ax.spines[spine].set_visible(False)
-
-#     t = list(range(len(Ih)))
-#     ax.plot(t, Sh, alpha=0.5, lw=2, label='Susceptible Humans')
-#     ax.plot(t, Ih, alpha=0.5, lw=2, label='Infected Humans')
-#     ax.plot(t, Rh, alpha=0.5, lw=2, label='Recovered Humans')
-#     legend = ax.legend()
-#     legend.get_frame().set_alpha(0.5)
-#     plt.title("Dengue Incidence")
-
-#     plt.show()
+        if args.figure == True:
+            plt.show()
+        if args.save_figure == True:
+            plt.ioff()
+            plt.savefig(f'plots/{name2}{list(plot_data.keys())[i]}.png')
 
 
 def main():
