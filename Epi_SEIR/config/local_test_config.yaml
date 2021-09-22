@@ -11,8 +11,8 @@ OUTPUT_DIR: '/Users/mbarnard/Documents/Dengue_Paper/Sim_Res'
 # Add unit test specification?
 OUTPUT_TYPE: '.csv' # default is .parquet
 
-DURATION: 500 # number of days to run the model
-RESOLUTION: 1 # how many points to run per day
+DURATION: 200 # number of days to run the model
+RESOLUTION: 5 # how many points to run per day
 
 DENGUE:
   PARAMETERS:

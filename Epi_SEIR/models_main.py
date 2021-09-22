@@ -33,6 +33,7 @@ def main():
     disease.logger.info(disease)
     disease.run_model(disease_name)
     disease.save_output(disease_name)
+    disease.plot_output(disease_name)
     disease.logger.info('SUCCESS')
 
 
