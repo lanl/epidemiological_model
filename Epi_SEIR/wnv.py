@@ -137,12 +137,3 @@ class WNVSEIRModel(vbdm.VectorBorneDiseaseModel):
             #ddt['Ih'] = math.trunc(rng.normal(loc = self.params['eta']*self.states['Iv'], scale = math.sqrt(self.params['eta']*self.states['Iv'])))
 
         return tuple(ddt.values())
-    
-    def calc_Ih(self, df):
-        rng = np.random.default_rng()
-        try:
-            df['Infected Humans'] = rng.poisson(lam=self.params['eta'] * df['Infected Vectors'])
-        except ValueError:
-            self.logger.exception(f"Used Normal distribution, lam = {math.trunc(self.params['eta']*df['Infected Vectors'])}")
-            df['Infected Humans'] = math.trunc(rng.normal(loc = self.params['eta']*df['Infected Vectors'], scale = math.sqrt(self.params['eta']*df['Infected Vectors'])))
-        return df
