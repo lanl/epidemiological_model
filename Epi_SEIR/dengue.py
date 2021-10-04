@@ -136,6 +136,7 @@ class DengueSEIRModel(sample_fit.VectorBorneDiseaseModel):
     
     def model_func_fit(self, t, y, params_fit):
         #start here
+        fit_constants = {k: all_constants[k] for k in self.fit_params}
         param_keys = [i for i in self.fit_params if i in list(self.params.keys())]
         init_keys = [i for i in self.fit_params if i in list(self.initial_states.keys())]
         #need to set all parameters we are interested in as params_fit

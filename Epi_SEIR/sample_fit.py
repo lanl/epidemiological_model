@@ -175,21 +175,44 @@ class VectorBorneDiseaseModel(ABC):
             raise e
         self.model_df = pd.DataFrame(dict(zip(list(self.initial_states.keys()), out.T)))
         
-    def fit_objective(self, disease_name, params_fit):
+    def fit_model_out2(self, params_fit):
+        keys = list(self.initial_states.keys())
+        self.model_output = np.empty([0, len(keys)])
+        
+        param_keys = [i for i in self.fit_params if i in list(self.params.keys())]
+        init_keys = [i for i in self.fit_params if i in list(self.initial_states.keys())]
+        #need to set all parameters we are interested in as params_fit
+        for k in param_keys:
+            self.params[k] = params_fit[k]
+        for j in init_keys:
+            self.initial_states[j] = params_fit[j]
+            
+        t = (0, self.config_dict['DURATION'])
+        self.t_eval = np.linspace(0, self.config_dict['DURATION'], self.config_dict['OUT_POINTS'])
+            
+        try:
+            sol = solve_ivp(self.model_func, t, list(self.initial_states.values()), t_eval=self.t_eval)
+            out = sol.y.T
+        except Exception as e:
+            self.logger.exception('Exception occurred running model')
+            raise e
+        self.model_df = pd.DataFrame(dict(zip(list(self.initial_states.keys()), out.T)))
+        
+    def fit_objective(self, params):
         resid = np.empty([0])
-        fit_keys = list(self.fit_compartments.keys())
-        fitting_output = pd.DataFrame(self.fit_model_out(disase_name, params_fit))
-        for k in fit_keys:
+        self.fit_model_out2(params)
+        for k in self.fit_compartments:
             #make this config dict a dictionary where the keys are the fitting compartments 
-            df = df[k]
+            #NOTE JUST DOING A CUMSUM FOR NOW
+            df = np.cumsum(self.fit_data[k])
             out = self.model_df[k]
             #calculate the residual
-            resid = np.concatenate((resid,out_select - df))
+            resid = np.concatenate((resid,out- df))
         #already flat here
         return resid
     
-    def fit_parameters(self, disease_name):
-        self.fit_out = minimize(self.fit_objective, disease_name, params_fit = self.init_fit_parameters())
+    def fit_parameters(self):
+        self.fit_out = minimize(self.fit_objective, self.init_fit_parameters())
         
     def save_fit_output(self, disease_name):
     #Need to create fit_output folder
