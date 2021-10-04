@@ -185,7 +185,7 @@ class VectorBorneDiseaseModel(ABC):
                                        f'{disease_name}_model_output.parquet')
                 pq.write_table(pa.Table.from_pandas(self.df), output_path)
 
-        self.logger.info(f'Output saved to {output_path}')
+        self.logger.info(f'Output saved to {output_path}')     
         
     def plot_output(self, disease_name, sim_labels = False, save_figure = False):
         human_vec = [x for x in self.df.columns if "Human" in x or "Time" in x]
@@ -216,8 +216,6 @@ class VectorBorneDiseaseModel(ABC):
                     plt.savefig(f'plots/{disease_name}_{self.output_names}_{list(data.keys())[i]}.png')
                 else:
                     plt.savefig(f'plots/{disease_name}_{list(data.keys())[i]}.png') 
-        
-
 
     def error_check_output_type(self):
         """check if output type is a string.
