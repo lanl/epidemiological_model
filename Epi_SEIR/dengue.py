@@ -16,10 +16,10 @@ by inputting a dictionary of different parameter values
 """
 
 from utils import create_logger
-import vbdm
+import sample_fit
 
 
-class DengueSEIRModel(vbdm.VectorBorneDiseaseModel):
+class DengueSEIRModel(sample_fit.VectorBorneDiseaseModel):
 
     """Models the spread of dengue.
 
@@ -133,3 +133,14 @@ class DengueSEIRModel(vbdm.VectorBorneDiseaseModel):
             self.params['mu_v'] * self.states['Iv']
 
         return tuple(ddt.values())
+    
+    def model_func_fit(self, t, y, params_fit):
+        #start here
+        param_keys = [i for i in self.fit_params if i in list(self.params.keys())]
+        init_keys = [i for i in self.fit_params if i in list(self.initial_states.keys())]
+        #need to set all parameters we are interested in as params_fit
+        for k in param_keys:
+            self.params[k] = params_fit[k]
+        for j in init_keys:
+            self.initial_states[j] = params_fit[j]
+        return self.model_func(t,y)

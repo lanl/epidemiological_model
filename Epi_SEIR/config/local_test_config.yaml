@@ -25,6 +25,10 @@ DENGUE:
     a_v: 0.75
     r_v: .2286 #0.3 (from latex) - mu_v
     K_v: 200000 #based on initial states in the latex
+  FIT: True
+  FIT_PARAMS: ['nu_h', 'gamma_h', 'Sv']
+  FIT_DATA_PATH: 'rio_fit_data_2010.csv'
+  FIT_COMPARTMENTS: ['Rh']
     
 WNV:
   PARAMETERS:
