@@ -91,11 +91,14 @@ class VectorBorneDiseaseModel(ABC):
         """Takes in a dictionary file that edits the parameter values for the model"""
         obj = cls(config_file, disease_name)
         dict_keys = list(param_dict.keys())
-        
-        for k in dict_keys:
+        param_keys = [i for i in dict_keys if i in list(obj.params.keys())]
+        init_keys = [i for i in dict_keys if i in list(obj.initial_states.keys())]
+        for k in param_keys:
             obj.params[k] = param_dict[k]
+        for j in init_keys:
+            obj.initial_states[j] = param_dict[j]
             
-        obj.logger.info(f"\n\nParameters changed: {param_dict}\n")
+        obj.logger.info(f"\n\nParameters and/or initial states changed: {param_dict}\n")
         return obj
 
     def _read_config(self, config_file, disease_name):
@@ -140,15 +143,22 @@ class VectorBorneDiseaseModel(ABC):
         df['Time'] = self.t_eval
         
         if sim_labels == True:
-            param_keys = data.columns
-            param_values = []
+            dict_keys = data.columns
+            param_keys = [i for i in dict_keys if i in list(self.params.keys())]
+            init_keys = [i for i in dict_keys if i in list(self.initial_states.keys())]
+            keys = []
+            values = []
             for k in param_keys:
-                param_values.append(str(round(self.params[k],4)))
+                keys.append(k)
+                values.append(str(round(self.params[k],4)))
+            for j in init_keys:
+                keys.append(j)
+                values.append(str(self.initial_states[j]))
 
             param_all = []
-            for i in range(0,len(param_keys)):
-                param_all.append(param_keys[i])
-                param_all.append(param_values[i])
+            for i in range(0,len(keys)):
+                param_all.append(keys[i])
+                param_all.append(values[i])
 
             output_names = '_'.join(param_all)
 
