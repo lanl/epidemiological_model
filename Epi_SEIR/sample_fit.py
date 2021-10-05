@@ -88,10 +88,14 @@ class VectorBorneDiseaseModel(ABC):
         self.error_check_mosq_initial_states()
     
         if self.config_dict[disease_name]['FIT'] == True:
-            self.fit_params = self.config_dict[disease_name]['FIT_PARAMS']
-            #need to have the same names as the compartments
-            self.fit_data = pd.read_csv(self.config_dict[disease_name]['FIT_DATA_PATH'])
-            self.fit_compartments = self.config_dict[disease_name]['FIT_COMPARTMENTS']
+            self.fit_params = list(self.config_dict[disease_name]['FIT_PARAMS'].keys())
+            self.fit_params_range = self.config_dict[disease_name]['FIT_PARAMS']
+            self.fit_data_res = self.config_dict[disease_name]['FIT_DATA']['res']
+            self.fit_data_compartment = self.config_dict[disease_name]['FIT_DATA']['compartment']
+            self.fit_data = []
+            for k in self.config_dict[disease_name]['FIT_DATA']['PATH']:
+                    self.fit_data.append(pd.read_csv(k))
+
         
     @classmethod
     def param_dict(cls, config_file, disease_name, param_dict):
@@ -127,10 +131,6 @@ class VectorBorneDiseaseModel(ABC):
     def model_func(self, t, y):
         pass
     
-    @abstractmethod
-    def model_func_fit(self, t, y, params_fit):
-        pass
-    
     def init_fit_parameters(self):
         #create the Parameter objects
             params_obj = Parameters()
@@ -138,9 +138,9 @@ class VectorBorneDiseaseModel(ABC):
             param_keys = [i for i in self.fit_params if i in list(self.params.keys())]
             init_keys = [i for i in self.fit_params if i in list(self.initial_states.keys())]
             for k in param_keys:
-                params_obj.add(k, self.params[k])
+                params_obj.add(k, self.params[k], min = self.fit_params_range[k]['min'], max = self.fit_params_range[k]['max'])
             for j in init_keys:
-                params_obj.add(j, self.initial_states[j])
+                params_obj.add(j, self.initial_states[j], min = self.fit_params_range[j]['min'], max = self.fit_params_range[j]['max'])
             return(params_obj)
 
     @timer
@@ -160,27 +160,14 @@ class VectorBorneDiseaseModel(ABC):
             raise e
         self.model_output = out
         
-    def fit_model_out(self, disease_name, params_fit):
-        keys = list(self.initial_states.keys())
-        self.model_output = np.empty([0, len(keys)])
-            
-        t = (0, self.config_dict['DURATION'])
-        self.t_eval = np.linspace(0, self.config_dict['DURATION'], self.config_dict['DURATION']*self.config_dict['RESOLUTION'])
-            
-        try:
-            sol = solve_ivp(self.model_func_fit, t, list(self.initial_states.values()), t_eval=self.t_eval, args = params_fit)
-            out = sol.y.T
-        except Exception as e:
-            self.logger.exception('Exception occurred running model')
-            raise e
-        self.model_df = pd.DataFrame(dict(zip(list(self.initial_states.keys()), out.T)))
         
-    def fit_model_out2(self, params_fit):
+    def fit_run_model(self, params_fit):
         keys = list(self.initial_states.keys())
         self.model_output = np.empty([0, len(keys)])
         
         param_keys = [i for i in self.fit_params if i in list(self.params.keys())]
         init_keys = [i for i in self.fit_params if i in list(self.initial_states.keys())]
+        
         #need to set all parameters we are interested in as params_fit
         for k in param_keys:
             self.params[k] = params_fit[k]
@@ -188,41 +175,49 @@ class VectorBorneDiseaseModel(ABC):
             self.initial_states[j] = params_fit[j]
             
         t = (0, self.config_dict['DURATION'])
-        self.t_eval = np.linspace(0, self.config_dict['DURATION'], self.config_dict['OUT_POINTS'])
+        self.t_eval = np.linspace(0, self.config_dict['DURATION'], self.config_dict['DURATION']*self.config_dict['RESOLUTION'])
             
         try:
+            #note not inputting the parameters as arguments, but it is working without that
             sol = solve_ivp(self.model_func, t, list(self.initial_states.values()), t_eval=self.t_eval)
             out = sol.y.T
         except Exception as e:
             self.logger.exception('Exception occurred running model')
             raise e
+        #Note: columns are Rh instead of Recovered Humans here
         self.model_df = pd.DataFrame(dict(zip(list(self.initial_states.keys()), out.T)))
         
     def fit_objective(self, params):
         resid = np.empty([0])
-        self.fit_model_out2(params)
-        for k in self.fit_compartments:
-            #make this config dict a dictionary where the keys are the fitting compartments 
+        self.fit_run_model(params)
+        for i in range(0,len(self.fit_data)):
+            res = self.fit_data_res[i]
+            compartment = self.fit_data_compartment[i]
             #NOTE JUST DOING A CUMSUM FOR NOW
-            df = np.cumsum(self.fit_data[k])
-            out = self.model_df[k]
+            df = self.fit_data[i][compartment]
+            if res == "weekly":
+                week_out = self.model_df.iloc[::7, :].reset_index()
+                out = week_out[compartment]
+            elif res == "daily":
+                out = self.model_df[compartment]
             #calculate the residual
+            #think sometime about weighting this based on the amount of data each source has
             resid = np.concatenate((resid,out- df))
-        #already flat here
+        #already flat here because of concatenating the residuals
         return resid
     
-    def fit_parameters(self):
+    def fit_constants(self):
         self.fit_out = minimize(self.fit_objective, self.init_fit_parameters())
         
     def save_fit_output(self, disease_name):
     #Need to create fit_output folder
-        #write a csv file with the parameter outptus
-        fitted_params = pd.DataFrame(columns=self.params_to_fit.keys(), index = [1])
+        #write a csv file with the parameter outputs
+        fitted_params = pd.DataFrame(columns=self.fit_params, index = [1])
         for k in fitted_params.columns:
             fitted_params[k] = self.fit_out.params[k].value
         path_param_values = os.path.join(self.config_dict['PARAMETER_FIT_DIR'],
                                        f'{disease_name}_parameter_values.csv')
-        fitted_params.to_csv(output_path, index=False)
+        fitted_params.to_csv(path_param_values, index=False)
         #write a text file with the full output
         path_param_out = os.path.join(self.config_dict['PARAMETER_FIT_DIR'],
                                        f'{disease_name}_parameter_output.txt')

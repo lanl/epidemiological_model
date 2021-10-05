@@ -134,14 +134,3 @@ class DengueSEIRModel(sample_fit.VectorBorneDiseaseModel):
 
         return tuple(ddt.values())
     
-    def model_func_fit(self, t, y, params_fit):
-        #start here
-        fit_constants = {k: all_constants[k] for k in self.fit_params}
-        param_keys = [i for i in self.fit_params if i in list(self.params.keys())]
-        init_keys = [i for i in self.fit_params if i in list(self.initial_states.keys())]
-        #need to set all parameters we are interested in as params_fit
-        for k in param_keys:
-            self.params[k] = params_fit[k]
-        for j in init_keys:
-            self.initial_states[j] = params_fit[j]
-        return self.model_func(t,y)

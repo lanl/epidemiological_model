@@ -16,12 +16,12 @@ by inputting a dictionary of different parameter values
 """
 
 from utils import create_logger
-import vbdm
+import sample_fit
 import numpy as np
 import math
 
 
-class WNVSEIRModel(vbdm.VectorBorneDiseaseModel):
+class WNVSEIRModel(sample_fit.VectorBorneDiseaseModel):
 
     """Models the spread of WNV.
 
