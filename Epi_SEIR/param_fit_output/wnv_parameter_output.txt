@@ -1,17 +1,17 @@
 [[Fit Statistics]]
     # fitting method   = leastsq
-    # function evals   = 46
+    # function evals   = 18
     # data points      = 364
     # variables        = 3
-    chi-square         = 1.7244e+11
-    reduced chi-square = 4.7768e+08
-    Akaike info crit   = 7277.32968
-    Bayesian info crit = 7289.02114
+    chi-square         = 1.7376e+11
+    reduced chi-square = 4.8133e+08
+    Akaike info crit   = 7280.10010
+    Bayesian info crit = 7291.79156
 [[Variables]]
-    nu_v:  0.09991376 +/- 3.9740e-04 (0.40%) (init = 0.1)
-    mu_v:  0.06200872 +/- 0.00115147 (1.86%) (init = 0.06)
-    Sv:    9902.93332 +/- 540.519863 (5.46%) (init = 10000)
+    nu_v:  0.10000000 +/- 3.0485e-05 (0.03%) (init = 0.1)
+    mu_v:  0.06000000 +/- 7.3052e-05 (0.12%) (init = 0.06)
+    Sv:    10000.0000 +/- 43.0819308 (0.43%) (init = 10000)
 [[Correlations]] (unreported correlations are < 0.100)
-    C(nu_v, Sv)   = -0.991
-    C(mu_v, Sv)   = -0.398
-    C(nu_v, mu_v) =  0.272
+    C(nu_v, Sv)   = -0.992
+    C(mu_v, Sv)   = -0.780
+    C(nu_v, mu_v) =  0.697
