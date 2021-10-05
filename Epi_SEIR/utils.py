@@ -83,6 +83,43 @@ def create_arg_parser_exp():
 
     return parser
 
+def create_arg_parser_fit():
+    """Configures command line argument parser for models_main.py
+
+    Checks if the argument is a valid file.
+
+    Returns:
+        parser object.
+    """
+
+    def is_valid_file(parser, arg):
+        if not os.path.isfile(arg):
+            parser.error(f'File {arg} not found.')
+        else:
+            return arg
+
+    def is_disease(parser, arg):
+        if arg.lower() not in ['wnv', 'dengue']:
+            parser.error('Specify [wnv] or [dengue]')
+        else:
+            return arg
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-c', '--config_file', action='store',
+                        type=lambda x: is_valid_file(parser, x))
+                        # default='config/local_test_config.yaml')
+    parser.add_argument('-d', '--disease_name', action='store',
+                        type=lambda x: is_disease(parser, x))
+                        # default='dengue')
+    parser.add_argument('-rm', '--run_fit_model', dest='run_fit_model', action='store_true')
+    parser.set_defaults(run_fit_model=False)
+    parser.add_argument('-f', '--figure', dest='figure', action='store_true')
+    parser.set_defaults(figure=False)
+    parser.add_argument('-sf', '--save_figure', dest='save_figure', action='store_true')
+    parser.set_defaults(save_figure=False)
+
+    return parser
+
 def create_logger(name, config_file):
     """Configures and instantiates logger object.
 
