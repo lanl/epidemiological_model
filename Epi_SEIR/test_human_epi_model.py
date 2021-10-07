@@ -135,7 +135,7 @@ class TestDengue:
         @pytest.mark.parametrize("param_dict", param_dict_list_dengue)
         def test_model_out_param_dict(self, param_dict):
             """
-                For identical model runs of param_dict method, check that each output has correct dimensions, that the outputs are identical, and that the      output changes over time.\n
+                For identical model runs of param_dict method, check that each output has correct dimensions, that the outputs are identical, and that the output changes over time.\n
                 Check that param_dict model run is different from standard model run.
             """
             disease1 = DengueSEIRModel.param_dict('config/local_test_config.yaml', param_dict)
