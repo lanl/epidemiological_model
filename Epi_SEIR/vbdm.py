@@ -86,6 +86,11 @@ class VectorBorneDiseaseModel(ABC):
 
         self.error_check_mosq_initial_states()
         
+        #EXTRACT and CALCULATE model run times (moving this here for now instead of model_func() for new fitting method)
+        self.t = (0, self.config_dict['DURATION'])
+        #need to add the +1 to get the correct step size
+        self.t_eval = np.linspace(0, self.config_dict['DURATION'], self.config_dict['DURATION']*self.config_dict['RESOLUTION'] + 1)
+        
     @classmethod
     def param_dict(cls, config_file, disease_name, param_dict):
         """Takes in a dictionary file that edits the parameter values for the model"""
@@ -126,11 +131,8 @@ class VectorBorneDiseaseModel(ABC):
         keys = list(self.initial_states.keys())
         self.model_output = np.empty([0, len(keys)])
             
-        t = (0, self.config_dict['DURATION'])
-        self.t_eval = np.linspace(0, self.config_dict['DURATION'], self.config_dict['DURATION']*self.config_dict['RESOLUTION'])
-            
         try:
-            sol = solve_ivp(self.model_func, t, list(self.initial_states.values()), t_eval=self.t_eval)
+            sol = solve_ivp(self.model_func, self.t, list(self.initial_states.values()), t_eval=self.t_eval)
             out = sol.y.T
         except Exception as e:
             self.logger.exception('Exception occurred running model')

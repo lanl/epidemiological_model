@@ -10,7 +10,6 @@ and fitting process given paramters from local_param_config.yaml and config.yaml
 from dengue import DengueSEIRModel
 from wnv import WNVSEIRModel
 from utils import create_arg_parser_fit
-from generate_param_values import param_data
 import sys
 import numpy as np
 import pandas as pd
@@ -40,7 +39,7 @@ def fit():
     disease.logger.info('SUCCESS')
     
     if args.run_fit_model == True:
-        fit_params = pd.read_csv(f'param_fit_output/{disease_name}_parameter_values.csv')
+        fit_params = pd.read_csv(f'param_fit_output/{disease_name}_parameter_values.csv').iloc[0,].to_dict()
         fit_disease = DengueSEIRModel.param_dict(config_file = args.config_file, param_dict =  fit_params)
         fit_disease.logger.info(fit_disease)
         fit_disease.run_model(disease_name)
@@ -52,7 +51,7 @@ def fit():
         for i in range(0, len(disease.fit_data)):
             data = disease.fit_data[i]
             if disease.fit_data_res[i] == 'weekly':
-                data['Time'] = np.arange(0, disease.config_dict['DURATION'], 7)
+                data['Time'] = fit_disease.t_eval[::7]
             elif disease.fit_data_res[i] == 'daily':
                 data['Time'] = fit_disease.t_eval
                        
@@ -62,8 +61,10 @@ def fit():
             plt.legend(loc='best')
             if args.save_figure == False:
                 plt.show()
+                plt.close()
             if args.save_figure == True:
                 plt.savefig(f'plots/{disease_name}_fit_{compartment}.png')
+                plt.close()
 
 if __name__ == "__main__":
     fit()

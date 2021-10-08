@@ -12,7 +12,7 @@ OUTPUT_DIR: 'human_model_output'
 # Add unit test specification?
 OUTPUT_TYPE: '.csv' # default is .parquet
 
-DURATION: 364 # number of days to run the model
+DURATION: 363 # number of days to run the model
 RESOLUTION: 1
 
 DENGUE:

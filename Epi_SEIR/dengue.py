@@ -16,15 +16,15 @@ by inputting a dictionary of different parameter values
 """
 
 from utils import create_logger
-import sample_fit
+import fit
 
 
-class DengueSEIRModel(sample_fit.VectorBorneDiseaseModel):
+class DengueSEIRModel(fit.FitModel):
 
     """Models the spread of dengue.
 
-    Inherits from the VectorBorneDiseaseModel class. Solves ODE system
-    of equations and plots the resulting curves.
+    Inherits from the FitModel class. Specifies ODE system
+    of equations.
 
     Attributes:
         logger: python logging object.\n
