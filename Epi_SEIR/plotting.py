@@ -1,9 +1,10 @@
-"""Plotting function for disease model output.
+"""Plotting function for disease model output. 
 Typical usage example:
 
-    python plotting.py -c <absolute path model output csv> -d <disease name
-    [dengue][wnv]> -f <show model output figures> -sf <save model output figures>
+    python plotting.py -of <absolute path model output csv> -d <disease name
+    [dengue][wnv]> -sf <save model output figures>
     
+    Will automatically show figure with -of and -d, if you -sf it will not automatically show the figure
     Note: naming of saved figures will only work if output data in /human_model_output and 
     files created from models_main.py or models_params.py
 
@@ -53,11 +54,12 @@ def graph_model():
         k = plot_data[list(plot_data.keys())[i]]
         n_plot = len(k.columns) -1 
         k.plot(x='Time',subplots=True, figsize=(7.5,n_plot*2.5))
-        if args.figure == True:
+        if args.save_figure == False:
             plt.show()
+            plt.close()
         if args.save_figure == True:
-            plt.ioff()
             plt.savefig(f'plots/{name2}{list(plot_data.keys())[i]}.png')
+            plt.close()
 
 
 def main():

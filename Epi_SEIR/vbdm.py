@@ -210,12 +210,14 @@ class VectorBorneDiseaseModel(ABC):
             k.plot(x='Time',subplots=True, figsize=(7.5,n_plot*2.5))
             if save_figure == False:
                 plt.show()
+                plt.close()
             elif save_figure == True:
-                plt.ioff() #this turns interactive environment off...does not seem to be stopping plot from opening
                 if sim_labels == True:
                     plt.savefig(f'plots/{disease_name}_{self.output_names}_{list(data.keys())[i]}.png')
+                    plt.close()
                 else:
                     plt.savefig(f'plots/{disease_name}_{list(data.keys())[i]}.png') 
+                    plt.close()
 
     def error_check_output_type(self):
         """check if output type is a string.

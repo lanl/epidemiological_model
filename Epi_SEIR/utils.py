@@ -114,12 +114,12 @@ def create_arg_parser_plot():
             return arg
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('-o', '--output_file', action='store',
+    parser.add_argument('-of', '--output_file', action='store',
                         type=lambda x: is_valid_file(parser, x))
     parser.add_argument('-d', '--disease_name', action='store',
                         type=lambda x: is_disease(parser, x))
-    parser.add_argument('-f', '--figure', dest='figure', action='store_true')
-    parser.set_defaults(figure=False)
+    #parser.add_argument('-f', '--figure', dest='figure', action='store_true')
+    #parser.set_defaults(figure=False)
     parser.add_argument('-sf', '--save_figure', dest='save_figure', action='store_true')
     parser.set_defaults(save_figure=False)
 
