@@ -16,6 +16,7 @@ by inputting a dictionary of different parameter values
 """
 
 from utils import create_logger
+import sys
 import vbdm
 
 
@@ -34,10 +35,15 @@ class DengueSEIRModel(vbdm.VectorBorneDiseaseModel):
 
     """
 
-    def __init__(self, config_file, param_dict = None): 
+    def __init__(self, config_file, param_dict = None):
         self.logger = create_logger(__name__, config_file)
+        if __name__ == "dengue_test":
+            self.logger.disabled = True
         
         super().__init__(config_file, 'DENGUE')
+        
+        self.error_zero_constants()
+        self.error_zero_to_one_params()
     
     @classmethod
     def param_dict(cls, config_file, param_dict):
@@ -133,3 +139,71 @@ class DengueSEIRModel(vbdm.VectorBorneDiseaseModel):
             self.params['mu_v'] * self.states['Iv']
 
         return tuple(ddt.values())
+    
+    
+    def error_zero_constants(self):
+        """check if human population is non-zero.
+
+        check if vector carrying capcity is non-zero.
+        """
+
+        # EXTRACT list of position
+        try:
+            if sum([self.initial_states['Sh'], self.initial_states['Eh'], self.initial_states['Ih'], self.initial_states['Rh']]) == 0:
+                raise ValueError('Human population size cannot be zero')
+        except ValueError as e:
+            self.logger.exception('Human population size cannot be zero')
+            raise e
+
+        try:
+            if self.params['K_v'] == 0:
+                raise ValueError('Vector carry capacity cannot be zero')
+        except ValueError as e:
+            self.logger.exception('Vector carry capacity cannot be zero')
+            raise e
+    
+    def error_zero_to_one_params(self):
+        """check if parameters that should be in [0,1] are
+        """
+        try:
+            if self.params['nu_v'] < 0 or self.params['nu_v'] > 1:
+                raise ValueError('nu_v must be in [0,1]')
+        except ValueError as e:
+            self.logger.exception('nu_v must be in [0,1]')
+            raise e
+            
+        try:
+            if self.params['nu_h'] < 0 or self.params['nu_h'] > 1:
+                raise ValueError('nu_h must be in [0,1]')
+        except ValueError as e:
+            self.logger.exception('nu_h must be in [0,1]')
+            raise e
+        
+        try:
+            if self.params['mu_v'] < 0 or self.params['mu_v'] > 1:
+                raise ValueError('mu_v must be in [0,1]')
+        except ValueError as e:
+            self.logger.exception('mu_v must be in [0,1]')
+            raise e
+        
+        try:
+            if self.params['gamma_h'] < 0 or self.params['gamma_h'] > 1:
+                raise ValueError('gamma_h must be in [0,1]')
+        except ValueError as e:
+            self.logger.exception('gamma_h must be in [0,1]')
+            raise e
+        
+        try:
+            if self.params['beta_h'] < 0 or self.params['beta_h'] > 1:
+                raise ValueError('beta_h must be in [0,1]')
+        except ValueError as e:
+            self.logger.exception('beta_h must be in [0,1]')
+            raise e
+            
+        try:
+            if self.params['beta_v'] < 0 or self.params['beta_v'] > 1:
+                raise ValueError('beta_v must be in [0,1]')
+        except ValueError as e:
+            self.logger.exception('beta_v must be in [0,1]')
+            raise e
+        
