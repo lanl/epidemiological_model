@@ -9,29 +9,32 @@ INITIAL_STATES_FILE_PATH: 'initial_states_input/unit_testing/position_integers_i
 OUTPUT_DIR: 'human_model_output'
 
 # Add unit test specification?
-OUTPUT_TYPE: 'csv' # default is .parquet
+OUTPUT_TYPE: '.csv' # default is .parquet
 
-DURATION: 10 # number of days to run the model
-RESOLUTION: 50 # how many points to run per day
+DURATION: 100 # number of days to run the model
+RESOLUTION: 10 # how many points to run per day
 
 DENGUE:
   PARAMETERS:
-    psi: 0.5
-    nu_h: 5
-    nu_v: 9
-    gamma_h: 7
-    mu_v: 12
-    beta_h: 0.5
-    beta_v: 0.75
-    sigma_h: 19
-    sigma_v: 0.5
+    nu_h: 0.164 
+    nu_v: 0.164 
+    gamma_h: 0.167 
+    mu_v: .0714 
+    beta_h: 0.33
+    beta_v: 0.33
+    a_v: 0.75
+    r_v: .2286 
+    K_v: 200000 
+    
 WNV:
   PARAMETERS:
     mu_v: 0.06
-    alpha: 0.0006
-    delta_b: 4.5
+    mu_b: 0.004
+    alpha_v: 0.69
+    alpha_b: 0.74
+    beta_b: 0.44
     eta: 0.003
-    A: 0.008
-    K: 0.08
-    r: -0.12
-    t0: 2
+    K_v: 15000
+    r_v: 0.2286
+    nu_v: 0.10
+    nu_b: 0.20 

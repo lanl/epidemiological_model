@@ -5,13 +5,13 @@
 PROJECT_ROOT: '.'
 LOGFILE_PATH: 'logs'
 MOSQUITOES_FILE_PATH: 'mosquitoes/mosq.csv'
-INITIAL_STATES_FILE_PATH: 'initial_states_input/initial_states.yaml'
+INITIAL_STATES_FILE_PATH: 'initial_states_input/unit_testing/working_initial_states.yaml'
 OUTPUT_DIR: 'human_model_output'
 
 # Add unit test specification?
 OUTPUT_TYPE: '.csv' # default is .parquet
 
-DURATION: -100 # number of days to run the model
+DURATION: 100 # number of days to run the model
 RESOLUTION: 10 # how many points to run per day
 
 DENGUE:
@@ -19,16 +19,16 @@ DENGUE:
     nu_h: 0.164 
     nu_v: 0.164 
     gamma_h: 0.167 
-    mu_v: .0714 
+    mu_v: 1.5 
     beta_h: 0.33
     beta_v: 0.33
     a_v: 0.75
-    r_v: .2286 
+    r_v: .2286
     K_v: 200000 
     
 WNV:
   PARAMETERS:
-    mu_v: 0.06
+    mu_v: 1.5
     mu_b: 0.004
     alpha_v: 0.69
     alpha_b: 0.74
@@ -37,5 +37,4 @@ WNV:
     K_v: 15000
     r_v: 0.2286
     nu_v: 0.10
-    nu_b: 0.20 
-
+    nu_b: 0.20

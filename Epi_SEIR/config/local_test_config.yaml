@@ -29,7 +29,7 @@ DENGUE:
 WNV:
   PARAMETERS:
     mu_v: 0.06
-    mu_b: 0.20
+    mu_b: 0.004
     alpha_v: 0.69
     alpha_b: 0.74
     beta_b: 0.44

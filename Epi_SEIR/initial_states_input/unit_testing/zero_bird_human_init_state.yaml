@@ -7,8 +7,8 @@
 
 DENGUE:
   Sh:
-    name: 2
-    value: 99900
+    name: 'Susceptible Humans'
+    value: 0
     position: 0
   Eh:
     name: 'Exposed Humans'
@@ -16,7 +16,7 @@ DENGUE:
     position: 1
   Ih:
     name: 'Infected Humans'
-    value: 100
+    value: 0
     position: 2
   Rh:
     name: 'Recovered Humans'
@@ -36,7 +36,7 @@ DENGUE:
     position: 6
 WNV:
   Sv:
-    name: 2
+    name: 'Susceptible Vectors'
     value: 10000
     position: 0
   Ev:
@@ -49,7 +49,7 @@ WNV:
     position: 2
   Sb:
     name: 'Susceptible Birds'
-    value: 500
+    value: 0
     position: 3
   Eb:
     name: 'Exposed Birds'
