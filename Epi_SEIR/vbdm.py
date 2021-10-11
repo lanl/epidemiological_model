@@ -90,6 +90,7 @@ class VectorBorneDiseaseModel(ABC):
     def param_dict(cls, config_file, disease_name, param_dict):
         """Takes in a dictionary file that edits the parameter values for the model"""
         obj = cls(config_file, disease_name)
+        obj.error_check_param_dict_names(param_dict)
         dict_keys = list(param_dict.keys())
         param_keys = [i for i in dict_keys if i in list(obj.params.keys())]
         init_keys = [i for i in dict_keys if i in list(obj.initial_states.keys())]
@@ -321,4 +322,16 @@ class VectorBorneDiseaseModel(ABC):
                 raise ValueError('Simulation resolution must be positive')
         except ValueError as e:
             self.logger.exception('Simulation resolution must be positive')
+            raise e
+            
+            
+    def error_check_param_dict_names(self, param_dict):
+        """check parameter dictionary names match model parameter names
+        """
+
+        try:
+            if len([x for x in list(param_dict.keys()) if x in list(self.params.keys())]) != len(list(param_dict.keys())):
+                raise ValueError('Parameter dictionary names do not match model parameter names')
+        except ValueError as e:
+            self.logger.exception('Parameter dictionary names do not match model parameter names')
             raise e
