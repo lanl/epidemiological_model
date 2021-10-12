@@ -183,14 +183,17 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
     
     def error_check_data_and_output_length(self):
         """check if the number of rows in fitting data sets will match the number of rows in the corresponding model output 
+           check if the fitting data has any NAs
         """
         data_rownum = [i.shape[0] for i in self.fit_data]
         model_rownum = []
+        na_list = []
         for i in range(0,len(self.fit_data)):
             if self.fit_data_res[i] == 'daily':
                 model_rownum.append(len(self.t_eval))
             elif self.fit_data_res[i] == 'weekly':
                 model_rownum.append(len(self.t_eval[::7]))
+            na_list.append(self.fit_data_res[i].isnull().values.any())
         rows_no_match = [i for i, item in enumerate(data_rownum) if item != model_rownum[i]]
         
         try:
@@ -199,3 +202,12 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
         except ValueError as e:
             self.logger.exception(f'Number of fitting data {", ".join(str(x) for x in rows_no_match)} rows will not match number of model output rows')
             raise e
+        
+        try:
+            if sum(na_list) > 0:
+                raise ValueError('At least one fitting data set contains NaN')
+        except ValueError as e:
+            self.logger.exception('At least one fitting data set contains NaN')
+            raise e
+        
+
