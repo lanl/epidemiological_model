@@ -328,9 +328,10 @@ class VectorBorneDiseaseModel(ABC):
     def error_check_param_dict_names(self, param_dict):
         """check parameter dictionary names match model parameter names
         """
-
+        constants = {**self.params, **self.initial_states}
+        
         try:
-            if len([x for x in list(param_dict.keys()) if x in list(self.params.keys())]) != len(list(param_dict.keys())):
+            if len([x for x in list(param_dict.keys()) if x in list(constants.keys())]) != len(list(param_dict.keys())):
                 raise ValueError('Parameter dictionary names do not match model parameter names')
         except ValueError as e:
             self.logger.exception('Parameter dictionary names do not match model parameter names')
