@@ -193,7 +193,7 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
                 model_rownum.append(len(self.t_eval))
             elif self.fit_data_res[i] == 'weekly':
                 model_rownum.append(len(self.t_eval[::7]))
-            na_list.append(self.fit_data_res[i].isnull().values.any())
+            na_list.append(self.fit_data[i].isnull().values.any())
         rows_no_match = [i for i, item in enumerate(data_rownum) if item != model_rownum[i]]
         
         try:
