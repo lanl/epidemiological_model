@@ -150,10 +150,10 @@ class VectorBorneDiseaseModel(ABC):
     
     def save_output(self, disease_name, sim_labels = False, data = None):
         """Save output to file"""
-        df = pd.DataFrame(dict(zip(list(self.state_names_order.values()), self.model_output.T)))
+        self.df = pd.DataFrame(dict(zip(list(self.state_names_order.values()), self.model_output.T)))
         if disease_name == 'wnv':
-            df = self.calc_Ih_wnv(df)
-        df['Time'] = self.t_eval
+            self.df = self.calc_Ih_wnv(self.df)
+        self.df['Time'] = self.t_eval
         
         if sim_labels == True:
             dict_keys = data.columns
