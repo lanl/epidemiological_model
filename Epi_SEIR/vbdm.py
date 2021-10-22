@@ -137,14 +137,23 @@ class VectorBorneDiseaseModel(ABC):
             self.logger.exception('Exception occurred running model')
             raise e
         self.model_output = out
-        
-#     def get_data(self):
-#         return pd.DataFrame(dict(zip(list(self.state_names_order.values()), self.model_output.T)))
-        
+    
+    def calc_Ih_wnv(self, df):
+        """Calcualtees Ih compartment using Poisson distribution for WNV"""
+        rng = np.random.default_rng()
+        try:
+            df['Infected Humans'] = rng.poisson(lam=self.params['eta'] * df['Infected Vectors'])
+        except ValueError:
+            self.logger.exception(f"Used Normal distribution, lam = {math.trunc(self.params['eta']*df['Infected Vectors'])}")
+            df['Infected Humans'] = math.trunc(rng.normal(loc = self.params['eta']*df['Infected Vectors'], scale = math.sqrt(self.params['eta']*df['Infected Vectors'])))
+        return df
+    
     def save_output(self, disease_name, sim_labels = False, data = None):
         """Save output to file"""
-        self.df = pd.DataFrame(dict(zip(list(self.state_names_order.values()), self.model_output.T)))
-        self.df['Time'] = self.t_eval
+        df = pd.DataFrame(dict(zip(list(self.state_names_order.values()), self.model_output.T)))
+        if disease_name == 'wnv':
+            df = self.calc_Ih_wnv(df)
+        df['Time'] = self.t_eval
         
         if sim_labels == True:
             dict_keys = data.columns
