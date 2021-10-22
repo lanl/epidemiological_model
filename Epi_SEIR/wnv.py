@@ -128,12 +128,4 @@ class WNVSEIRModel(vbdm.VectorBorneDiseaseModel):
             self.params['mu_b'] * self.states['Ib']
         ddt['Rb'] = self.params['mu_b'] * self.states['Ib']
 
-
-        #rng = np.random.default_rng()
-        #try:
-            #ddt['Ih'] = rng.poisson(lam=self.params['eta'] * self.states['Iv'])
-        #except ValueError:
-            #self.logger.exception(f"Used Normal distribution, lam = {math.trunc(self.params['eta']*self.states['Iv'])}")
-            #ddt['Ih'] = math.trunc(rng.normal(loc = self.params['eta']*self.states['Iv'], scale = math.sqrt(self.params['eta']*self.states['Iv'])))
-
         return tuple(ddt.values())
