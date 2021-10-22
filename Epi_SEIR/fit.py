@@ -4,15 +4,16 @@ Contains class for specific diseases that inherit from the
 class FitModel. Inherits from the VectorBorneDiseaseModel class.
 
 """
+import os
+from utils import timer
+from abc import abstractmethod
 
 import numpy as np
 import yaml
-import os
 import pandas as pd
-from utils import timer
 from scipy.integrate import solve_ivp
 from lmfit import Parameters, minimize, fit_report
-from abc import abstractmethod
+
 import vbdm
 
 
