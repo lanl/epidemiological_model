@@ -6,7 +6,7 @@ given paramters from local_param_config.yaml and config.yaml configuration files
 
     python models_params.py -c <absolute path to config.yaml> -d <disease name
     [dengue][wnv]> -l <rename labels> -g <generate parameter data>
-    -p <absolute path to parameter data file, only if no -g>
+    -p <absolute path to parameter data file, only if no -g> -sf <save model output figures>
 """
 from dengue import DengueSEIRModel
 from wnv import WNVSEIRModel
@@ -44,8 +44,10 @@ def main():
         disease.logger.info(disease)
         disease.run_model(disease_name)
         disease.save_output(disease_name, args.sim_labels, param_values)
+        if args.save_figure == True:
+            disease.plot_output(disease_name, args.sim_labels, save_figure = True)
         disease.logger.info('SUCCESS')
 
-
+        
 if __name__ == "__main__":
     main()

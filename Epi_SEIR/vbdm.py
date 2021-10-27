@@ -15,6 +15,7 @@ import pyarrow.parquet as pq
 from utils import timer
 from scipy.integrate import solve_ivp
 from abc import ABC, abstractmethod
+import matplotlib.pyplot as plt
 
 
 class VectorBorneDiseaseModel(ABC):
@@ -137,11 +138,23 @@ class VectorBorneDiseaseModel(ABC):
             self.logger.exception('Exception occurred running model')
             raise e
         self.model_output = out
-        
+    
+    def calc_Ih_wnv(self, df):
+        """Calcualtees Ih compartment using Poisson distribution for WNV"""
+        rng = np.random.default_rng()
+        try:
+            df['Infected Humans'] = rng.poisson(lam=self.params['eta'] * df['Infected Vectors'])
+        except ValueError:
+            self.logger.exception(f"Used Normal distribution, lam = {math.trunc(self.params['eta']*df['Infected Vectors'])}")
+            df['Infected Humans'] = math.trunc(rng.normal(loc = self.params['eta']*df['Infected Vectors'], scale = math.sqrt(self.params['eta']*df['Infected Vectors'])))
+        return df
+    
     def save_output(self, disease_name, sim_labels = False, data = None):
         """Save output to file"""
-        df = pd.DataFrame(dict(zip(list(self.state_names_order.values()), self.model_output.T)))
-        df['Time'] = self.t_eval
+        self.df = pd.DataFrame(dict(zip(list(self.state_names_order.values()), self.model_output.T)))
+        if disease_name == 'wnv':
+            self.df = self.calc_Ih_wnv(self.df)
+        self.df['Time'] = self.t_eval
         
         if sim_labels == True:
             dict_keys = data.columns
@@ -161,29 +174,60 @@ class VectorBorneDiseaseModel(ABC):
                 param_all.append(keys[i])
                 param_all.append(values[i])
 
-            output_names = '_'.join(param_all)
+            self.output_names = '_'.join(param_all)
 
         if self.config_dict['OUTPUT_TYPE'] == 'csv':
             if sim_labels == True:
                 output_path = os.path.join(self.config_dict['OUTPUT_DIR'],
-                                           f'{disease_name}_{output_names}_model_output.csv')
-                df.to_csv(output_path, index=False)
+                                           f'{disease_name}_{self.output_names}_model_output.csv')
+                self.df.to_csv(output_path, index=False)
             else:
                 output_path = os.path.join(self.config_dict['OUTPUT_DIR'],
                                            f'{disease_name}_model_output.csv')
-                df.to_csv(output_path, index=False)
+                self.df.to_csv(output_path, index=False)
         else:
             if sim_labels == True:
                 output_path = os.path.join(self.config_dict['OUTPUT_DIR'],
-                                           f'{disease_name}_{output_names}_model_output.parquet')
-                pq.write_table(pa.Table.from_pandas(df), output_path)
+                                           f'{disease_name}_{self.output_names}_model_output.parquet')
+                pq.write_table(pa.Table.from_pandas(self.df), output_path)
             else:
                 output_path = os.path.join(self.config_dict['OUTPUT_DIR'],
                                        f'{disease_name}_model_output.parquet')
-                pq.write_table(pa.Table.from_pandas(df), output_path)
+                pq.write_table(pa.Table.from_pandas(self.df), output_path)
 
-        self.logger.info(f'Output saved to {output_path}')
+        self.logger.info(f'Output saved to {output_path}')     
+        
+    def plot_output(self, disease_name, sim_labels = False, save_figure = False):
+        human_vec = [x for x in self.df.columns if "Human" in x or "Time" in x]
+        vector_vec = [x for x in self.df.columns if "Vector" in x or "Time" in x]
+    
+        if disease_name.lower() == "wnv":
+            bird_vec = [x for x in self.df.columns if "Bird" in x or "Time" in x]
 
+
+        human = self.df[human_vec]
+        vector = self.df[vector_vec]
+
+        if disease_name.lower() == "wnv":
+            bird = self.df[bird_vec]
+            data = {'human': human, 'vector': vector, 'bird': bird}
+        elif disease_name.lower() == "dengue":
+            data = {'human': human, 'vector': vector}
+            
+        for i in range(0, len(data.keys())):
+            k = data[list(data.keys())[i]]
+            n_plot = len(k.columns) -1
+            k.plot(x='Time',subplots=True, figsize=(7.5,n_plot*2.5))
+            if save_figure == False:
+                plt.show()
+                plt.close()
+            elif save_figure == True:
+                if sim_labels == True:
+                    plt.savefig(f'plots/{disease_name}_{self.output_names}_{list(data.keys())[i]}.png')
+                    plt.close()
+                else:
+                    plt.savefig(f'plots/{disease_name}_{list(data.keys())[i]}.png') 
+                    plt.close()
 
     def error_check_output_type(self):
         """check if output type is a string.
