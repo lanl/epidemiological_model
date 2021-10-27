@@ -89,21 +89,24 @@ def gen_new_params(disease_name):
         #make the change in eta big enough that it will create a different model output
         #will need to change this if we get rid of the poisson distribution
         if disease_name == 'wnv' and list(constants.keys())[i] == 'eta':
-            scalar = rng.uniform(low = 100, high = 1000, size = 1)
-            val = {list(constants.keys())[i]: (list(constants.values())[i] * scalar)[0]}
+            val = "Nothing because eta will not impact standard model comparments"
+            #scalar = rng.uniform(low = 100, high = 1000, size = 1)
+            #val = {list(constants.keys())[i]: (list(constants.values())[i] * scalar)[0]}
         #r_v is not very sensitive, so sometimes getting the same output even when changed slightly: this is to fix that
         elif disease_name == 'dengue' and list(constants.keys())[i] == 'r_v':
             scalar = rng.uniform(low = 2, high = 10, size = 1)
             val = {list(constants.keys())[i]: (list(constants.values())[i] * scalar)[0]}
+            constant_dict_list.append(val) 
         else:
             val = {list(constants.keys())[i]: (list(constants.values()) * scalars)[i]}
-        constant_dict_list.append(val)
+            constant_dict_list.append(val)
 
     constant_dict_list.append(dict(zip(list(constants.keys()), list(constants.values()) * scalars)))
     return(constant_dict_list)
 
 param_dict_list_dengue = gen_new_params('dengue')
 param_dict_list_wnv = gen_new_params('wnv')
+
 
 dengue = DengueSEIRModel('config/unit_testing/working_config_file.yaml')
 wnv = WNVSEIRModel('config/unit_testing/working_config_file.yaml')
@@ -246,7 +249,7 @@ class TestDengue:
                 assert sum(run1[k] == run2[k]) == len(run1.index)
                 assert round(sum(abs(run1[k].diff().iloc[1:,])),3) != 0.000
                 out_sums.append(sum(norm_run[k] == run1[k]))
-            assert sum(out_sums) < len(out_sums)*500
+            assert sum(out_sums) < len(out_sums)*disease1.config_dict['DURATION'] * disease1.config_dict['RESOLUTION']
         
         @pytest.mark.parametrize("eq", eq_points_dengue)
         def test_eq_points_success(self, eq):
@@ -439,7 +442,7 @@ class TestWNV:
                 assert sum(run1[k] == run2[k]) == len(run1.index)
                 assert round(sum(abs(run1[k].diff().iloc[1:,])),3) != 0.000
                 out_sums.append(sum(norm_run[k] == run1[k]))
-            assert sum(out_sums) < len(out_sums)*500
+            assert sum(out_sums) < len(out_sums)*disease1.config_dict['DURATION'] * disease1.config_dict['RESOLUTION']
         
         @pytest.mark.parametrize("eq", eq_points_wnv)
         def test_eq_points_success(self, eq):
