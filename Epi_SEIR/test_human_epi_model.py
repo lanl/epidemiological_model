@@ -71,6 +71,8 @@ def gen_new_params(disease_name):
         constants = {**params, **init_states}
     elif disease_name == 'wnv':
         params = WNVSEIRModel('config/unit_testing/working_config_file.yaml').params
+        #deleting eta because changes in it won't impact the tested (non-human) comaprtments
+        del params['eta']
         init_states = WNVSEIRModel('config/unit_testing/working_config_file.yaml').initial_states
         constants = {**params, **init_states}
     rng = np.random.default_rng()
@@ -86,20 +88,13 @@ def gen_new_params(disease_name):
         #make zero constants non-zero so we actually test altering them
         if list(constants.values())[i] == 0:
             constants[list(constants.keys())[i]] = 1
-        #make the change in eta big enough that it will create a different model output
-        #will need to change this if we get rid of the poisson distribution
-        if disease_name == 'wnv' and list(constants.keys())[i] == 'eta':
-            val = "Nothing because eta will not impact standard model comparments"
-            #scalar = rng.uniform(low = 100, high = 1000, size = 1)
-            #val = {list(constants.keys())[i]: (list(constants.values())[i] * scalar)[0]}
         #r_v is not very sensitive, so sometimes getting the same output even when changed slightly: this is to fix that
-        elif disease_name == 'dengue' and list(constants.keys())[i] == 'r_v':
+        if disease_name == 'dengue' and list(constants.keys())[i] == 'r_v':
             scalar = rng.uniform(low = 2, high = 10, size = 1)
-            val = {list(constants.keys())[i]: (list(constants.values())[i] * scalar)[0]}
-            constant_dict_list.append(val) 
+            val = {list(constants.keys())[i]: (list(constants.values())[i] * scalar)[0]} 
         else:
             val = {list(constants.keys())[i]: (list(constants.values()) * scalars)[i]}
-            constant_dict_list.append(val)
+        constant_dict_list.append(val)
 
     constant_dict_list.append(dict(zip(list(constants.keys()), list(constants.values()) * scalars)))
     return(constant_dict_list)
@@ -218,7 +213,7 @@ class TestDengue:
         @pytest.mark.parametrize("param_dict", param_dict_list_dengue)
         def test_model_out_param_dict_success(self, param_dict):
             """
-                For identical model runs of param_dict method, check that each output has correct dimensions, that the outputs are identical, and that the output changes over time.\n
+                For identical model runs of param_dict method, check that each output has correct dimensions, that the outputs are identical, and that the output changes over time. \n
                 Check that param_dict model run is different from standard model run.
             """
             disease1 = DengueSEIRModel.param_dict('config/unit_testing/working_config_file.yaml', param_dict)
@@ -272,7 +267,6 @@ class TestDengue:
             """
                 For model runs of param_dict method with initial states as equilibrium points, check that output does not change at all.
             """
-            
             disease = DengueSEIRModel.param_dict('config/unit_testing/working_config_file.yaml', param_dict)
             disease.initial_states = eq
             #need to change eq where Sv = K_v if K_v changes
@@ -293,6 +287,9 @@ class TestDengue:
                 assert round(sum(abs(run[k].diff().iloc[1:,])),1) == 0
                 
         def test_zero_param_values_success(self):
+            """
+                For model runs where a_v = 0 and beta_h = 0 check that Sh stays constant
+            """
             disease_av = DengueSEIRModel('config/unit_testing/working_config_file.yaml')
             disease_betah = DengueSEIRModel('config/unit_testing/working_config_file.yaml')
             disease_av.params['a_v'] = 0
@@ -434,7 +431,7 @@ class TestWNV:
             assert sum(run1.columns == run2.columns) == len(run1.columns)
             assert len(run1.index) == len(run2.index)
             
-            #check identical runs are the same, and param_dict run different from normal: having issues with the latter, parameter 7
+            #check identical runs are the same, and param_dict run different from normal
             col_names = list(run1.columns)
             col_names.remove('Infected Humans')
             out_sums = []
@@ -465,7 +462,6 @@ class TestWNV:
             """
                 For model runs of param_dict method with initial states as equilibrium points, check that output does not change at all.
             """
-            
             disease = WNVSEIRModel.param_dict('config/unit_testing/working_config_file.yaml', param_dict)
             disease.initial_states = eq
             #need to change eq where Sv = K_v if K_v changes
@@ -480,6 +476,9 @@ class TestWNV:
                 assert round(sum(abs(run[k].diff().iloc[1:,])),3) == 0.000
                 
         def test_zero_param_values_success(self):
+            """
+                For model runs where alpha_b = 0 and beta_b = 0 check that Sb stays constant
+            """
             disease_alphab = WNVSEIRModel('config/unit_testing/working_config_file.yaml')
             disease_betab = WNVSEIRModel('config/unit_testing/working_config_file.yaml')
             disease_alphab.params['alpha_b'] = 0
