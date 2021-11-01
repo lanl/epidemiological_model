@@ -8,7 +8,6 @@ MOSQUITOES_FILE_PATH: 'mosquitoes/mosq.csv'
 INITIAL_STATES_FILE_PATH: 'initial_states_input/initial_states.yaml'
 OUTPUT_DIR: 'human_model_output'
 
-# Add unit test specification?
 OUTPUT_TYPE: '.csv' # default is .parquet
 
 DURATION: 100 # number of days to run the model
@@ -23,8 +22,8 @@ DENGUE:
     beta_h: 0.33
     beta_v: 0.33
     a_v: 0.75
-    r_v: .2286 #0.3 (from latex) - mu_v
-    K_v: 200000 #based on initial states in the latex
+    r_v: .2286
+    K_v: 200000
     
 WNV:
   PARAMETERS:
