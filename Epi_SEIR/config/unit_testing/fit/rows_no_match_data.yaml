@@ -11,12 +11,12 @@ OUTPUT_DIR: 'human_model_output'
 # Add unit test specification?
 OUTPUT_TYPE: '.csv' # default is .parquet
 
-DURATION: 100 # number of days to run the model
-RESOLUTION: 10 # how many points to run per day
+DURATION: 200 # number of days to run the model
+RESOLUTION: 1 # how many points to run per day
 
 DENGUE:
   PARAMETERS:
-    nu_h: -0.5 
+    nu_h: 0.164 
     nu_v: 0.164 
     gamma_h: 0.167 
     mu_v: .0714 
@@ -24,7 +24,7 @@ DENGUE:
     beta_v: 0.33
     a_v: 0.75
     r_v: .2286
-    K_v: 200000 
+    K_v: 200000
   FIT: False
   FIT_PARAMS:
     nu_h:
