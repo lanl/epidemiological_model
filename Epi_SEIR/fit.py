@@ -93,7 +93,7 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
         self.t_eval = np.linspace(0, self.config_dict['DURATION'], self.config_dict['DURATION']*self.config_dict['RESOLUTION'] + 1)
             
         try:
-            #note not inputting the parameters as arguments, but it is working without that
+            #Note we are not not inputting the parameters as arguments, but it is working without that
             sol = solve_ivp(self.model_func, t, list(self.initial_states.values()), t_eval=self.t_eval)
             out = sol.y.T
         except Exception as e:
