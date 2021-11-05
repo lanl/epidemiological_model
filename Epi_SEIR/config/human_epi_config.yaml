@@ -11,30 +11,60 @@ OUTPUT_DIR: 'HUMAN_EPI_MODEL_OUTPUT_PATH' # (e.g., '/Users/jkeithley/Documents/C
 # Add unit test specification?
 OUTPUT_TYPE: 'csv' # default is .parquet
 
-DURATION: 10 # number of days to run the model
-RESOLUTION: 50 # how many points to run per day
+DURATION: 363 # number of days to run the model
+RESOLUTION: 1
 
 DENGUE:
   PARAMETERS:
-    nu_h: 0.20 #(1/5) reverse to make units match with current model
-    nu_v: 0.10 #(1/10) reverse to make units match with current model
-    gamma_h: 0.167 #(1/6) reverse to make units match with current model
-    mu_v: .0714 #(1/14) reverse to make units match with current model
-    beta_h: 0.33
-    beta_v: 0.33
-    a_v: 1 #total guess for now
-    r_v: .2286 #0.3 (from latex) - mu_v
-    K_v: 100000000 #based on initial states in the latex
+    nu_h: 0.106
+    nu_v: 0.106 
+    gamma_h: 0.167
+    mu_v: .107 
+    beta_h: 0.101
+    beta_v: 0.606
+    a_v: 0.307
+    r_v: .190 
+    K_v: 688818
+  FIT: False
+  FIT_PARAMS:
+    nu_h:
+      min: 0.07
+      max: .33
+    gamma_h:
+      min: 0.08
+      max: .25
+    Sv:
+      min: 10000000
+      max: 60000000
+  FIT_DATA: 
+    PATH: ['fit_data/old/rio_fit_data_2010.csv']
+    res: ['weekly']
+    compartment: ['Rh']
+    
 WNV:
   PARAMETERS:
     mu_v: 0.06
-    mu_b: 0.20
+    mu_b: 0.004
     alpha_v: 0.69
     alpha_b: 0.74
     beta_b: 0.44
     eta: 0.003
-    K_b: 9596.401 # from Toronto 2004 season fitting
-    K_s: 8946.468
-    r_b: 0.00438 
-    r_s: 0.00976
+    K_v: 15000
+    r_v: 0.2286
     nu_v: 0.10
+    nu_b: 0.20
+  FIT: False
+  FIT_PARAMS:
+    nu_v:
+      min: 0.07
+      max: .14
+    mu_v:
+      min: 0.016
+      max: .33
+    Sv:
+      min: 5000
+      max: 30000
+  FIT_DATA: 
+    PATH: ['fit_data/old/Toronto_totmosq_2004.csv']
+    res: ['daily'] 
+    compartment: ['Sv']

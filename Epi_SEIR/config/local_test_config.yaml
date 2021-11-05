@@ -26,7 +26,7 @@ DENGUE:
     a_v: 0.307
     r_v: .190 #0.3 (from latex) - mu_v
     K_v: 688818 #based on initial states in the latex
-  FIT: True
+  FIT: False
   FIT_PARAMS:
     nu_h:
       min: 0.07
@@ -39,7 +39,7 @@ DENGUE:
       max: 60000000
 #data needs to be in exact formatting to compare to a given compartment
   FIT_DATA: 
-    PATH: ['fit_data/rio_fit_data_2010.csv']
+    PATH: ['fit_data/old/rio_fit_data_2010.csv']
     res: ['weekly'] #can be weekly or daily, regardless set resolution to 1
     compartment: ['Rh']
     
@@ -59,7 +59,7 @@ WNV:
     r_v: 0.2286
     nu_v: 0.10
     nu_b: 0.20 #guess for now
-  FIT: True
+  FIT: False
   FIT_PARAMS:
     nu_v:
       min: 0.07
@@ -72,6 +72,6 @@ WNV:
       max: 30000
 #data needs to be in exact formatting to compare to a given compartment
   FIT_DATA: 
-    PATH: ['fit_data/Toronto_totmosq_2004.csv']
+    PATH: ['fit_data/old/Toronto_totmosq_2004.csv']
     res: ['daily'] #can be weekly or daily, regardless set resolution to 1
     compartment: ['Sv']
