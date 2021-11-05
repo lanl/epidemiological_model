@@ -1,7 +1,7 @@
 """Dengue SEIR Model Class
 
 Contains class for dengue disease model. Inherits from
-Vector Borne Disease Model class.
+FitModel and Vector Borne Disease Model class.
 
     Typical usage example:
 
@@ -25,12 +25,6 @@ class DengueSEIRModel(fit.FitModel):
 
     Inherits from the FitModel class. Specifies ODE system
     of equations.
-
-    Attributes:
-        logger: python logging object.\n
-        long_state_names: more compartment values for output.\n
-        Nh: human population size.\n
-        Nh: vector population size.\n
 
     """
 

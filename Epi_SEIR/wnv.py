@@ -1,7 +1,7 @@
 """West Nile Virus SEIR Model Class
 
 Contains class for West Nile Virus disease model. Inherits from
-Vector Borne Disease Model class.
+FitModel and Vector Borne Disease Model class.
 
     Typical usage example:
 
@@ -27,10 +27,6 @@ class WNVSEIRModel(fit.FitModel):
 
     Inherits from the FitModel class. Specifies ODE system
     of equations.
-
-    Attributes:
-        logger: python logging object.\n
-        long_state_names: more compartment values for output.\n
 
     """
 
@@ -85,7 +81,7 @@ class WNVSEIRModel(fit.FitModel):
             alpha_b: Probability of virus transmission to bird, per infectious bit.\n
             psi_v: Vector birth rate. \n
             K_v: Vector carrying capacity.\n
-            r_v: Vector birth rate.\n
+            r_v: Vector growth rate.\n
             lambda_v: vector force of infection. \n
             lambda_b: Bird force of infection. \n
             nu_v: Vector latent period. \n
