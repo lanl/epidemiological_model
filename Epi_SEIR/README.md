@@ -6,24 +6,31 @@
 	- `git branch <branch_name>`
 	- `git checkout <branch_name>`
 - Develop changes
+- Add changes `git add <specific file> or -A for all files`
 - Commit changes `git commit -m <commit_message>`
 - Verify continuous integration job passed
 	- left sidebar -> CI/CD -> Pipelines
-- Merge branch with master
+- Merge branch with master by creating Merge Request at gitlab.lanl.gov
+- Can merge in the command line as well, but recommend creating a Merge Request
 	- `git checkout master`
 	- `git merge <branch_name>`
 
 ### *Conda Environment Creation*
 To create environment from text file specification, run
-- `conda create --name human-epi-env --file conda_environment/human-epi-env.txt`
+- `conda env create -f conda_environment/environment.yml`
  
 To create environment manually, run the following  
-- `conda create --name human-epi-env python=3.8.3`
+- `conda create --name human-epi-env python=3.9`
 - `conda activate human-epi-env`
-- `conda install --channel conda-forge numpy pyyaml pandas scipy pyarrow matplotlib sphinx pytest`
+- `conda install --channel conda-forge numpy pyyaml pandas scipy pyarrow matplotlib sphinx pytest lmfit`
 
-### *Running Model*
+### *Running Model from Shell Scripts*
 - `./run_human_epi_model.sh <config_file_path> <[1 to run clean script]|[0 to not run clean script]>`
+
+### *Running Model from Python Scripts*
+- `python models_main.py -c <config_file_path> -d <dengue or wnv> -f` (to print model output figures) `-sf` (to save model output figures)
+- `python models_params.py -c <config_file_path> -d <denuge or wnv> -l` (to label model outut files by parameter values) `-g` (to generate parameter data file of parameters to sequence through from config/local_param_config.yaml) `-p` <parameter_values_data_file_path> (for if `-g` is not used) `-sf` (to save model output figures)
+- `python models_fit.py -c <config_file_path> -d <dengue or wnv> -rm` (to run model with fit parameters) `-f` (to print model output and fitting data figure) `-sf` (to save model output and fitting data figure)
 
 ### *Building Documentation*
 - `pip install sphinx_rtd_theme`
@@ -59,14 +66,16 @@ NOTE: There is probably a better way to do this, but this works for now.
 
 #### Python Scripts
 - **models_main.py**: main function for model - runs each general stage of model.
+- **models_params.py**: main function to run model through a series of parameter values.
+- **modesl_fit.py**: main function to fit model parameters to data.
 - **vbdm.py**: main class for model - defines general vector borne disease model.
+- **fit.py**: class for model fitting - defines fitting functions.
 - **dengue.py**: defines behavior for dengue specific model.
 - **wnv.py**: defines behavior for WNV specific model.
 - **utils.py**: contains functions for creating loggers, parsing arguments, and function timing.
 - **generate_inputs.py**: for testing purposes - generates dummy input for mosquito and human population inputs.
-- **plotting.py**: CURRENTLY UNDEVELOPED - for plotting the output of model run.
+- **plotting.py**: For plotting the output of model run from an output csv.
 - **test_human_epi_model.py**: contains code for unit testing the model.
-- **Toronto_PBMtoLogistic.py**:  fits the mosquito PBM output to time-varying logistic parameters for Toronto
 
 #### Directories
 - **config**: contains main configuration files and unit testing configuration files.
@@ -81,5 +90,5 @@ NOTE: There is probably a better way to do this, but this works for now.
 - **build_docs.sh**: builds documentation using sphinx-autodoc.
 - **clean.sh**: for testing purposes - moves old logfiles to logs/logfile_archive and deletes old model output.
 	- usage: `./clean.sh <config_file_path>`
-- **run_human_epi_model.sh**: generates dummy mosquito population input and runs the model for dengue and WNV.
+- **run_human_epi_model.sh**: singe run of the model for dengue and WNV.
 	- usage: `./run_human_epi_model.sh <config_file_path> <[1 to run clean script]|[0 to not run clean script]>`
