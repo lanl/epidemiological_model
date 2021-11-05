@@ -63,8 +63,4 @@ WNV:
     name: 'Recovered Birds'
     value: 0
     position: 6
-  Ih:
-    name: 'Infected Humans'
-    value: 0
-    position: 7
 

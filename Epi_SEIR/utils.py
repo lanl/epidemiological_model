@@ -45,6 +45,10 @@ def create_arg_parser():
     parser.add_argument('-d', '--disease_name', action='store',
                         type=lambda x: is_disease(parser, x))
                         # default='dengue')
+    parser.add_argument('-f', '--figure', dest='figure', action='store_true')
+    parser.set_defaults(figure=False)
+    parser.add_argument('-sf', '--save_figure', dest='save_figure', action='store_true')
+    parser.set_defaults(save_figure=False)
 
     return parser
 
@@ -80,6 +84,40 @@ def create_arg_parser_exp():
     parser.set_defaults(generate_params=False)
     parser.add_argument('-p', '--param_data_file', action='store', 
                         type=lambda x: is_valid_file(parser, x))
+    #not giving -f option because too many plots would come up
+    parser.add_argument('-sf', '--save_figure', dest='save_figure', action='store_true')
+    parser.set_defaults(save_figure=False)
+
+    return parser
+
+def create_arg_parser_plot():
+    """Configures command line argument parser for models_params.py
+
+    Checks if the argument is a valid file.
+
+    Returns:
+        parser object.
+    """
+
+    def is_valid_file(parser, arg):
+        if not os.path.isfile(arg):
+            parser.error(f'File {arg} not found.')
+        else:
+            return arg
+
+    def is_disease(parser, arg):
+        if arg.lower() not in ['wnv', 'dengue']:
+            parser.error('Specify [wnv] or [dengue]')
+        else:
+            return arg
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-of', '--output_file', action='store',
+                        type=lambda x: is_valid_file(parser, x))
+    parser.add_argument('-d', '--disease_name', action='store',
+                        type=lambda x: is_disease(parser, x))
+    parser.add_argument('-sf', '--save_figure', dest='save_figure', action='store_true')
+    parser.set_defaults(save_figure=False)
 
     return parser
 

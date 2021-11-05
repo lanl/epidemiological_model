@@ -16,15 +16,15 @@ RESOLUTION: 1
 
 DENGUE:
   PARAMETERS:
-    nu_h: 0.106
-    nu_v: 0.106 
-    gamma_h: 0.167
-    mu_v: .107 
-    beta_h: 0.101
-    beta_v: 0.606
-    a_v: 0.307
-    r_v: .190 
-    K_v: 688818
+    nu_h: 0.164 
+    nu_v: 0.164 
+    gamma_h: 0.167 
+    mu_v: .0714 
+    beta_h: 0.33
+    beta_v: 0.33
+    a_v: 0.75
+    r_v: .2286 #0.3 (from latex) - mu_v
+    K_v: 200000 #based on initial states in the latex
   FIT: False
   FIT_PARAMS:
     nu_h:
