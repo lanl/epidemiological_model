@@ -26,9 +26,9 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
     Attributes:
         config_dict: All configurations read in from config file.\n
         params: ODE system parameters.\n
-
         initial_states: initial states for population sizes.\n
-        mosq: Daily mosquito population data.\n
+        fit_params: parameter names and range values to fit.\n
+        fit_data: list of csvs to fit the model to.\n
 
     """
 
@@ -82,29 +82,24 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
         param_keys = [i for i in self.fit_params if i in list(self.params.keys())]
         init_keys = [i for i in self.fit_params if i in list(self.initial_states.keys())]
         
-        #need to set all parameters we are interested in as params_fit
         for k in param_keys:
             self.params[k] = params_fit[k]
         for j in init_keys:
             self.initial_states[j] = params_fit[j]
             
-        t = (0, self.config_dict['DURATION'])
-        #need to add the +1 to get the correct step size
-        self.t_eval = np.linspace(0, self.config_dict['DURATION'], self.config_dict['DURATION']*self.config_dict['RESOLUTION'] + 1)
-            
         try:
             #Note we are not not inputting the parameters as arguments, but it is working without that
-            sol = solve_ivp(self.model_func, t, list(self.initial_states.values()), t_eval=self.t_eval)
+            sol = solve_ivp(self.model_func, self.t, list(self.initial_states.values()), t_eval=self.t_eval)
             out = sol.y.T
         except Exception as e:
             self.logger.exception('Exception occurred running model for fitting')
             raise e
-        #Note: columns are Rh instead of Recovered Humans here
+        #Note: columns are abbrevations (ex. Rh) instead of full name (ex. Recovered Humans) here
         self.model_df = pd.DataFrame(dict(zip(list(self.initial_states.keys()), out.T)))
         
-    def fit_objective(self, params):
+    def fit_objective(self, params_fit):
         resid = np.empty([0])
-        self.fit_run_model(params)
+        self.fit_run_model(params_fit)
         for i in range(0,len(self.fit_data)):
             res = self.fit_data_res[i]
             compartment = self.fit_data_compartment[i]
