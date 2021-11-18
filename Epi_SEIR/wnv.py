@@ -32,8 +32,13 @@ class WNVSEIRModel(fit.FitModel):
 
     def __init__(self, config_file, param_dict = None):
         self.logger = create_logger(__name__, config_file)
+        if __name__ == "wnv_test":
+            self.logger.disabled = True
 
         super().__init__(config_file, 'WNV')
+        
+        self.error_zero_constants()
+        self.error_zero_to_one_params()
         
     @classmethod
     def param_dict(cls, config_file, param_dict):
@@ -125,3 +130,71 @@ class WNVSEIRModel(fit.FitModel):
         ddt['Rb'] = self.params['mu_b'] * self.states['Ib']
 
         return tuple(ddt.values())
+    
+    
+    def error_zero_constants(self):
+        """check if human population is non-zero.
+
+        check if vector carrying capcity is non-zero.
+        """
+
+        # EXTRACT list of position
+        try:
+            if sum([self.initial_states['Sb'], self.initial_states['Eb'], self.initial_states['Ib'], self.initial_states['Rb']]) == 0:
+                raise ValueError('Bird population size cannot be zero')
+        except ValueError as e:
+            self.logger.exception('Bird population size cannot be zero')
+            raise e
+
+        try:
+            if self.params['K_v'] == 0:
+                raise ValueError('Vector carry capacity cannot be zero')
+        except ValueError as e:
+            self.logger.exception('Vector carry capacity cannot be zero')
+            raise e
+    
+    def error_zero_to_one_params(self):
+        """check if parameters that should be in [0,1] are
+        """
+        try:
+            if self.params['nu_v'] < 0 or self.params['nu_v'] > 1:
+                raise ValueError('nu_v must be in [0,1]')
+        except ValueError as e:
+            self.logger.exception('nu_v must be in [0,1]')
+            raise e
+            
+        try:
+            if self.params['nu_b'] < 0 or self.params['nu_b'] > 1:
+                raise ValueError('nu_b must be in [0,1]')
+        except ValueError as e:
+            self.logger.exception('nu_b must be in [0,1]')
+            raise e
+        
+        try:
+            if self.params['mu_v'] < 0 or self.params['mu_v'] > 1:
+                raise ValueError('mu_v must be in [0,1]')
+        except ValueError as e:
+            self.logger.exception('mu_v must be in [0,1]')
+            raise e
+        
+        try:
+            if self.params['mu_b'] < 0 or self.params['mu_b'] > 1:
+                raise ValueError('mu_b must be in [0,1]')
+        except ValueError as e:
+            self.logger.exception('mu_b must be in [0,1]')
+            raise e
+        
+        try:
+            if self.params['beta_b'] < 0 or self.params['beta_b'] > 1:
+                raise ValueError('beta_b must be in [0,1]')
+        except ValueError as e:
+            self.logger.exception('beta_b must be in [0,1]')
+            raise e
+            
+        try:
+            if self.params['eta'] < 0 or self.params['eta'] > 1:
+                raise ValueError('eta must be in [0,1]')
+        except ValueError as e:
+            self.logger.exception('eta must be in [0,1]')
+            raise e
+

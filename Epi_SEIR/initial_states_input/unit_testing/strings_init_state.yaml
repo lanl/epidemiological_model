@@ -8,54 +8,62 @@
 DENGUE:
   Sh:
     name: 2
-    value: 60
+    value: 99900
     position: 0
   Eh:
     name: 'Exposed Humans'
     value: 0
     position: 1
-  Iha:
-    name: 'Asymptomatic Infected Humans'
-    value: 20
+  Ih:
+    name: 'Infected Humans'
+    value: 100
     position: 2
-  Ihs:
-    name: 'Symptomatic Infected Humans'
-    value: 20
-    position: 3
   Rh:
     name: 'Recovered Humans'
     value: 0
-    position: 4
+    position: 3
   Sv:
     name: 'Susceptible Vectors'
-    value: 0 # INITIALIZE BUT REPLACE
-    position: 5
+    value: 199800
+    position: 4
   Ev:
     name: 'Exposed Vectors'
-    value: 2
-    position: 6
+    value: 0
+    position: 5
   Iv:
     name: 'Infected Vectors'
-    value: 2
-    position: 7
+    value: 200
+    position: 6
 WNV:
   Sv:
     name: 2
-    value: 0 # INITIALIZE BUT REPLACE
+    value: 10000
     position: 0
+  Ev:
+    name: 'Exposed Vectors'
+    value: 1
+    position: 1
   Iv:
     name: 'Infected Vectors'
     value: 0
-    position: 1
+    position: 2
   Sb:
     name: 'Susceptible Birds'
     value: 500
-    position: 2
+    position: 3
+  Eb:
+    name: 'Exposed Birds'
+    value: 0
+    position: 4
   Ib:
     name: 'Infected Birds'
     value: 0
-    position: 3
+    position: 5
+  Rb:
+    name: 'Recovered Birds'
+    value: 0
+    position: 6
   Ih:
     name: 'Infected Humans'
     value: 0
-    position: 4
+    position: 7

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>fit module &mdash; Epi-SEIR  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="generate_inputs module" href="generate_inputs.html" />
+    <link rel="prev" title="dengue module" href="dengue.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> Epi-SEIR
+            <img src="_static/logo.JPG" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Epi_SEIR</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="dengue.html">dengue module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">fit module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generate_inputs.html">generate_inputs module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generate_param_values.html">generate_param_values module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models_main.html">models_main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models_fit.html">models_fit module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models_params.html">models_params module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plotting.html">plotting module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="test_human_epi_model.html">test_human_epi_model module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utils.html">utils module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vbdm.html">vbdm module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wnv.html">wnv module</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Epi-SEIR</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="modules.html">Epi_SEIR</a> &raquo;</li>
+      <li>fit module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/fit.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-fit">
+<span id="fit-module"></span><h1>fit module<a class="headerlink" href="#module-fit" title="Permalink to this headline"></a></h1>
+<p>Fitting Model Class.</p>
+<p>Contains class for specific diseases that inherit from the
+class FitModel. Inherits from the VectorBorneDiseaseModel class.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="fit.FitModel">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fit.</span></span><span class="sig-name descname"><span class="pre">FitModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">disease_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fit.FitModel" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="vbdm.html#vbdm.VectorBorneDiseaseModel" title="vbdm.VectorBorneDiseaseModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">vbdm.VectorBorneDiseaseModel</span></code></a></p>
+<p>Defines a general fitting procedure.</p>
+<p>Inherits from VectorBorneDiseaseModel.</p>
+<dl>
+<dt>Attributes:</dt><dd><p>config_dict: All configurations read in from config file.</p>
+<p>params: ODE system parameters.</p>
+<p>initial_states: initial states for population sizes.</p>
+<p>fit_params: parameter names and range values to fit.</p>
+<p>fit_data: list of csvs to fit the model to.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="fit.FitModel.error_check_compartment_names">
+<span class="sig-name descname"><span class="pre">error_check_compartment_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fit.FitModel.error_check_compartment_names" title="Permalink to this definition"></a></dt>
+<dd><p>check if fitting compartment names match an initial state name</p>
+<p>check if fitting compartment names matches a column name in corresponding fitting data</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fit.FitModel.error_check_data_and_output_length">
+<span class="sig-name descname"><span class="pre">error_check_data_and_output_length</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fit.FitModel.error_check_data_and_output_length" title="Permalink to this definition"></a></dt>
+<dd><p>check if the number of rows in fitting data sets will match the number of rows in the corresponding model output 
+check if the fitting data has any NAs</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fit.FitModel.error_check_resolution">
+<span class="sig-name descname"><span class="pre">error_check_resolution</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fit.FitModel.error_check_resolution" title="Permalink to this definition"></a></dt>
+<dd><p>check if resolution in configuration file is 1 for a daily run</p>
+<p>check if all fitting data resolutions are listed as either daily or weekly</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fit.FitModel.fit_constants">
+<span class="sig-name descname"><span class="pre">fit_constants</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fit.FitModel.fit_constants" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fit.FitModel.fit_objective">
+<span class="sig-name descname"><span class="pre">fit_objective</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params_fit</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fit.FitModel.fit_objective" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fit.FitModel.fit_run_model">
+<span class="sig-name descname"><span class="pre">fit_run_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params_fit</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fit.FitModel.fit_run_model" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fit.FitModel.model_func">
+<em class="property"><span class="pre">abstract</span> </em><span class="sig-name descname"><span class="pre">model_func</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fit.FitModel.model_func" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fit.FitModel.param_dict">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">param_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">disease_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param_dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fit.FitModel.param_dict" title="Permalink to this definition"></a></dt>
+<dd><p>Inherit vbdm param_dict class method</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fit.FitModel.save_fit_output">
+<span class="sig-name descname"><span class="pre">save_fit_output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">disease_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fit.FitModel.save_fit_output" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="dengue.html" class="btn btn-neutral float-left" title="dengue module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="generate_inputs.html" class="btn btn-neutral float-right" title="generate_inputs module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Los Alamos National Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

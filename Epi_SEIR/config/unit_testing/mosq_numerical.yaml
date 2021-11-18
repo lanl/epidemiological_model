@@ -25,6 +25,22 @@ DENGUE:
     beta_v: 0.75
     sigma_h: 19
     sigma_v: 0.5
+  FIT: False
+  FIT_PARAMS:
+    nu_h:
+      min: 0.07
+      max: .33
+    gamma_h:
+      min: 0.08
+      max: .25
+    Sv:
+      min: 10000000
+      max: 60000000
+  FIT_DATA: 
+    PATH: ['fit_data/old/rio_fit_data_2010.csv']
+    res: ['weekly']
+    compartment: ['Rh']
+    
 WNV:
   PARAMETERS:
     mu_v: 0.06
@@ -35,3 +51,18 @@ WNV:
     K: 0.08
     r: -0.12
     t0: 2
+  FIT: False
+  FIT_PARAMS:
+    nu_v:
+      min: 0.07
+      max: .14
+    mu_v:
+      min: 0.016
+      max: .33
+    Sv:
+      min: 5000
+      max: 30000
+  FIT_DATA: 
+    PATH: ['fit_data/old/Toronto_totmosq_2004.csv']
+    res: ['daily']
+    compartment: ['Sv']

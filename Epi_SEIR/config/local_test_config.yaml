@@ -9,7 +9,6 @@ INITIAL_STATES_FILE_PATH: 'initial_states_input/initial_states.yaml'
 PARAMETER_FIT_DIR: 'param_fit_output'
 OUTPUT_DIR: 'human_model_output'
 
-# Add unit test specification?
 OUTPUT_TYPE: '.csv' # default is .parquet
 
 DURATION: 363 # number of days to run the model
@@ -17,15 +16,15 @@ RESOLUTION: 1
 
 DENGUE:
   PARAMETERS:
-    nu_h: 0.106
-    nu_v: 0.106 
-    gamma_h: 0.167
-    mu_v: .107 
-    beta_h: 0.101
-    beta_v: 0.606
-    a_v: 0.307
-    r_v: .190 #0.3 (from latex) - mu_v
-    K_v: 688818 #based on initial states in the latex
+    nu_h: 0.164 
+    nu_v: 0.164 
+    gamma_h: 0.167 
+    mu_v: .0714 
+    beta_h: 0.33
+    beta_v: 0.33
+    a_v: 0.75
+    r_v: .2286
+    K_v: 200000
   FIT: False
   FIT_PARAMS:
     nu_h:

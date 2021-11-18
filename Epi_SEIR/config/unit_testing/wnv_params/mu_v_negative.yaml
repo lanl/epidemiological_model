@@ -1,0 +1,70 @@
+#------------------------------------------#
+# Vector Borne Disease Model Configuration #
+#------------------------------------------#
+
+PROJECT_ROOT: '.'
+LOGFILE_PATH: 'logs'
+MOSQUITOES_FILE_PATH: 'mosquitoes/mosq.csv'
+INITIAL_STATES_FILE_PATH: 'initial_states_input/unit_testing/working_initial_states.yaml'
+OUTPUT_DIR: 'human_model_output'
+
+# Add unit test specification?
+OUTPUT_TYPE: '.csv' # default is .parquet
+
+DURATION: 100 # number of days to run the model
+RESOLUTION: 10 # how many points to run per day
+
+DENGUE:
+  PARAMETERS:
+    nu_h: 0.164 
+    nu_v: 0.164 
+    gamma_h: 0.167 
+    mu_v: -0.5 
+    beta_h: 0.33
+    beta_v: 0.33
+    a_v: 0.75
+    r_v: .2286
+    K_v: 200000
+  FIT: False
+  FIT_PARAMS:
+    nu_h:
+      min: 0.07
+      max: .33
+    gamma_h:
+      min: 0.08
+      max: .25
+    Sv:
+      min: 10000000
+      max: 60000000
+  FIT_DATA: 
+    PATH: ['fit_data/old/rio_fit_data_2010.csv']
+    res: ['weekly']
+    compartment: ['Rh']
+    
+WNV:
+  PARAMETERS:
+    mu_v: -0.5
+    mu_b: 0.004
+    alpha_v: 0.69
+    alpha_b: 0.74
+    beta_b: 0.44
+    eta: 0.003
+    K_v: 15000
+    r_v: 0.2286
+    nu_v: 0.10
+    nu_b: 0.20
+  FIT: False
+  FIT_PARAMS:
+    nu_v:
+      min: 0.07
+      max: .14
+    mu_v:
+      min: 0.016
+      max: .33
+    Sv:
+      min: 5000
+      max: 30000
+  FIT_DATA: 
+    PATH: ['fit_data/old/Toronto_totmosq_2004.csv']
+    res: ['daily']
+    compartment: ['Sv']
