@@ -1,76 +1,35 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>test_human_epi_model module &mdash; Epi-SEIR  documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="utils module" href="utils.html" />
     <link rel="prev" title="plotting module" href="plotting.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
             <a href="index.html" class="icon icon-home"> Epi-SEIR
-          
-
-          
-            
             <img src="_static/logo.JPG" class="logo" alt="Logo"/>
-          
           </a>
-
-          
-            
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -78,25 +37,16 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">Epi_SEIR</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="dengue.html">dengue module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fit.html">fit module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generate_inputs.html">generate_inputs module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generate_param_values.html">generate_param_values module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="models_main.html">models_main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models_fit.html">models_fit module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="models_params.html">models_params module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plotting.html">plotting module</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">test_human_epi_model module</a></li>
@@ -107,86 +57,115 @@
 </li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">Epi-SEIR</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-        
           <li><a href="modules.html">Epi_SEIR</a> &raquo;</li>
-        
       <li>test_human_epi_model module</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-          
             <a href="_sources/test_human_epi_model.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="module-test_human_epi_model">
-<span id="test-human-epi-model-module"></span><h1>test_human_epi_model module<a class="headerlink" href="#module-test_human_epi_model" title="Permalink to this headline">¶</a></h1>
+             
+  <section id="module-test_human_epi_model">
+<span id="test-human-epi-model-module"></span><h1>test_human_epi_model module<a class="headerlink" href="#module-test_human_epi_model" title="Permalink to this headline"></a></h1>
 <p>Unit Testing for Human Epi model code</p>
 <p>Contains unit tests for CIMMID Human Epi code.</p>
 <p>usage: pytest</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="test_human_epi_model.TestDengue">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">test_human_epi_model.</span></span><span class="sig-name descname"><span class="pre">TestDengue</span></span><a class="headerlink" href="#test_human_epi_model.TestDengue" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">test_human_epi_model.</span></span><span class="sig-name descname"><span class="pre">TestDengue</span></span><a class="headerlink" href="#test_human_epi_model.TestDengue" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Defines a class to test dengue code.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="test_human_epi_model.TestDengue.TestModelOutput">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">TestModelOutput</span></span><a class="headerlink" href="#test_human_epi_model.TestDengue.TestModelOutput" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Tests for <cite>run_model()</cite> and corresponding output for DengueSEIRModel and DengueSEIRModel.param_dict.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="test_human_epi_model.TestDengue.TestModelOutput.test_eq_points_param_dict_success">
+<span class="sig-name descname"><span class="pre">test_eq_points_param_dict_success</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param_dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#test_human_epi_model.TestDengue.TestModelOutput.test_eq_points_param_dict_success" title="Permalink to this definition"></a></dt>
+<dd><p>For model runs of param_dict method with initial states as equilibrium points, check that output does not change at all.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="test_human_epi_model.TestDengue.TestModelOutput.test_eq_points_success">
+<span class="sig-name descname"><span class="pre">test_eq_points_success</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eq</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#test_human_epi_model.TestDengue.TestModelOutput.test_eq_points_success" title="Permalink to this definition"></a></dt>
+<dd><p>For model runs with initial states as equilibrium points, check that output does not change at all.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="test_human_epi_model.TestDengue.TestModelOutput.test_fit_method_success">
+<span class="sig-name descname"><span class="pre">test_fit_method_success</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#test_human_epi_model.TestDengue.TestModelOutput.test_fit_method_success" title="Permalink to this definition"></a></dt>
+<dd><p>Test that fitting framework is returning numeric values for all parameters desired and that the values are in the designated range</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="test_human_epi_model.TestDengue.TestModelOutput.test_model_out_param_dict_success">
+<span class="sig-name descname"><span class="pre">test_model_out_param_dict_success</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param_dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#test_human_epi_model.TestDengue.TestModelOutput.test_model_out_param_dict_success" title="Permalink to this definition"></a></dt>
+<dd><p>For identical model runs of param_dict method, check that each output has correct dimensions, that the outputs are identical, and that the output changes over time.</p>
+<p>Check that param_dict model run is different from standard model run.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="test_human_epi_model.TestDengue.TestModelOutput.test_model_out_success">
+<span class="sig-name descname"><span class="pre">test_model_out_success</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#test_human_epi_model.TestDengue.TestModelOutput.test_model_out_success" title="Permalink to this definition"></a></dt>
+<dd><p>For identical model runs, check that each output has correct dimensions, that the outputs are identical, and that the output changes over time.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="test_human_epi_model.TestDengue.TestModelOutput.test_zero_param_values_success">
+<span class="sig-name descname"><span class="pre">test_zero_param_values_success</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#test_human_epi_model.TestDengue.TestModelOutput.test_zero_param_values_success" title="Permalink to this definition"></a></dt>
+<dd><p>For model runs where a_v = 0 and beta_h = 0 check that Sh stays constant</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="test_human_epi_model.TestDengue.test_arg_error">
+<span class="sig-name descname"><span class="pre">test_arg_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">monkeypatch</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#test_human_epi_model.TestDengue.test_arg_error" title="Permalink to this definition"></a></dt>
+<dd><p>tests TypeError generated when no configuration file is passed</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="test_human_epi_model.TestDengue.test_param_dict_col_names_error">
+<span class="sig-name descname"><span class="pre">test_param_dict_col_names_error</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#test_human_epi_model.TestDengue.test_param_dict_col_names_error" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="test_human_epi_model.TestDengue.test_param_dict_method_arg_error">
+<span class="sig-name descname"><span class="pre">test_param_dict_method_arg_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">monkeypatch</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#test_human_epi_model.TestDengue.test_param_dict_method_arg_error" title="Permalink to this definition"></a></dt>
+<dd><p>tests TypeError generated when no param_dict is passed in the class method.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="test_human_epi_model.TestDengue.test_param_values_error">
+<span class="sig-name descname"><span class="pre">test_param_values_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">monkeypatch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#test_human_epi_model.TestDengue.test_param_values_error" title="Permalink to this definition"></a></dt>
+<dd><p>tests parameter value errors.</p>
+<dl class="simple">
+<dt>attributes:</dt><dd><p>dengue_param_arglist: list of configuration file with bad parameter values.</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="test_human_epi_model.TestDengue.test_type_error">
-<span class="sig-name descname"><span class="pre">test_type_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">monkeypatch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#test_human_epi_model.TestDengue.test_type_error" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">test_type_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">monkeypatch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#test_human_epi_model.TestDengue.test_type_error" title="Permalink to this definition"></a></dt>
 <dd><p>tests TypeError exceptions.</p>
 <dl class="simple">
 <dt>attributes:</dt><dd><p>type_error_arglist: list of configuration file with values to trip TypeError.</p>
@@ -196,10 +175,10 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="test_human_epi_model.TestDengue.test_value_error">
-<span class="sig-name descname"><span class="pre">test_value_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">monkeypatch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#test_human_epi_model.TestDengue.test_value_error" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">test_value_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">monkeypatch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#test_human_epi_model.TestDengue.test_value_error" title="Permalink to this definition"></a></dt>
 <dd><p>tests ValueError exceptions.</p>
 <dl class="simple">
-<dt>attributes:</dt><dd><p>value_error_arglist: list of configuration file with values to trip ValueError.</p>
+<dt>attributes:</dt><dd><p>value_error_arglist: list of configuration files with values to trip ValueError for fitting code.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -208,12 +187,83 @@
 
 <dl class="py class">
 <dt class="sig sig-object py" id="test_human_epi_model.TestWNV">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">test_human_epi_model.</span></span><span class="sig-name descname"><span class="pre">TestWNV</span></span><a class="headerlink" href="#test_human_epi_model.TestWNV" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">test_human_epi_model.</span></span><span class="sig-name descname"><span class="pre">TestWNV</span></span><a class="headerlink" href="#test_human_epi_model.TestWNV" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Defines a class to test WNV code.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="test_human_epi_model.TestWNV.TestModelOutput">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">TestModelOutput</span></span><a class="headerlink" href="#test_human_epi_model.TestWNV.TestModelOutput" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Tests for <cite>run_model()</cite> and corresponding output for WNVSEIRModel and WNVSEIRModel.param_dict.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="test_human_epi_model.TestWNV.TestModelOutput.test_eq_points_param_dict_success">
+<span class="sig-name descname"><span class="pre">test_eq_points_param_dict_success</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param_dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#test_human_epi_model.TestWNV.TestModelOutput.test_eq_points_param_dict_success" title="Permalink to this definition"></a></dt>
+<dd><p>For model runs of param_dict method with initial states as equilibrium points, check that output does not change at all.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="test_human_epi_model.TestWNV.TestModelOutput.test_eq_points_success">
+<span class="sig-name descname"><span class="pre">test_eq_points_success</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eq</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#test_human_epi_model.TestWNV.TestModelOutput.test_eq_points_success" title="Permalink to this definition"></a></dt>
+<dd><p>For model runs with initial states as equilibrium points, check that output does not change at all.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="test_human_epi_model.TestWNV.TestModelOutput.test_fit_method_success">
+<span class="sig-name descname"><span class="pre">test_fit_method_success</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#test_human_epi_model.TestWNV.TestModelOutput.test_fit_method_success" title="Permalink to this definition"></a></dt>
+<dd><p>Test that fitting framework is returning numeric values for all parameters desired and that the values are in the designated range</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="test_human_epi_model.TestWNV.TestModelOutput.test_model_out_param_dict_success">
+<span class="sig-name descname"><span class="pre">test_model_out_param_dict_success</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param_dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#test_human_epi_model.TestWNV.TestModelOutput.test_model_out_param_dict_success" title="Permalink to this definition"></a></dt>
+<dd><p>For identical model runs of param_dict method, check that each output has correct dimensions, that the outputs are identical, and that the output changes over time.</p>
+<p>Check that param_dict model run is different from standard model run.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="test_human_epi_model.TestWNV.TestModelOutput.test_model_out_success">
+<span class="sig-name descname"><span class="pre">test_model_out_success</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#test_human_epi_model.TestWNV.TestModelOutput.test_model_out_success" title="Permalink to this definition"></a></dt>
+<dd><p>For identical model runs, check that each output has correct dimensions, that the outputs are identical, and that the output changes over time.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="test_human_epi_model.TestWNV.TestModelOutput.test_zero_param_values_success">
+<span class="sig-name descname"><span class="pre">test_zero_param_values_success</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#test_human_epi_model.TestWNV.TestModelOutput.test_zero_param_values_success" title="Permalink to this definition"></a></dt>
+<dd><p>For model runs where alpha_b = 0 and beta_b = 0 check that Sb stays constant</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="test_human_epi_model.TestWNV.test_arg_error">
+<span class="sig-name descname"><span class="pre">test_arg_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">monkeypatch</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#test_human_epi_model.TestWNV.test_arg_error" title="Permalink to this definition"></a></dt>
+<dd><p>tests TypeError generated when no configuration file is passed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="test_human_epi_model.TestWNV.test_param_dict_col_names_error">
+<span class="sig-name descname"><span class="pre">test_param_dict_col_names_error</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#test_human_epi_model.TestWNV.test_param_dict_col_names_error" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="test_human_epi_model.TestWNV.test_param_dict_method_arg_error">
+<span class="sig-name descname"><span class="pre">test_param_dict_method_arg_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">monkeypatch</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#test_human_epi_model.TestWNV.test_param_dict_method_arg_error" title="Permalink to this definition"></a></dt>
+<dd><p>tests TypeError generated when no param_dict is passed in the class method.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="test_human_epi_model.TestWNV.test_param_values_error">
+<span class="sig-name descname"><span class="pre">test_param_values_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">monkeypatch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#test_human_epi_model.TestWNV.test_param_values_error" title="Permalink to this definition"></a></dt>
+<dd><p>tests parameter value errors.</p>
+<dl class="simple">
+<dt>attributes:</dt><dd><p>dengue_param_arglist: list of configuration file with bad parameter values.</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="test_human_epi_model.TestWNV.test_type_error">
-<span class="sig-name descname"><span class="pre">test_type_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">monkeypatch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#test_human_epi_model.TestWNV.test_type_error" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">test_type_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">monkeypatch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#test_human_epi_model.TestWNV.test_type_error" title="Permalink to this definition"></a></dt>
 <dd><p>tests TypeError exceptions.</p>
 <dl class="simple">
 <dt>attributes:</dt><dd><p>type_error_arglist: list of configuration file with values to trip TypeError.</p>
@@ -223,64 +273,57 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="test_human_epi_model.TestWNV.test_value_error">
-<span class="sig-name descname"><span class="pre">test_value_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">monkeypatch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#test_human_epi_model.TestWNV.test_value_error" title="Permalink to this definition">¶</a></dt>
-<dd><p>Tests ValueError exceptions.</p>
+<span class="sig-name descname"><span class="pre">test_value_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">monkeypatch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#test_human_epi_model.TestWNV.test_value_error" title="Permalink to this definition"></a></dt>
+<dd><p>tests ValueError exceptions.</p>
 <dl class="simple">
-<dt>Attributes:</dt><dd><p>value_error_arglist: list of configuration file with values to trip ValueError.</p>
+<dt>attributes:</dt><dd><p>value_error_arglist: list of configuration files with values to trip ValueError for fitting code.</p>
 </dd>
 </dl>
 </dd></dl>
 
 </dd></dl>
 
-</div>
+<dl class="py function">
+<dt class="sig sig-object py" id="test_human_epi_model.check_float">
+<span class="sig-prename descclassname"><span class="pre">test_human_epi_model.</span></span><span class="sig-name descname"><span class="pre">check_float</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#test_human_epi_model.check_float" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="test_human_epi_model.gen_new_params">
+<span class="sig-prename descclassname"><span class="pre">test_human_epi_model.</span></span><span class="sig-name descname"><span class="pre">gen_new_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">disease_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#test_human_epi_model.gen_new_params" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="utils.html" class="btn btn-neutral float-right" title="utils module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="plotting.html" class="btn btn-neutral float-left" title="plotting module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="utils.html" class="btn btn-neutral float-right" title="utils module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2021, Los Alamos National Laboratory.
-
-    </p>
+    <p>&#169; Copyright 2021, Los Alamos National Laboratory.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>generate_param_values module &mdash; Epi-SEIR  documentation</title>
+  <title>models_fit module &mdash; Epi-SEIR  documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -18,8 +18,8 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="models_main module" href="models_main.html" />
-    <link rel="prev" title="generate_inputs module" href="generate_inputs.html" /> 
+    <link rel="next" title="models_params module" href="models_params.html" />
+    <link rel="prev" title="models_main module" href="models_main.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -44,9 +44,9 @@
 <li class="toctree-l2"><a class="reference internal" href="dengue.html">dengue module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="fit.html">fit module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generate_inputs.html">generate_inputs module</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">generate_param_values module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generate_param_values.html">generate_param_values module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="models_main.html">models_main module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="models_fit.html">models_fit module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">models_fit module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="models_params.html">models_params module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plotting.html">plotting module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="test_human_epi_model.html">test_human_epi_model module</a></li>
@@ -72,9 +72,9 @@
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="modules.html">Epi_SEIR</a> &raquo;</li>
-      <li>generate_param_values module</li>
+      <li>models_fit module</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/generate_param_values.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/models_fit.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -82,21 +82,21 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="module-generate_param_values">
-<span id="generate-param-values-module"></span><h1>generate_param_values module<a class="headerlink" href="#module-generate_param_values" title="Permalink to this headline"></a></h1>
-<p>Script to generate parameter value combinations to sequence through for models_params.py
-Generates parameter values based on values input in local_param_config.yaml
-Outputs a csv of all possible parameter combinations in Epi_SEIR/parameters</p>
+  <section id="module-models_fit">
+<span id="models-fit-module"></span><h1>models_fit module<a class="headerlink" href="#module-models_fit" title="Permalink to this headline"></a></h1>
+<p>Script to fit vector borne disease models to data
+Instantiates VBDM (Vector Borne Disease Model)
+and fitting process given paramters from local_param_config.yaml and config.yaml configuration files.</p>
 <blockquote>
 <div><p>Typical usage example:</p>
-<p>param_data(&lt;disease_name&gt;)</p>
-<p>Output:</p>
-<p>parameters/&lt;disease_name&gt;_param_values.csv</p>
+<p>python models_fit.py -c &lt;absolute path to config.yaml&gt; -d &lt;disease name&gt; -rm &lt;if you want to run model with fit params&gt;
+-f &lt;if you want to plot model output against data&gt; -sf &lt;if you want to save that plot&gt;</p>
 </div></blockquote>
 <dl class="py function">
-<dt class="sig sig-object py" id="generate_param_values.param_data">
-<span class="sig-prename descclassname"><span class="pre">generate_param_values.</span></span><span class="sig-name descname"><span class="pre">param_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">disease_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#generate_param_values.param_data" title="Permalink to this definition"></a></dt>
-<dd><p>Generates input data for sequencing through parameter values</p>
+<dt class="sig sig-object py" id="models_fit.fit">
+<span class="sig-prename descclassname"><span class="pre">models_fit.</span></span><span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#models_fit.fit" title="Permalink to this definition"></a></dt>
+<dd><p>Runs vector borne disease simulations.</p>
+<p>Instaniates each disease from configuration file</p>
 </dd></dl>
 
 </section>
@@ -105,8 +105,8 @@ Outputs a csv of all possible parameter combinations in Epi_SEIR/parameters</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="generate_inputs.html" class="btn btn-neutral float-left" title="generate_inputs module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="models_main.html" class="btn btn-neutral float-right" title="models_main module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="models_main.html" class="btn btn-neutral float-left" title="models_main module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="models_params.html" class="btn btn-neutral float-right" title="models_params module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

@@ -113,9 +113,9 @@ def gen_new_params(disease_name):
     constant_dict_list.append(dict(zip(list(constants.keys()), list(constants.values()) * scalars)))
     return(constant_dict_list)
 
+
 param_dict_list_dengue = gen_new_params('dengue')
 param_dict_list_wnv = gen_new_params('wnv')
-
 
 dengue = DengueSEIRModel('config/unit_testing/working_config_file.yaml')
 wnv = WNVSEIRModel('config/unit_testing/working_config_file.yaml')
@@ -205,7 +205,6 @@ class TestDengue:
         with pytest.raises(ValueError):
             disease = DengueSEIRModel.param_dict('config/unit_testing/working_config_file.yaml', {'nu_v':0.2, 'nu_b':0.2})
     
-    #ask about the hard coding of the config file, and the sequencing of param_dict
     class TestModelOutput:
         """
             Tests for `run_model()` and corresponding output for DengueSEIRModel and DengueSEIRModel.param_dict.
