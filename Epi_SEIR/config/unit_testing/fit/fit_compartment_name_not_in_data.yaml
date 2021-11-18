@@ -25,7 +25,7 @@ DENGUE:
     a_v: 0.75
     r_v: .2286
     K_v: 200000
-  FIT: False
+  FIT: True
   FIT_PARAMS:
     nu_h:
       min: 0.07
@@ -53,7 +53,7 @@ WNV:
     r_v: 0.2286
     nu_v: 0.10
     nu_b: 0.20
-  FIT: False
+  FIT: True
   FIT_PARAMS:
     nu_v:
       min: 0.07

@@ -34,6 +34,13 @@ type_error_arglist = ['config/unit_testing/strings.yaml',
                       #'config/unit_testing/mosq_numerical.yaml',
                       'config/unit_testing/output_is_string.yaml']
 
+value_error_fit_arglist = ['config/unit_testing/fit/fit_compartment_name_not_in_data.yaml',
+                           'config/unit_testing/fit/fit_compartment_name_wrong.yaml',
+                           'config/unit_testing/fit/fit_data_res_wrong.yaml',
+                           'config/unit_testing/fit/mod_res_not_one.yaml',
+                           'config/unit_testing/fit/nas_fit_data.yaml',
+                           'config/unit_testing/fit/rows_no_match_data.yaml']                      
+
 dengue_param_arglist = ['config/unit_testing/dengue_params/gamma_h_negative.yaml',
                         'config/unit_testing/dengue_params/beta_v_negative.yaml', 
                         'config/unit_testing/dengue_params/gamma_h_greater_one.yaml',
@@ -62,6 +69,13 @@ wnv_param_arglist = ['config/unit_testing/wnv_params/eta_negative.yaml',
                      'config/unit_testing/wnv_params/mu_b_greater_one.yaml',
                      'config/unit_testing/wnv_params/nu_b_greater_one.yaml',
                      'config/unit_testing/wnv_params/nu_v_greater_one.yaml']
+
+def check_float(x):
+    try:
+        float(x)
+        return True
+    except ValueError:
+        return False
 
 # Create parameter value lise to sequence through
 def gen_new_params(disease_name):
@@ -140,6 +154,19 @@ class TestDengue:
             m.setattr(sys, 'argv', ['models_main', '-c', config_file, '-d', 'dengue'])
             with pytest.raises(TypeError):
                 disease = DengueSEIRModel(config_file)
+                
+    @pytest.mark.parametrize("config_file", value_error_fit_arglist)
+    def test_value_error(self, monkeypatch, config_file):
+        """tests ValueError exceptions.
+
+        attributes:
+            value_error_arglist: list of configuration files with values to trip ValueError for fitting code.
+
+        """
+        with monkeypatch.context() as m:
+            m.setattr(sys, 'argv', ['models_fit', '-c', config_file, '-d', 'dengue'])
+            with pytest.raises(ValueError):
+                disease = DengueSEIRModel(config_file)
     
     @pytest.mark.parametrize("config_file", dengue_param_arglist)
     def test_param_values_error(self, monkeypatch, config_file):
@@ -155,7 +182,7 @@ class TestDengue:
                 disease = DengueSEIRModel(config_file)
     
     def test_arg_error(self, monkeypatch):
-        """tests TypeError generated when no param_dict is passed in the class method.
+        """tests TypeError generated when no configuration file is passed
         """
         with monkeypatch.context() as m:
             m.setattr(sys, 'argv', ['models_main', '-d', 'dengue'])
@@ -197,7 +224,7 @@ class TestDengue:
            
             #check that we have the correct number of columns and rows
             assert len(run1.columns) == len(disease1.initial_states)
-            assert len(run1.index) == disease1.config_dict['DURATION'] * disease1.config_dict['RESOLUTION']
+            assert len(run1.index) == disease1.config_dict['DURATION'] * disease1.config_dict['RESOLUTION'] + 1
             
             #check that both model run outputs are the same
             assert len(run1.columns) == len(run2.columns)
@@ -230,7 +257,7 @@ class TestDengue:
             
             #check that we have the correct number of columns and rows
             assert len(run1.columns) == len(disease1.initial_states)
-            assert len(run1.index) == disease1.config_dict['DURATION'] * disease1.config_dict['RESOLUTION']
+            assert len(run1.index) == disease1.config_dict['DURATION'] * disease1.config_dict['RESOLUTION'] + 1
             
             #check that both model run outputs are the same
             assert len(run1.columns) == len(run2.columns)
@@ -244,7 +271,7 @@ class TestDengue:
                 assert sum(run1[k] == run2[k]) == len(run1.index)
                 assert round(sum(abs(run1[k].diff().iloc[1:,])),3) != 0.000
                 out_sums.append(sum(norm_run[k] == run1[k]))
-            assert sum(out_sums) < len(out_sums)*disease1.config_dict['DURATION'] * disease1.config_dict['RESOLUTION']
+            assert sum(out_sums) < len(out_sums)*(disease1.config_dict['DURATION'] * disease1.config_dict['RESOLUTION'] + 1)
         
         @pytest.mark.parametrize("eq", eq_points_dengue)
         def test_eq_points_success(self, eq):
@@ -302,6 +329,18 @@ class TestDengue:
             
             assert round(sum(abs(run_av['Susceptible Humans'].diff().iloc[1:,])),3) == 0.000
             assert round(sum(abs(run_betah['Susceptible Humans'].diff().iloc[1:,])),3) == 0.000
+    
+        def test_fit_method_success(self):
+            """
+                Test that fitting framework is returning numeric values for all parameters desired and that the values are in the designated range
+            """
+            disease_fit = DengueSEIRModel('config/unit_testing/fit/working_config_fit_file.yaml')
+            disease_fit.fit_constants()
+            assert len(disease_fit.fit_out.params) == len(disease_fit.fit_params)
+            for k in disease_fit.fit_params:
+                assert check_float(disease_fit.fit_out.params[k].value) == True
+                assert disease_fit.fit_out.params[k].value <= disease_fit.fit_params_range[k]['max']
+                assert disease_fit.fit_out.params[k].value >= disease_fit.fit_params_range[k]['min']
         
 
 class TestWNV:
@@ -335,6 +374,19 @@ class TestWNV:
             with pytest.raises(TypeError):
                 disease = WNVSEIRModel(config_file)
     
+    @pytest.mark.parametrize("config_file", value_error_fit_arglist)
+    def test_value_error(self, monkeypatch, config_file):
+        """tests ValueError exceptions.
+
+        attributes:
+            value_error_arglist: list of configuration files with values to trip ValueError for fitting code.
+
+        """
+        with monkeypatch.context() as m:
+            m.setattr(sys, 'argv', ['models_fit', '-c', config_file, '-d', 'wnv'])
+            with pytest.raises(ValueError):
+                disease = WNVSEIRModel(config_file)
+    
     @pytest.mark.parametrize("config_file", wnv_param_arglist)
     def test_param_values_error(self, monkeypatch, config_file):
         """tests parameter value errors.
@@ -349,7 +401,7 @@ class TestWNV:
                 disease = WNVSEIRModel(config_file)
                 
     def test_arg_error(self, monkeypatch):
-        """tests TypeError generated when no param_dict is passed in the class method.
+        """tests TypeError generated when no configuration file is passed.
         """
         with monkeypatch.context() as m:
             m.setattr(sys, 'argv', ['models_main', '-d', 'wnv'])
@@ -390,7 +442,7 @@ class TestWNV:
            
             #check that we have the correct number of columns and rows
             assert len(run1.columns) == len(disease1.initial_states)
-            assert len(run1.index) == disease1.config_dict['DURATION'] * disease1.config_dict['RESOLUTION']
+            assert len(run1.index) == disease1.config_dict['DURATION'] * disease1.config_dict['RESOLUTION'] + 1
             
             #check that both model run outputs are the same
             assert len(run1.columns) == len(run2.columns)
@@ -407,7 +459,7 @@ class TestWNV:
         @pytest.mark.parametrize("param_dict", param_dict_list_wnv)
         def test_model_out_param_dict_success(self, param_dict):
             """
-                For identical model runs of param_dict method, check that each output has correct dimensions, that the outputs are identical, and that the      output changes over time.\n
+                For identical model runs of param_dict method, check that each output has correct dimensions, that the outputs are identical, and that the output changes over time.\n
                 Check that param_dict model run is different from standard model run.
             """
             disease1 = WNVSEIRModel.param_dict('config/unit_testing/working_config_file.yaml', param_dict)
@@ -424,7 +476,7 @@ class TestWNV:
             
             #check that we have the correct number of columns and rows
             assert len(run1.columns) == len(disease1.initial_states)
-            assert len(run1.index) == disease1.config_dict['DURATION'] * disease1.config_dict['RESOLUTION']
+            assert len(run1.index) == disease1.config_dict['DURATION'] * disease1.config_dict['RESOLUTION'] + 1
             
             #check that both model run outputs are the same
             assert len(run1.columns) == len(run2.columns)
@@ -439,7 +491,7 @@ class TestWNV:
                 assert sum(run1[k] == run2[k]) == len(run1.index)
                 assert round(sum(abs(run1[k].diff().iloc[1:,])),3) != 0.000
                 out_sums.append(sum(norm_run[k] == run1[k]))
-            assert sum(out_sums) < len(out_sums)*disease1.config_dict['DURATION'] * disease1.config_dict['RESOLUTION']
+            assert sum(out_sums) < len(out_sums) * (disease1.config_dict['DURATION'] * disease1.config_dict['RESOLUTION'] + 1)
         
         @pytest.mark.parametrize("eq", eq_points_wnv)
         def test_eq_points_success(self, eq):
@@ -491,4 +543,16 @@ class TestWNV:
             
             assert round(sum(abs(run_alphab['Susceptible Birds'].diff().iloc[1:,])),3) == 0.000
             assert round(sum(abs(run_betab['Susceptible Birds'].diff().iloc[1:,])),3) == 0.000
+        
+        def test_fit_method_success(self):
+            """
+                Test that fitting framework is returning numeric values for all parameters desired and that the values are in the designated range
+            """
+            disease_fit = WNVSEIRModel('config/unit_testing/fit/working_config_fit_file.yaml')
+            disease_fit.fit_constants()
+            assert len(disease_fit.fit_out.params) == len(disease_fit.fit_params)
+            for k in disease_fit.fit_params:
+                assert check_float(disease_fit.fit_out.params[k].value) == True
+                assert disease_fit.fit_out.params[k].value <= disease_fit.fit_params_range[k]['max']
+                assert disease_fit.fit_out.params[k].value >= disease_fit.fit_params_range[k]['min']
         

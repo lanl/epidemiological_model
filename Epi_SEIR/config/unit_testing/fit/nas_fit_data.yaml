@@ -37,7 +37,7 @@ DENGUE:
       min: 10000000
       max: 60000000
   FIT_DATA: 
-    PATH: ['fit_data/old/rio_fit_data_2010.csv']
+    PATH: ['fit_data/unit_testing/rio_fit_data_2010.csv']
     res: ['weekly']
     compartment: ['Rh']
     
@@ -65,6 +65,6 @@ WNV:
       min: 5000
       max: 30000
   FIT_DATA: 
-    PATH: ['fit_data/old/Toronto_totmosq_2004.csv']
+    PATH: ['fit_data/unit_testing/Toronto_totmosq_2004.csv']
     res: ['daily']
     compartment: ['Sv']
