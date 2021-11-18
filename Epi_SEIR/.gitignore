@@ -3,6 +3,7 @@ human_model_output/
 !fit_data/
 fit_data/*
 !fit_data/old
+!fit_data/unit_testing
 !plots/
 plots/*
 !plots/old
