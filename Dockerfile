@@ -15,6 +15,8 @@ RUN echo "export NO_PROXY=localhost" >> ~/.bashrc
 
 # setup the conda environment
 RUN conda init bash
-RUN conda create -y -n human-epi-env
+RUN conda create -y -n human-epi-env python=3.9
+RUN conda activate human-epi-env
 RUN echo "conda activate human-epi-env" >> ~/.bashrc
-RUN conda install -y -c conda-forge numpy pyyaml pandas scipy pyarrow matplotlib sphinx pytest
+RUN conda install -y numpy pandas scipy pyarrow pyyaml matplotlib sphinx pytest
+RUN conda install -y -c conda-forge lmfit

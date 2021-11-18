@@ -1,7 +1,7 @@
 """Dengue SEIR Model Class
 
 Contains class for dengue disease model. Inherits from
-Vector Borne Disease Model class.
+FitModel and Vector Borne Disease Model class.
 
     Typical usage example:
 
@@ -17,21 +17,14 @@ by inputting a dictionary of different parameter values
 
 from utils import create_logger
 import sys
-import vbdm
+import fit
 
-
-class DengueSEIRModel(vbdm.VectorBorneDiseaseModel):
+class DengueSEIRModel(fit.FitModel):
 
     """Models the spread of dengue.
 
-    Inherits from the VectorBorneDiseaseModel class. Solves ODE system
-    of equations and plots the resulting curves.
-
-    Attributes:
-        logger: python logging object.\n
-        long_state_names: more compartment values for output.\n
-        Nh: human population size.\n
-        Nh: vector population size.\n
+    Inherits from the FitModel class. Specifies ODE system
+    of equations.
 
     """
 
@@ -206,4 +199,3 @@ class DengueSEIRModel(vbdm.VectorBorneDiseaseModel):
         except ValueError as e:
             self.logger.exception('beta_v must be in [0,1]')
             raise e
-        
