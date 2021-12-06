@@ -26,6 +26,7 @@ DENGUE:
     r_v: .2286
     K_v: 200000
   FIT: False
+  FIT_METHOD: 'pois' #can be res, pois, nbinom, norm
   FIT_PARAMS:
     nu_h:
       min: 0.07
@@ -59,6 +60,7 @@ WNV:
     nu_v: 0.10
     nu_b: 0.20 #guess for now
   FIT: False
+  FIT_METHOD: 'pois' #can be res, pois, nbinom, normal
   FIT_PARAMS:
     nu_v:
       min: 0.07

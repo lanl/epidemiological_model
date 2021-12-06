@@ -13,6 +13,9 @@ import yaml
 import pandas as pd
 from scipy.integrate import solve_ivp
 from lmfit import Parameters, minimize, fit_report
+from scipy.stats import poisson
+from scipy.stats import norm
+from scipy.stats import nbinom
 
 import vbdm
 
@@ -39,6 +42,7 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
     
         if self.config_dict[disease_name]['FIT'] == True:
             self.fit_params = list(self.config_dict[disease_name]['FIT_PARAMS'].keys())
+            self.fit_method = self.config_dict[disease_name]['FIT_METHOD']
             self.fit_params_range = self.config_dict[disease_name]['FIT_PARAMS']
             self.fit_data_res = self.config_dict[disease_name]['FIT_DATA']['res']
             self.fit_data_compartment = self.config_dict[disease_name]['FIT_DATA']['compartment']
@@ -72,8 +76,7 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
             for j in init_keys:
                 params_obj.add(j, self.initial_states[j], min = self.fit_params_range[j]['min'], max = self.fit_params_range[j]['max'])
             return(params_obj)
-        
-    
+         
        
     def fit_run_model(self, params_fit):
         keys = list(self.initial_states.keys())
@@ -96,23 +99,86 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
             raise e
         #Note: columns are abbrevations (ex. Rh) instead of full name (ex. Recovered Humans) here
         self.model_df = pd.DataFrame(dict(zip(list(self.initial_states.keys()), out.T)))
+    
+    if self.fit_method == 'res':
+        def fit_objective(self, params_fit):
+            resid = np.empty([0])
+            self.fit_run_model(params_fit)
+            for i in range(0,len(self.fit_data)):
+                res = self.fit_data_res[i]
+                compartment = self.fit_data_compartment[i]
+                df = self.fit_data[i][compartment]
+                if res == "weekly":
+                    week_out = self.model_df.iloc[::7, :].reset_index()
+                    out = week_out[compartment]
+                elif res == "daily":
+                    out = self.model_df[compartment]
+                #think sometime about weighting this based on the amount of data each source has
+                resid = np.concatenate((resid,out- df))
+            #already flat here because of concatenating the residuals
+            return resid
+    elif self.fit_method == 'pois':
+        def fit_objective(self, params_fit):
+            data = np.empty([0])
+            mod_out = np.empty([0])
+            self.fit_run_model(params_fit)
+            for i in range(0,len(self.fit_data)):
+                res = self.fit_data_res[i]
+                compartment = self.fit_data_compartment[i]
+                df = self.fit_data[i][compartment]
+                if res == "weekly":
+                    week_out = self.model_df.iloc[::7, :].reset_index()
+                    out = week_out[compartment]
+                elif res == "daily":
+                    out = self.model_df[compartment]
+                #think sometime about weighting this based on the amount of data each source has
+                data = np.concatenate((resid,df))
+                mod_out = np.concatenate((resid,out))
+            return -sum(np.log(poisson.pmf(np.round(data),np.round(mod_out))))
+    elif self.fit_method == 'nbinom':
+        def fit_objective(self, params_fit):
+            data = np.empty([0])
+            mod_out = np.empty([0])
+            self.fit_run_model(params_fit)
+            for i in range(0,len(self.fit_data)):
+                res = self.fit_data_res[i]
+                compartment = self.fit_data_compartment[i]
+                df = self.fit_data[i][compartment]
+                if res == "weekly":
+                    week_out = self.model_df.iloc[::7, :].reset_index()
+                    out = week_out[compartment]
+                elif res == "daily":
+                    out = self.model_df[compartment]
+                #think sometime about weighting this based on the amount of data each source has
+                data = np.concatenate((resid,df))
+                mod_out = np.concatenate((resid,out)
+            sigma = 0.1*np.mean(data)  # example WLS assuming sigma = 0.1*mean(data)
+            #https://stackoverflow.com/questions/62454956/parameterization-of-the-negative-binomial-in-scipy-via-mean-and-std
+            #I believe below is correct, but will want to double check
+            p = [k/sigma**2 for k in mod_out]
+            n = [k*p/(1.0-p) for k in mod_out]
+            #n is same as here https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.nbinom.html 
+            p = [k/sigma**2 for k in mod_out]
+            return -sum(np.log(nbinom.pmf(np.round(data),np.round(n), p)))
+    elif self.fit_method == 'norm':
+        def fit_objective(self, params_fit):
+            data = np.empty([0])
+            mod_out = np.empty([0])
+            self.fit_run_model(params_fit)
+            for i in range(0,len(self.fit_data)):
+                res = self.fit_data_res[i]
+                compartment = self.fit_data_compartment[i]
+                df = self.fit_data[i][compartment]
+                if res == "weekly":
+                    week_out = self.model_df.iloc[::7, :].reset_index()
+                    out = week_out[compartment]
+                elif res == "daily":
+                    out = self.model_df[compartment]
+                #think sometime about weighting this based on the amount of data each source has
+                data = np.concatenate((resid,df))
+                mod_out = np.concatenate((resid,out))
+            return -sum(np.log(norm.pdf(data,mod_out,0.1*np.mean(data)))) # example WLS assuming sigma = 0.1*mean(data)
         
-    def fit_objective(self, params_fit):
-        resid = np.empty([0])
-        self.fit_run_model(params_fit)
-        for i in range(0,len(self.fit_data)):
-            res = self.fit_data_res[i]
-            compartment = self.fit_data_compartment[i]
-            df = self.fit_data[i][compartment]
-            if res == "weekly":
-                week_out = self.model_df.iloc[::7, :].reset_index()
-                out = week_out[compartment]
-            elif res == "daily":
-                out = self.model_df[compartment]
-            #think sometime about weighting this based on the amount of data each source has
-            resid = np.concatenate((resid,out- df))
-        #already flat here because of concatenating the residuals
-        return resid
     
     @timer 
     def fit_constants(self):
