@@ -7,7 +7,7 @@ class FitModel. Inherits from the VectorBorneDiseaseModel class.
 import os
 from utils import timer
 from abc import abstractmethod
-
+#need numdifftools installed to estimate covariance and then get std errors https://lmfit.github.io/lmfit-py/fitting.html
 import numpy as np
 import yaml
 import pandas as pd
@@ -100,8 +100,8 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
         #Note: columns are abbrevations (ex. Rh) instead of full name (ex. Recovered Humans) here
         self.model_df = pd.DataFrame(dict(zip(list(self.initial_states.keys()), out.T)))
     
-    if self.fit_method == 'res':
-        def fit_objective(self, params_fit):
+    def fit_objective(self, params_fit):
+        if self.fit_method == 'res':
             resid = np.empty([0])
             self.fit_run_model(params_fit)
             for i in range(0,len(self.fit_data)):
@@ -113,12 +113,11 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
                     out = week_out[compartment]
                 elif res == "daily":
                     out = self.model_df[compartment]
-                #think sometime about weighting this based on the amount of data each source has
+                    #think sometime about weighting this based on the amount of data each source has
                 resid = np.concatenate((resid,out- df))
-            #already flat here because of concatenating the residuals
+                #already flat here because of concatenating the residuals
             return resid
-    elif self.fit_method == 'pois':
-        def fit_objective(self, params_fit):
+        elif self.fit_method == 'pois':
             data = np.empty([0])
             mod_out = np.empty([0])
             self.fit_run_model(params_fit)
@@ -131,12 +130,12 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
                     out = week_out[compartment]
                 elif res == "daily":
                     out = self.model_df[compartment]
-                #think sometime about weighting this based on the amount of data each source has
-                data = np.concatenate((resid,df))
-                mod_out = np.concatenate((resid,out))
-            return -sum(np.log(poisson.pmf(np.round(data),np.round(mod_out))))
-    elif self.fit_method == 'nbinom':
-        def fit_objective(self, params_fit):
+                    #think sometime about weighting this based on the amount of data each source has
+                data = np.concatenate((data,df))
+                mod_out = np.concatenate((mod_out,out))
+            #adding a fudge factor for the log currently, because getting all zeros due to terrible fit
+            return -sum(np.log(poisson.pmf(np.round(data),np.round(mod_out)) + 0.00001))
+        elif self.fit_method == 'nbinom':
             data = np.empty([0])
             mod_out = np.empty([0])
             self.fit_run_model(params_fit)
@@ -149,9 +148,9 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
                     out = week_out[compartment]
                 elif res == "daily":
                     out = self.model_df[compartment]
-                #think sometime about weighting this based on the amount of data each source has
-                data = np.concatenate((resid,df))
-                mod_out = np.concatenate((resid,out)
+                    #think sometime about weighting this based on the amount of data each source has
+                data = np.concatenate((data,df))
+                mod_out = np.concatenate((mod_out,out))
             sigma = 0.1*np.mean(data)  # example WLS assuming sigma = 0.1*mean(data)
             #https://stackoverflow.com/questions/62454956/parameterization-of-the-negative-binomial-in-scipy-via-mean-and-std
             #I believe below is correct, but will want to double check
@@ -160,8 +159,7 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
             #n is same as here https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.nbinom.html 
             p = [k/sigma**2 for k in mod_out]
             return -sum(np.log(nbinom.pmf(np.round(data),np.round(n), p)))
-    elif self.fit_method == 'norm':
-        def fit_objective(self, params_fit):
+        elif self.fit_method == 'norm':
             data = np.empty([0])
             mod_out = np.empty([0])
             self.fit_run_model(params_fit)
@@ -174,16 +172,19 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
                     out = week_out[compartment]
                 elif res == "daily":
                     out = self.model_df[compartment]
-                #think sometime about weighting this based on the amount of data each source has
-                data = np.concatenate((resid,df))
-                mod_out = np.concatenate((resid,out))
+                    #think sometime about weighting this based on the amount of data each source has
+                data = np.concatenate((data,df))
+                mod_out = np.concatenate((mod_out,out))
             return -sum(np.log(norm.pdf(data,mod_out,0.1*np.mean(data)))) # example WLS assuming sigma = 0.1*mean(data)
         
     
     @timer 
     def fit_constants(self):
         try:
-            self.fit_out = minimize(self.fit_objective, self._init_fit_parameters())
+            if self.fit_method == 'res':
+                self.fit_out = minimize(self.fit_objective, self._init_fit_parameters())
+            else:
+                self.fit_out = minimize(self.fit_objective, self._init_fit_parameters(), method = 'nelder')
         except Exception as e:
             self.logger.exception('Exception occurred when running minimization for model fitting')
             raise e

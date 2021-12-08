@@ -25,7 +25,7 @@ DENGUE:
     a_v: 0.75
     r_v: .2286
     K_v: 200000
-  FIT: False
+  FIT: True
   FIT_METHOD: 'pois' #can be res, pois, nbinom, norm
   FIT_PARAMS:
     nu_h:
