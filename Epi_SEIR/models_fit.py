@@ -4,7 +4,7 @@ and fitting process given paramters from local_param_config.yaml and config.yaml
 
     Typical usage example:
 
-    python models_fit.py -c <absolute path to config.yaml> -d <disease name> -rm <if you want to run model with fit params>
+    python models_fit.py -c <absolute path to config.yaml> -d <disease name> -p <if you want to use the best guess params> -rm <if you want to run model with fit params>
     -f <if you want to plot model output against data> -sf <if you want to save that plot>
 """
 from dengue import DengueSEIRModel
@@ -15,6 +15,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import yaml
+import numdifftools
 
 
 def fit():
@@ -29,9 +30,15 @@ def fit():
     disease_name = args.disease_name.lower()
 
     if disease_name == 'dengue':
-        disease = DengueSEIRModel(args.config_file)
+        if args.best_guess_params == True:
+            disease = DengueSEIRModel.param_dict(args.config_file, pd.read_csv(f'param_fit_output/{disease_name}_best_param_guess.csv').iloc[0,:].to_dict())
+        else:
+            disease = DengueSEIRModel(args.config_file)
     elif disease_name == 'wnv':
-        disease = WNVSEIRModel(args.config_file)
+        if args.best_guess_params == True:
+            disease = WNVSEIRModel(args.config_file, pd.read_csv(f'param_fit_output/{disease_name}_best_param_guess.csv').to_dict())
+        else:
+            disease = WNVSEIRModel(args.config_file)
 
     disease.logger.info(disease)
     disease.fit_constants()

@@ -13,3 +13,4 @@ dependencies:
   - sphinx
   - pytest
   - lmfit
+  - numdifftools

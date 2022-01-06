@@ -11,6 +11,7 @@ from abc import abstractmethod
 import numpy as np
 import yaml
 import pandas as pd
+import numdifftools
 from scipy.integrate import solve_ivp
 from lmfit import Parameters, minimize, fit_report
 from scipy.stats import poisson
@@ -73,8 +74,10 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
             init_keys = [i for i in self.fit_params if i in list(self.initial_states.keys())]
             for k in param_keys:
                 params_obj.add(k, self.params[k], min = self.fit_params_range[k]['min'], max = self.fit_params_range[k]['max'])
+                #params_obj.add(k, self.params[k])
             for j in init_keys:
                 params_obj.add(j, self.initial_states[j], min = self.fit_params_range[j]['min'], max = self.fit_params_range[j]['max'])
+                #params_obj.add(j, self.initial_states[j])
             return(params_obj)
          
        
