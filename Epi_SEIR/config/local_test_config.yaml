@@ -11,7 +11,7 @@ OUTPUT_DIR: 'human_model_output'
 
 OUTPUT_TYPE: '.csv' # default is .parquet
 
-DURATION: 363 # number of days to run the model
+DURATION: 398 # number of days to run the model
 RESOLUTION: 1
 
 DENGUE:
@@ -25,7 +25,7 @@ DENGUE:
     a_v: 0.75
     r_v: .2286
     #K_v: 200000
-    K_v: 200000
+    K_v: 3374000
   FIT: True
   FIT_METHOD: 'pois' #can be res, pois, nbinom, norm
   FIT_PARAMS:
@@ -35,20 +35,26 @@ DENGUE:
 #     gamma_h:
 #       min: 0.0001
 #       max: .4
-    a_v:
-      min: 0
-      max: 0.5
+#    a_v:
+#      min: 0
+#     max: 0.5
     Sv:
-      min: 10
-      max: 1000
-    K_v: 
-      min: 10
-      max: 1000
+      min: 1687000
+      max: 6748000
+    Iv:
+      min: 500
+      max: 10000
+    K_v:
+      min: 1687000
+      max: 6748000
+#    K_v: 
+#      min: 10
+#     max: 1000
 #data needs to be in exact formatting to compare to a given compartment
   FIT_DATA: 
-    PATH: ['fit_data/old/rio_fit_data_2010.csv']
+    PATH: ['fit_data/rdj_2010_2011_season_peak.csv']
     res: ['weekly'] #can be weekly or daily, regardless set resolution to 1
-    compartment: ['Rh']
+    compartment: ['Dh']
     
 WNV:
   PARAMETERS:

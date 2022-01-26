@@ -69,7 +69,12 @@ class DengueSEIRModel(fit.FitModel):
         
     def _birth_rate(self):
         """Caclualtes vector natural birth rate"""
-        self.psi_v = self.params['r_v'] + self.params['mu_v']
+            self.psi_v = self.params['r_v'] + self.params['mu_v']
+    
+    def _set_zero(self, t):
+        if t > 200:
+            self.params['r_v'] = 0 - self.params['mu_v']
+    
 
     def model_func(self, t, y):
         """Defines system of ODEs for dengue model.
@@ -112,8 +117,10 @@ class DengueSEIRModel(fit.FitModel):
         # Find force of infection
         self._force_of_infection()
         
+        self._set_zero()
+        
         # Find vector natural birth rate
-        self._birth_rate()
+        self._birth_rate(t)
 
         # System of equations
         ddt['Sh'] = -self.lambda_h * self.states['Sh']
@@ -122,6 +129,8 @@ class DengueSEIRModel(fit.FitModel):
         ddt['Ih'] = self.params['nu_h'] * self.states['Eh'] - \
             self.params['gamma_h'] * self.states['Ih']
         ddt['Rh'] = self.params['gamma_h'] * self.states['Ih']
+        #add cummulative humans column for the fitting
+        ddt['Ch'] = self.params['nu_h'] * self.states['Eh']
         ddt['Sv'] = (self.psi_v - self.params['r_v'] * self.Nv / self.params['K_v']) * self.Nv - \
             self.lambda_v * self.states['Sv'] - \
             self.params['mu_v'] * self.states['Sv']

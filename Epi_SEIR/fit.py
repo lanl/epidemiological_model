@@ -17,6 +17,7 @@ from lmfit import Parameters, minimize, fit_report
 from scipy.stats import poisson
 from scipy.stats import norm
 from scipy.stats import nbinom
+from scipy.stats import chi2
 
 import vbdm
 
@@ -73,10 +74,25 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
             param_keys = [i for i in self.fit_params if i in list(self.params.keys())]
             init_keys = [i for i in self.fit_params if i in list(self.initial_states.keys())]
             for k in param_keys:
-                params_obj.add(k, self.params[k], min = self.fit_params_range[k]['min'], max = self.fit_params_range[k]['max'])
+                params_obj.add(k, value = self.params[k], min = self.fit_params_range[k]['min'], max = self.fit_params_range[k]['max'])
                 #params_obj.add(k, self.params[k])
             for j in init_keys:
-                params_obj.add(j, self.initial_states[j], min = self.fit_params_range[j]['min'], max = self.fit_params_range[j]['max'])
+                params_obj.add(j, value = self.initial_states[j], min = self.fit_params_range[j]['min'], max = self.fit_params_range[j]['max'])
+                #params_obj.add(j, self.initial_states[j])
+            return(params_obj)
+    
+    #adding this for the proflikelihood calculation
+    def _init_proflik_parameters(self, lik_fitparams):
+        #create the Parameter objects
+            params_obj = Parameters()
+            #add selected parameters and guesses into the framework
+            param_keys = [i for i in lik_fitparams if i in list(self.params.keys())]
+            init_keys = [i for i in lik_fitparams if i in list(self.initial_states.keys())]
+            for k in param_keys:
+                params_obj.add(k, self.params[k], min = self.params[k]*.5, max = self.params[k]*1.5)
+                #params_obj.add(k, self.params[k])
+            for j in init_keys:
+                params_obj.add(j, self.initial_states[j], min = self.initial_states[j]*.5, max = self.initial_states[j]*1.5)
                 #params_obj.add(j, self.initial_states[j])
             return(params_obj)
          
@@ -113,8 +129,12 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
                 df = self.fit_data[i][compartment]
                 if res == "weekly":
                     week_out = self.model_df.iloc[::7, :].reset_index()
+                    #added below for getting weekly cases
+                    week_out['Dh'] = week_out['Ch'].diff().fillna(0)
                     out = week_out[compartment]
                 elif res == "daily":
+                     #added below for getting daily ccases
+                    self.model['Dh'] = self.model_df['Ch'].diff().fillna(0)
                     out = self.model_df[compartment]
                     #think sometime about weighting this based on the amount of data each source has
                 resid = np.concatenate((resid,out- df))
@@ -130,8 +150,12 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
                 df = self.fit_data[i][compartment]
                 if res == "weekly":
                     week_out = self.model_df.iloc[::7, :].reset_index()
+                    #added below for getting weekly cases
+                    week_out['Dh'] = week_out['Ch'].diff().fillna(0)
                     out = week_out[compartment]
                 elif res == "daily":
+                     #added below for getting daily ccases
+                    self.model['Dh'] = self.model_df['Ch'].diff().fillna(0)
                     out = self.model_df[compartment]
                     #think sometime about weighting this based on the amount of data each source has
                 data = np.concatenate((data,df))
@@ -148,8 +172,12 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
                 df = self.fit_data[i][compartment]
                 if res == "weekly":
                     week_out = self.model_df.iloc[::7, :].reset_index()
+                    #added below for getting weekly cases
+                    week_out['Dh'] = week_out['Ch'].diff().fillna(0)
                     out = week_out[compartment]
                 elif res == "daily":
+                     #added below for getting daily ccases
+                    self.model['Dh'] = self.model_df['Ch'].diff().fillna(0)
                     out = self.model_df[compartment]
                     #think sometime about weighting this based on the amount of data each source has
                 data = np.concatenate((data,df))
@@ -172,8 +200,12 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
                 df = self.fit_data[i][compartment]
                 if res == "weekly":
                     week_out = self.model_df.iloc[::7, :].reset_index()
+                    #added below for getting weekly cases
+                    week_out['Dh'] = week_out['Ch'].diff().fillna(0)
                     out = week_out[compartment]
                 elif res == "daily":
+                    #added below for getting daily ccases
+                    self.model['Dh'] = self.model_df['Ch'].diff().fillna(0)
                     out = self.model_df[compartment]
                     #think sometime about weighting this based on the amount of data each source has
                 data = np.concatenate((data,df))
@@ -183,6 +215,7 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
     
     @timer 
     def fit_constants(self):
+        #should return self.fit_out.success here as well 
         try:
             if self.fit_method == 'res':
                 self.fit_out = minimize(self.fit_objective, self._init_fit_parameters())
@@ -191,7 +224,40 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
         except Exception as e:
             self.logger.exception('Exception occurred when running minimization for model fitting')
             raise e
+    
+    #not going to add the specifics of the numbers calculated within the range to the config file at the moment 
+    #need to make sure below is within the min/max range listed in the config file
+    def _calc_param_range(self, param, perc = .75, num = 10):
+        param_seq = np.arange((1-perc)*param, (1 + perc)*param, 2*num)
+        
+    def proflike(self):
+        threshold = self.fit_objective(self.fit_out.params) + chi2.ppf(.95, len(self.fit_params))/2
+        for k in self.fit_params:
+            #reset self.params to the fit values for the start of every run
+            for j in self.fit_params:
+                self.params[j] = self.fit_out.params[j].value
             
+            #only want to fit the other parameters
+            lik_fitparams = self.fit_out.params
+            del lik_fitparams[k] 
+            
+            #set up parameters to sequence through and lists for results
+            param_seq = self._calc_param_range(self.params[k])
+            nll = list()
+            fit_success = list()
+            
+            #calculate nll through the sequenced parameters
+            for p in param_seq:
+                self.params[k] = p
+                fit = minimize(self.fit_objective, self._init_proflik_parameters(lik_fitparams))
+                fit_success.append(fit.success)
+                nll.append(self.fit_objective(fit.params))
+           
+        #next steps: 1) find some easy way to store the results for each parameter
+        #            2) add chi square threshhold and find some easy way to find intersection between fit (maybe NLL~loess(param_values))?
+        #.           3) find an easy way to save CIs for each parameter
+        #            4) Test this out with dengue data!        
+                                              
         
     def save_fit_output(self, disease_name):
         #write a csv file with the parameter outputs
@@ -232,12 +298,13 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
         
         check if fitting compartment names matches a column name in corresponding fitting data
         """
-        try:
-            if sum([i in list(self.initial_states.keys()) for i in self.fit_data_compartment]) != len(self.fit_data_compartment):
-                raise ValueError('Fitting data compartment names must match initial state names')
-        except ValueError as e:
-            self.logger.exception('Fitting data compartment names must match initial state names')
-            raise e
+        #commenting this out, because this will not always be true with how we need to move to daily/weekly cases
+        #try:
+           # if sum([i in list(self.initial_states.keys()) for i in self.fit_data_compartment]) != len(self.fit_data_compartment):
+               # raise ValueError('Fitting data compartment names must match initial state names')
+        #except ValueError as e:
+            #self.logger.exception('Fitting data compartment names must match initial state names')
+            #raise e
         
         data_colnames = [i.columns for i in self.fit_data]
         try:
