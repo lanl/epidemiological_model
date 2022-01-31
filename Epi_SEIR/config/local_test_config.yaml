@@ -24,8 +24,9 @@ DENGUE:
     beta_v: 0.33
     a_v: 0.75
     r_v: .2286
+    #r_v: .5
     #K_v: 200000
-    K_v: 3374000
+    K_v: 2699200.0
   FIT: True
   FIT_METHOD: 'pois' #can be res, pois, nbinom, norm
   FIT_PARAMS:
@@ -39,14 +40,18 @@ DENGUE:
 #      min: 0
 #     max: 0.5
     Sv:
-      min: 1687000
-      max: 6748000
+      #min: 1687000
+      min: 0
+      max: 26992000
     Iv:
-      min: 500
+      min: 0
       max: 10000
+    #Iv:
+      #min: 5
+      #max: 15
     K_v:
-      min: 1687000
-      max: 6748000
+      min: 0
+      max: 26992000
 #    K_v: 
 #      min: 10
 #     max: 1000

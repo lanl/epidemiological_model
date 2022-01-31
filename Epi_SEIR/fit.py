@@ -89,10 +89,10 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
             param_keys = [i for i in lik_fitparams if i in list(self.params.keys())]
             init_keys = [i for i in lik_fitparams if i in list(self.initial_states.keys())]
             for k in param_keys:
-                params_obj.add(k, self.params[k], min = self.params[k]*.5, max = self.params[k]*1.5)
+                params_obj.add(k, lik_fitparams[k].value, min = lik_fitparams[k].value*.5, max = lik_fitparams[k].value*1.5)
                 #params_obj.add(k, self.params[k])
             for j in init_keys:
-                params_obj.add(j, self.initial_states[j], min = self.initial_states[j]*.5, max = self.initial_states[j]*1.5)
+                params_obj.add(j, lik_fitparams[j].value, min = lik_fitparams[j].value*.5, max = lik_fitparams[j].value*1.5)
                 #params_obj.add(j, self.initial_states[j])
             return(params_obj)
          
@@ -101,8 +101,11 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
         keys = list(self.initial_states.keys())
         self.model_output = np.empty([0, len(keys)])
         
-        param_keys = [i for i in self.fit_params if i in list(self.params.keys())]
-        init_keys = [i for i in self.fit_params if i in list(self.initial_states.keys())]
+        #param_keys = [i for i in self.fit_params if i in list(self.params.keys())]
+        #init_keys = [i for i in self.fit_params if i in list(self.initial_states.keys())]
+        
+        param_keys = [i for i in params_fit if i in list(self.params.keys())]
+        init_keys = [i for i in params_fit if i in list(self.initial_states.keys())]
         
         for k in param_keys:
             self.params[k] = params_fit[k]
@@ -227,31 +230,54 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
     
     #not going to add the specifics of the numbers calculated within the range to the config file at the moment 
     #need to make sure below is within the min/max range listed in the config file
-    def _calc_param_range(self, param, perc = .75, num = 10):
-        param_seq = np.arange((1-perc)*param, (1 + perc)*param, 2*num)
+    def _calc_param_range(self, param, perc = .01, num = 10):
+        param_seq = np.linspace((1-perc)*param, (1 + perc)*param, 2*num)
+        return param_seq
         
     def proflike(self):
         threshold = self.fit_objective(self.fit_out.params) + chi2.ppf(.95, len(self.fit_params))/2
+        df_list = list()
+        df_list.append(threshold)
+        perc_dict = dict(zip(self.fit_params, [.1,.1, .01]))
         for k in self.fit_params:
             #reset self.params to the fit values for the start of every run
-            for j in self.fit_params:
+            param_keys = [i for i in self.fit_params if i in list(self.params.keys())]
+            init_keys = [i for i in self.fit_params if i in list(self.initial_states.keys())]
+            for j in param_keys:
                 self.params[j] = self.fit_out.params[j].value
+            for h in init_keys:
+                self.initial_states[h] = self.fit_out.params[h].value
             
             #only want to fit the other parameters
-            lik_fitparams = self.fit_out.params
+            lik_fitparams = self.fit_out.params.copy()
             del lik_fitparams[k] 
             
             #set up parameters to sequence through and lists for results
-            param_seq = self._calc_param_range(self.params[k])
+            
+            if k in list(self.params.keys()):
+                param_seq = self._calc_param_range(self.params[k], perc = perc_dict[k])
+            elif k in list(self.initial_states.keys()):
+                param_seq = self._calc_param_range(self.initial_states[k], perc = perc_dict[k])
+                
             nll = list()
             fit_success = list()
             
             #calculate nll through the sequenced parameters
             for p in param_seq:
-                self.params[k] = p
-                fit = minimize(self.fit_objective, self._init_proflik_parameters(lik_fitparams))
+                if k in list(self.params.keys()):
+                    self.params[k] = p
+                elif k in list(self.initial_states.keys()):
+                    self.initial_states[k] = p
+                fit = minimize(self.fit_objective, self._init_proflik_parameters(lik_fitparams), method = 'nelder')
+                #update guesses for the next round
+                for i in lik_fitparams:
+                    lik_fitparams[i].value = fit.params[i].value
                 fit_success.append(fit.success)
                 nll.append(self.fit_objective(fit.params))
+            
+            df = pd.DataFrame({k:param_seq, 'nll': nll, 'success': fit_success})
+            df_list.append(df)
+        return df_list
            
         #next steps: 1) find some easy way to store the results for each parameter
         #            2) add chi square threshhold and find some easy way to find intersection between fit (maybe NLL~loess(param_values))?

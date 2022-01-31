@@ -67,13 +67,18 @@ class DengueSEIRModel(fit.FitModel):
         self.lambda_h = self.params['a_v'] * self.params['beta_h'] * self.states['Iv'] / self.Nh
         self.lambda_v = self.params['a_v'] * self.params['beta_v'] * (self.states['Ih']) / self.Nh
         
-    def _birth_rate(self):
+    def _birth_rate(self,t):
         """Caclualtes vector natural birth rate"""
+        if t < 180:
             self.psi_v = self.params['r_v'] + self.params['mu_v']
+        else:
+            self.psi_v = 0
+            self.r_v = self.psi_v - self.params['mu_v']
     
-    def _set_zero(self, t):
-        if t > 200:
-            self.params['r_v'] = 0 - self.params['mu_v']
+#     def _set_zero(self, t):
+#         if t > 120:
+#             self.psi_v = 0
+#             self.r_v = self.psi_v - self.params['mu_v']
     
 
     def model_func(self, t, y):
@@ -117,7 +122,7 @@ class DengueSEIRModel(fit.FitModel):
         # Find force of infection
         self._force_of_infection()
         
-        self._set_zero()
+        #self._set_zero(t)
         
         # Find vector natural birth rate
         self._birth_rate(t)
