@@ -89,11 +89,11 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
             param_keys = [i for i in lik_fitparams if i in list(self.params.keys())]
             init_keys = [i for i in lik_fitparams if i in list(self.initial_states.keys())]
             for k in param_keys:
-                params_obj.add(k, lik_fitparams[k].value, min = lik_fitparams[k].value*.5, max = lik_fitparams[k].value*1.5)
-                #params_obj.add(k, self.params[k])
+                params_obj.add(k, lik_fitparams[k].value, min = lik_fitparams[k].value*.1, max = lik_fitparams[k].value*1.9)
+                #params_obj.add(k, lik_fitparams[k].value)
             for j in init_keys:
-                params_obj.add(j, lik_fitparams[j].value, min = lik_fitparams[j].value*.5, max = lik_fitparams[j].value*1.5)
-                #params_obj.add(j, self.initial_states[j])
+                params_obj.add(j, lik_fitparams[j].value, min = lik_fitparams[j].value*.1, max = lik_fitparams[j].value*1.9)
+                #params_obj.add(j, lik_fitparams[j].value)
             return(params_obj)
          
        
@@ -164,7 +164,7 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
                 data = np.concatenate((data,df))
                 mod_out = np.concatenate((mod_out,out))
             #adding a fudge factor for the log currently, because getting all zeros due to terrible fit
-            return -sum(np.log(poisson.pmf(np.round(data),np.round(mod_out)) + 0.00001))
+            return -sum(np.log(poisson.pmf(np.round(data),np.round(mod_out)) + 0.0001))
         elif self.fit_method == 'nbinom':
             data = np.empty([0])
             mod_out = np.empty([0])
@@ -238,7 +238,7 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
         threshold = self.fit_objective(self.fit_out.params) + chi2.ppf(.95, len(self.fit_params))/2
         df_list = list()
         df_list.append(threshold)
-        perc_dict = dict(zip(self.fit_params, [.1,.1, .01]))
+        #perc_dict = dict(zip(self.fit_params, [.25,.25, .25]))
         for k in self.fit_params:
             #reset self.params to the fit values for the start of every run
             param_keys = [i for i in self.fit_params if i in list(self.params.keys())]
@@ -255,9 +255,9 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
             #set up parameters to sequence through and lists for results
             
             if k in list(self.params.keys()):
-                param_seq = self._calc_param_range(self.params[k], perc = perc_dict[k])
+                param_seq = self._calc_param_range(self.params[k], perc = self.fit_params_range[k]['proflike'])
             elif k in list(self.initial_states.keys()):
-                param_seq = self._calc_param_range(self.initial_states[k], perc = perc_dict[k])
+                param_seq = self._calc_param_range(self.initial_states[k], perc = self.fit_params_range[k]['proflike'])
                 
             nll = list()
             fit_success = list()

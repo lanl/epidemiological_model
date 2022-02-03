@@ -43,15 +43,19 @@ DENGUE:
       #min: 1687000
       min: 0
       max: 26992000
+      proflike: .03
     Iv:
       min: 0
       max: 10000
+      proflike: .055
     #Iv:
       #min: 5
       #max: 15
     K_v:
       min: 0
       max: 26992000
+      proflike: .01
+    
 #    K_v: 
 #      min: 10
 #     max: 1000

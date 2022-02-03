@@ -31,7 +31,7 @@ plt.legend(loc='best')
 
 #This is incredibly variable for some of the parameters - specifically Sv is not behaving well
 test = self.proflike()
-#Sv parameter fit highly dependent on initial value...with a guess of around 2,000,000 we had a higher NLL than 3,000,000
+#Sv parameter fit highly dependent on initial value...with a guess of around 2,000,000 but we had a higher NLL than 3,000,000
 plt.plot(test[1]['Sv'], test[1]['nll'], 'ro', label = 'NLL')
 plt.plot(test[1]['Sv'], [test[0]]*len(test[1]), 'b-', label = 'Threshold')
 plt.legend(loc='best')
@@ -44,4 +44,16 @@ plt.legend(loc='best')
 
 plt.plot(test[3]['K_v'], test[3]['nll'], 'ro', label = 'NLL')
 plt.plot(test[3]['K_v'], [test[0]]*len(test[3]), 'b-', label = 'Threshold')
+plt.legend(loc='best')
+
+
+#Results without fitting Sv
+
+plt.plot(test[1]['Iv'], test[1]['nll'], 'ro', label = 'NLL')
+plt.plot(test[1]['Iv'], [test[0]]*len(test[1]), 'b-', label = 'Threshold')
+plt.legend(loc='best')
+
+
+plt.plot(test[2]['K_v'], test[2]['nll'], 'ro', label = 'NLL')
+plt.plot(test[2]['K_v'], [test[0]]*len(test[2]), 'b-', label = 'Threshold')
 plt.legend(loc='best')
