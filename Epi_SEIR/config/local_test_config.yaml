@@ -18,50 +18,57 @@ DENGUE:
   PARAMETERS:
     nu_h: 0.164 
     nu_v: 0.164 
-    gamma_h: 0.167 
+    gamma_h: 0.3 
     mu_v: .0714 
     beta_h: 0.33
     beta_v: 0.33
-    a_v: 0.75
+    a_v: 0.3
     r_v: .2286
     #r_v: .5
     #K_v: 200000
-    K_v: 2699200.0
+    K_v: 4028296
   FIT: True
   FIT_METHOD: 'pois' #can be res, pois, nbinom, norm
   FIT_PARAMS:
-#    nu_h:
+#     nu_h:
 #       min: 0.0001
 #       max: .4
-#     gamma_h:
-#       min: 0.0001
-#       max: .4
-#    a_v:
-#      min: 0
-#     max: 0.5
-    Sv:
-      #min: 1687000
+#       proflike: 0.1
+    a_v:
       min: 0
-      max: 26992000
-      proflike: .03
-    Iv:
-      min: 0
-      max: 10000
-      proflike: .055
-    #Iv:
-      #min: 5
-      #max: 15
-    K_v:
-      min: 0
-      max: 26992000
-      proflike: .01
+      max: 0.8
+      proflike: 0.2
+    gamma_h:
+      min: 0.0001
+      max: 0.5
+      proflike: 0.2
+#     mu_v:
+#       min: 0
+#       max: 0.4
+#       proflike: 0.05
+#     Sv:
+#       #min: 1687000
+#       min: 0
+#       max: 26992000
+#       proflike: .03
+#     Iv:
+#       min: 0
+#       max: 10000
+#       proflike: .055
+#     #Iv:
+#       #min: 5
+#       #max: 15
+#     K_v:
+#       min: 0
+#       max: 26992000
+#       proflike: .01
     
 #    K_v: 
 #      min: 10
 #     max: 1000
 #data needs to be in exact formatting to compare to a given compartment
   FIT_DATA: 
-    PATH: ['fit_data/rdj_2010_2011_season_peak.csv']
+    PATH: ['fit_data/sim_data.csv']
     res: ['weekly'] #can be weekly or daily, regardless set resolution to 1
     compartment: ['Dh']
     

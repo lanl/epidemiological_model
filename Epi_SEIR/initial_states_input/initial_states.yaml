@@ -28,10 +28,7 @@ DENGUE:
     position: 4
   Sv:
     name: 'Susceptible Vectors'
-    #value: 2699200.0 #.4 * the population size
-    value: 3000000
-    #value: 3800000
-    #value: 3965453
+    value: 2513848
     position: 5
   Ev:
     name: 'Exposed Vectors'
@@ -40,7 +37,7 @@ DENGUE:
   Iv:
     name: 'Infected Vectors'
     #value: 500
-    value: 100
+    value: 94
     position: 7
 WNV:
   Sv:

@@ -67,7 +67,7 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
     def model_func(self, t, y):
         pass
     
-    def _init_fit_parameters(self):
+    def init_fit_parameters(self):
         #create the Parameter objects
             params_obj = Parameters()
             #add selected parameters and guesses into the framework
@@ -144,8 +144,8 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
                 #already flat here because of concatenating the residuals
             return resid
         elif self.fit_method == 'pois':
-            data = np.empty([0])
-            mod_out = np.empty([0])
+            data = np.empty(shape = 0)
+            mod_out = np.empty(shape = 0)
             self.fit_run_model(params_fit)
             for i in range(0,len(self.fit_data)):
                 res = self.fit_data_res[i]
@@ -153,18 +153,21 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
                 df = self.fit_data[i][compartment]
                 if res == "weekly":
                     week_out = self.model_df.iloc[::7, :].reset_index()
-                    #added below for getting weekly cases
-                    week_out['Dh'] = week_out['Ch'].diff().fillna(0)
+                    #added below for getting weekly cases - fill with 1 now to avoid the 0 poisson output
+                    week_out['Dh'] = week_out['Ch'].diff().fillna(1)
                     out = week_out[compartment]
                 elif res == "daily":
                      #added below for getting daily ccases
-                    self.model['Dh'] = self.model_df['Ch'].diff().fillna(0)
+                    self.model['Dh'] = self.model_df['Ch'].diff().fillna(1)
                     out = self.model_df[compartment]
                     #think sometime about weighting this based on the amount of data each source has
                 data = np.concatenate((data,df))
                 mod_out = np.concatenate((mod_out,out))
             #adding a fudge factor for the log currently, because getting all zeros due to terrible fit
-            return -sum(np.log(poisson.pmf(np.round(data),np.round(mod_out)) + 0.0001))
+            #return -sum(np.log(poisson.pmf(np.round(data),np.round(mod_out)) + 0.0001))
+            #return -sum(np.log(poisson.pmf(np.round(data),np.round(mod_out))))
+            return -sum(np.log(poisson.pmf(np.round(data),np.round(mod_out)) + 1e-323))
+                
         elif self.fit_method == 'nbinom':
             data = np.empty([0])
             mod_out = np.empty([0])
@@ -221,9 +224,9 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
         #should return self.fit_out.success here as well 
         try:
             if self.fit_method == 'res':
-                self.fit_out = minimize(self.fit_objective, self._init_fit_parameters())
+                self.fit_out = minimize(self.fit_objective, self.init_fit_parameters())
             else:
-                self.fit_out = minimize(self.fit_objective, self._init_fit_parameters(), method = 'nelder')
+                self.fit_out = minimize(self.fit_objective, self.init_fit_parameters(), method = 'nelder')
         except Exception as e:
             self.logger.exception('Exception occurred when running minimization for model fitting')
             raise e
