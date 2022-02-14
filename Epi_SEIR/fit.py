@@ -45,6 +45,7 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
         if self.config_dict[disease_name]['FIT'] == True:
             self.fit_params = list(self.config_dict[disease_name]['FIT_PARAMS'].keys())
             self.fit_method = self.config_dict[disease_name]['FIT_METHOD']
+            self.dispersion = self.config_dict[disease_name]['DISPERSION']
             self.fit_params_range = self.config_dict[disease_name]['FIT_PARAMS']
             self.fit_data_res = self.config_dict[disease_name]['FIT_DATA']['res']
             self.fit_data_compartment = self.config_dict[disease_name]['FIT_DATA']['compartment']
@@ -179,23 +180,24 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
                 if res == "weekly":
                     week_out = self.model_df.iloc[::7, :].reset_index()
                     #added below for getting weekly cases
-                    week_out['Dh'] = week_out['Ch'].diff().fillna(0)
+                    week_out['Dh'] = week_out['Ch'].diff().fillna(1)
                     out = week_out[compartment]
                 elif res == "daily":
                      #added below for getting daily ccases
-                    self.model['Dh'] = self.model_df['Ch'].diff().fillna(0)
+                    self.model['Dh'] = self.model_df['Ch'].diff().fillna(1)
                     out = self.model_df[compartment]
                     #think sometime about weighting this based on the amount of data each source has
                 data = np.concatenate((data,df))
                 mod_out = np.concatenate((mod_out,out))
-            sigma = 0.1*np.mean(data)  # example WLS assuming sigma = 0.1*mean(data)
+            #sigma = 0.1*np.mean(data)  # example WLS assuming sigma = 0.1*mean(data)
+            sigma = self.dispersion
             #https://stackoverflow.com/questions/62454956/parameterization-of-the-negative-binomial-in-scipy-via-mean-and-std
             #I believe below is correct, but will want to double check
             p = [k/sigma**2 for k in mod_out]
-            n = [k*p/(1.0-p) for k in mod_out]
+            n = [mod_out[i]*p[i]/(1.0-p[i]) for i in range(0, len(mod_out))]
             #n is same as here https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.nbinom.html 
-            p = [k/sigma**2 for k in mod_out]
-            return -sum(np.log(nbinom.pmf(np.round(data),np.round(n), p)))
+            #p = [k/sigma**2 for k in mod_out]
+            return -sum(np.log(nbinom.pmf(np.round(data),np.round(n) + 1e-323, np.array(p) + 1e-323)))
         elif self.fit_method == 'norm':
             data = np.empty([0])
             mod_out = np.empty([0])
@@ -216,7 +218,9 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
                     #think sometime about weighting this based on the amount of data each source has
                 data = np.concatenate((data,df))
                 mod_out = np.concatenate((mod_out,out))
-            return -sum(np.log(norm.pdf(data,mod_out,0.1*np.mean(data)))) # example WLS assuming sigma = 0.1*mean(data)
+                #sigma = 0.1*np.mean(data)
+                sigma = self.dispersion
+            return -sum(np.log(norm.pdf(data,mod_out,sigma))) # example WLS assuming sigma = 0.1*mean(data)
         
     
     @timer 
@@ -271,12 +275,18 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
                     self.params[k] = p
                 elif k in list(self.initial_states.keys()):
                     self.initial_states[k] = p
-                fit = minimize(self.fit_objective, self._init_proflik_parameters(lik_fitparams), method = 'nelder')
-                #update guesses for the next round
-                for i in lik_fitparams:
-                    lik_fitparams[i].value = fit.params[i].value
-                fit_success.append(fit.success)
-                nll.append(self.fit_objective(fit.params))
+                
+                if len(self.fit_params) > 1:
+                    fit = minimize(self.fit_objective, self._init_proflik_parameters(lik_fitparams), method = 'nelder')
+                    #update guesses for the next round
+                    for i in lik_fitparams:
+                        lik_fitparams[i].value = fit.params[i].value
+                    fit_success.append(fit.success)
+                    nll.append(self.fit_objective(fit.params))
+                else:
+                    #just need to put something in the params category, doesn't really matter what
+                    fit_success.append(np.nan)
+                    nll.append(self.fit_objective(self.params))
             
             df = pd.DataFrame({k:param_seq, 'nll': nll, 'success': fit_success})
             df_list.append(df)

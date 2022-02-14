@@ -16,9 +16,9 @@ RESOLUTION: 1
 
 DENGUE:
   PARAMETERS:
-    nu_h: 0.164 
-    nu_v: 0.164 
-    gamma_h: 0.3 
+    nu_h: 0.164
+    nu_v: 0.2 
+    gamma_h: 0.17 
     mu_v: .0714 
     beta_h: 0.33
     beta_v: 0.33
@@ -28,20 +28,25 @@ DENGUE:
     #K_v: 200000
     K_v: 4028296
   FIT: True
-  FIT_METHOD: 'pois' #can be res, pois, nbinom, norm
+  FIT_METHOD: 'nbinom' #can be res, pois, nbinom, norm
+  DISPERSION: 5
   FIT_PARAMS:
-#     nu_h:
-#       min: 0.0001
-#       max: .4
-#       proflike: 0.1
+    nu_h:
+      min: 0.0001
+      max: .4
+      proflike: 0.001
+#     beta_v:
+#       min: 0.1
+#       max: 0.9
+#       proflike: 0.05
     a_v:
       min: 0
       max: 0.8
-      proflike: 0.2
-    gamma_h:
-      min: 0.0001
-      max: 0.5
-      proflike: 0.2
+      proflike: 0.001
+#     gamma_h:
+#       min: 0.0001
+#       max: 0.5
+#       proflike: 0.2
 #     mu_v:
 #       min: 0
 #       max: 0.4

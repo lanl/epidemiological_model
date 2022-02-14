@@ -34,14 +34,18 @@ plt.legend(loc='best')
 #This is incredibly variable for some of the parameters - specifically Sv is not behaving well
 test = self.proflike()
 #Sv parameter fit highly dependent on initial value...with a guess of around 2,000,000 but we had a higher NLL than 3,000,000
-plt.plot(test[1]['a_v'], test[1]['nll'], 'ro', label = 'NLL')
-plt.plot(test[1]['a_v'], [test[0]]*len(test[1]), 'b-', label = 'Threshold')
+plt.plot(test[2]['a_v'], test[2]['nll'], 'ro', label = 'NLL')
+plt.plot(test[2]['a_v'], [test[0]]*len(test[1]), 'b-', label = 'Threshold')
 plt.legend(loc='best')
+plt.title('Biting rate a_v')
+#plt.savefig('plots/fit_test/a_v_0_01.png')
 
 
-plt.plot(test[2]['gamma_h'], test[2]['nll'], 'ro', label = 'NLL')
-plt.plot(test[2]['gamma_h'], [test[0]]*len(test[2]), 'b-', label = 'Threshold')
+plt.plot(test[1]['nu_h'], test[1]['nll'], 'ro', label = 'NLL')
+plt.plot(test[1]['nu_h'], [test[0]]*len(test[2]), 'b-', label = 'Threshold')
 plt.legend(loc='best')
+plt.title('Biting rate a_v')
+#plt.savefig('plots/fit_test/a_v_0_01.png')
 
 
 plt.plot(test[3]['K_v'], test[3]['nll'], 'ro', label = 'NLL')
