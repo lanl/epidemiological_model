@@ -17,6 +17,7 @@ by inputting a dictionary of different parameter values
 
 from utils import create_logger
 import sys
+import math
 import fit
 
 class DengueSEIRModel(fit.FitModel):
@@ -48,28 +49,31 @@ class DengueSEIRModel(fit.FitModel):
         self.Nh = sum([self.states['Sh'], self.states['Eh'], self.states['Ih'], self.states['Rh']])
         self.Nv = sum([self.states['Sv'], self.states['Ev'], self.states['Iv']])
     
-    #for complex force of infection: will ultimately use this later
-    #def _biting_rate(self):
-        #"""Calculates biting rate"""
-        #b = self.params['sigma_h'] * self.params['sigma_v'] / \
-            #(self.params['sigma_h'] * self.Nh + self.params['sigma_v'] * self.Nv)
-        #self.b_h = b * self.Nv
-        #self.b_v = b * self.Nh
-    
-    #complex force of infection: will ultimately use this later
-    #def _force_of_infection(self):
-        #"""Calculates force of infection"""
-        #self.lambda_h = self.b_h * self.params['beta_h'] * self.states['Iv'] / self.Nv
-        #self.lambda_v = self.b_v * self.params['beta_v'] * (self.states['Ih']) / self.Nh
+    def _biting_rate(self):
+        """Calculates biting rate"""
+        b = self.params['sigma_h'] * self.params['sigma_v'] / \
+            (self.params['sigma_h'] * self.Nh + self.params['sigma_v'] * self.Nv)
+        self.b_h = b * self.Nv
+        self.b_v = b * self.Nh
     
     def _force_of_infection(self):
         """Calculates force of infection"""
-        self.lambda_h = self.params['a_v'] * self.params['beta_h'] * self.states['Iv'] / self.Nh
-        self.lambda_v = self.params['a_v'] * self.params['beta_v'] * (self.states['Ih']) / self.Nh
+        self.lambda_h = self.b_h * self.params['beta_h'] * self.states['Iv'] / self.Nv
+        self.lambda_v = self.b_v * self.params['beta_v'] * (self.states['Ih']) / self.Nh
         
+    def _mosq_population_values(self, t):
+        self.K_v = self.params['K'] - self.params['K_s'] * math.cos((2 * math.pi / 365))
+        self.r_v = self.params['r'] - self.params['r_s'] * math.cos((2 * math.pi / 365))
+    
+    def _initial_human_pop(self):
+        self.H0 = sum([self.initial_states['Sh'], self.initial_states['Eh'], self.initial_states['Ih'], self.initial_states['Rh']])
+    
     def _birth_rate(self):
         """Caclualtes vector natural birth rate"""
-        self.psi_v = self.params['r_v'] + self.params['mu_v']
+        self.psi_v = self.r_v + self.params['mu_v']
+    
+    def _calc_hNv(self):
+        self.hNv = self.psi_v - self.r_v * self.Nv / self.K_v
 
     def model_func(self, t, y):
         """Defines system of ODEs for dengue model.
@@ -86,18 +90,27 @@ class DengueSEIRModel(fit.FitModel):
             Nv: Vector population.\n
 
         Parameters:
+            H0: Initial human population.\n
+            psi_h: Per capita birth rate for humans.\n
+            psi_v: Per capita birth rate for mosquitoes.\n
+            beta_h: Probability of vector to host transmission.\n
+            beta_v: Probability of host to vector transmission.\n
+            sigma_h: Maximum number of times one mosquito bite a human per day.\n
+            sigma_v: Maximum number of mosquito bites a human can sustain per day.\n
             lambda_h: Human force of infection.\n
             lambda_v: Vector force of infection.\n
+            alpha_h: Rate of lost dengue immunity.\n
             nu_h: Human latent period.\n
             nu_v: Vector latent period.\n
             gamma_h: Human infectious period.\n
-            psi_v: Vector natural birth rate .\n
             mu_v: Vector natural death rate.\n
-            r_v: Vector instrinsic growth rate.\n
-            K_v: Vector carrying capacity.\n
-            a_v: Average number of bites to a human for each mosquito per day.\n
-            beta_h: Probability of vector to host transmission.\n
-            beta_v: Probability of host to vector transmission.\n
+            mu_h: Human natural death rate.\n
+            r: Baseline vector growth rate factor.\n
+            r_s: Scaling vector growth rate factor.\n
+            r_v: Time-varying vector growth rate.\n
+            K: Baseline vector carrying capacity factor.\n
+            K_s: Scaling vector carrying capacity factor.\n
+            K_v: Time-varying vector carrying capacity.\n
 
         """
         ddt = self.initial_states.copy()
@@ -107,22 +120,38 @@ class DengueSEIRModel(fit.FitModel):
         self._population_sizes()
 
         # Find biting rate
-        #self._biting_rate()
+        self._biting_rate()
 
         # Find force of infection
         self._force_of_infection()
         
+        # Find mosquito carrying capcity and growth rate from LLM fit
+        self._mosq_population_values(t)
+        
+        # Find initial human population
+        self._initial_human_pop()
+        
         # Find vector natural birth rate
         self._birth_rate()
+        
+        # Find hNv value
+        self._calc_hNv()
 
         # System of equations
-        ddt['Sh'] = -self.lambda_h * self.states['Sh']
+        ddt['Sh'] = self.params['psi_h'] * self.H0 - \
+            self.lambda_h * self.states['Sh'] + \
+            self.params['alpha_h'] * self.states['Rh'] - \
+            self.params['mu_h'] * self.states['Sh']
         ddt['Eh'] = self.lambda_h * self.states['Sh'] - \
-            self.params['nu_h'] * self.states['Eh']
+            self.params['nu_h'] * self.states['Eh'] - \
+            self.params['mu_h'] * self.states['Eh']
         ddt['Ih'] = self.params['nu_h'] * self.states['Eh'] - \
-            self.params['gamma_h'] * self.states['Ih']
-        ddt['Rh'] = self.params['gamma_h'] * self.states['Ih']
-        ddt['Sv'] = (self.psi_v - self.params['r_v'] * self.Nv / self.params['K_v']) * self.Nv - \
+            self.params['gamma_h'] * self.states['Ih'] - \
+            self.params['mu_h'] * self.states['Ih']
+        ddt['Rh'] = self.params['gamma_h'] * self.states['Ih'] - \
+            self.params['alpha_h'] * self.states['Rh'] - \
+            self.params['mu_h'] * self.states['Rh']
+        ddt['Sv'] = self.hNv * self.Nv - \
             self.lambda_v * self.states['Sv'] - \
             self.params['mu_v'] * self.states['Sv']
         ddt['Ev'] = self.lambda_v * self.states['Sv'] - \
@@ -148,12 +177,12 @@ class DengueSEIRModel(fit.FitModel):
             self.logger.exception('Human population size cannot be zero')
             raise e
 
-        try:
-            if self.params['K_v'] == 0:
-                raise ValueError('Vector carry capacity cannot be zero')
-        except ValueError as e:
-            self.logger.exception('Vector carry capacity cannot be zero')
-            raise e
+        #try:
+            #if self.params['K_v'] == 0:
+                #raise ValueError('Vector carry capacity cannot be zero')
+        #except ValueError as e:
+            #self.logger.exception('Vector carry capacity cannot be zero')
+            #raise e
     
     def error_zero_to_one_params(self):
         """check if parameters that should be in [0,1] are
@@ -186,16 +215,16 @@ class DengueSEIRModel(fit.FitModel):
             self.logger.exception('gamma_h must be in [0,1]')
             raise e
         
-        try:
-            if self.params['beta_h'] < 0 or self.params['beta_h'] > 1:
-                raise ValueError('beta_h must be in [0,1]')
-        except ValueError as e:
-            self.logger.exception('beta_h must be in [0,1]')
-            raise e
+#         try:
+#             if self.params['beta_h'] < 0 or self.params['beta_h'] > 1:
+#                 raise ValueError('beta_h must be in [0,1]')
+#         except ValueError as e:
+#             self.logger.exception('beta_h must be in [0,1]')
+#             raise e
             
-        try:
-            if self.params['beta_v'] < 0 or self.params['beta_v'] > 1:
-                raise ValueError('beta_v must be in [0,1]')
-        except ValueError as e:
-            self.logger.exception('beta_v must be in [0,1]')
-            raise e
+#         try:
+#             if self.params['beta_v'] < 0 or self.params['beta_v'] > 1:
+#                 raise ValueError('beta_v must be in [0,1]')
+#         except ValueError as e:
+#             self.logger.exception('beta_v must be in [0,1]')
+#             raise e
