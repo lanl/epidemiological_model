@@ -164,14 +164,17 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
                     #think sometime about weighting this based on the amount of data each source has
                 data = np.concatenate((data,df))
                 mod_out = np.concatenate((mod_out,out))
+                #add a if negative barrier so we can maybe get away without not rounding the model output
+                mod_out = np.where(mod_out < 0, 0, mod_out)
             #adding a fudge factor for the log currently, because getting all zeros due to terrible fit
             #return -sum(np.log(poisson.pmf(np.round(data),np.round(mod_out)) + 0.0001))
             #return -sum(np.log(poisson.pmf(np.round(data),np.round(mod_out))))
-            return -sum(np.log(poisson.pmf(np.round(data),np.round(mod_out)) + 1e-323))
+            #return -sum(np.log(poisson.pmf(np.round(data),np.round(mod_out)) + 1e-323))
+            return -sum(np.log(poisson.pmf(np.round(data),mod_out) + 1e-323))
                 
         elif self.fit_method == 'nbinom':
-            data = np.empty([0])
-            mod_out = np.empty([0])
+            data = np.empty(shape = 0)
+            mod_out = np.empty(shape = 0)
             self.fit_run_model(params_fit)
             for i in range(0,len(self.fit_data)):
                 res = self.fit_data_res[i]
@@ -189,15 +192,19 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
                     #think sometime about weighting this based on the amount of data each source has
                 data = np.concatenate((data,df))
                 mod_out = np.concatenate((mod_out,out))
+                #add a if negative barrier so we can maybe get away without not rounding the model output
+                #and make the filler not zero so we don't encounter NaN values
+                mod_out = np.where(mod_out <= 0, 0.00001, mod_out)
             #sigma = 0.1*np.mean(data)  # example WLS assuming sigma = 0.1*mean(data)
-            sigma = self.dispersion
+            #sigma = self.dispersion
+            sigma_squared = mod_out + self.dispersion*(mod_out**2)
             #https://stackoverflow.com/questions/62454956/parameterization-of-the-negative-binomial-in-scipy-via-mean-and-std
             #I believe below is correct, but will want to double check
-            p = [k/sigma**2 for k in mod_out]
-            n = [mod_out[i]*p[i]/(1.0-p[i]) for i in range(0, len(mod_out))]
+            p = mod_out / sigma_squared #[k/sigma**2 for k in mod_out]
+            n = mod_out**2 / (sigma_squared - mod_out) #[mod_out[i]*p[i]/(1.0-p[i]) for i in range(0, len(mod_out))]
             #n is same as here https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.nbinom.html 
             #p = [k/sigma**2 for k in mod_out]
-            return -sum(np.log(nbinom.pmf(np.round(data),np.round(n) + 1e-323, np.array(p) + 1e-323)))
+            return -sum(np.log(nbinom.pmf(np.round(data),n, np.array(p)) + 1e-323))
         elif self.fit_method == 'norm':
             data = np.empty([0])
             mod_out = np.empty([0])
@@ -284,7 +291,7 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
                     fit_success.append(fit.success)
                     nll.append(self.fit_objective(fit.params))
                 else:
-                    #just need to put something in the params category, doesn't really matter what
+                    #just need to put something in the params category, doesn't really matter what 
                     fit_success.append(np.nan)
                     nll.append(self.fit_objective(self.params))
             

@@ -23,7 +23,7 @@ week_out = model_df.iloc[::7, :].reset_index()
 week_out['Dh'] = week_out['Ch'].diff().fillna(0)
 
 #data = pd.read_csv('fit_data/rdj_2010_2011_season_peak.csv')
-data = pd.read_csv('fit_data/sim_data.csv')
+data = pd.read_csv('fit_data/sim_data2.csv')
 
 week_out['Time'] = fit_disease.t_eval[::7]
 
@@ -34,23 +34,34 @@ plt.legend(loc='best')
 #This is incredibly variable for some of the parameters - specifically Sv is not behaving well
 test = self.proflike()
 #Sv parameter fit highly dependent on initial value...with a guess of around 2,000,000 but we had a higher NLL than 3,000,000
-plt.plot(test[2]['a_v'], test[2]['nll'], 'ro', label = 'NLL')
-plt.plot(test[2]['a_v'], [test[0]]*len(test[1]), 'b-', label = 'Threshold')
+plt.plot(test[1]['a_v'], test[1]['nll'], 'ro', label = 'NLL')
+plt.plot(test[1]['a_v'], [test[0]]*len(test[1]), 'b-', label = 'Threshold')
+plt.legend(loc='best')
+plt.title('Biting rate a_v')
+#plt.savefig('plots/fit_test/a_v_0_001_simdata_no_round.png')
+#plt.savefig('plots/fit_test/a_v_0_0003_riodata_no_round.png')
+#plt.savefig('plots/fit_test/a_v_0_05_simdata2_nbinom.png')
+
+
+plt.plot(test[2]['nu_h'], test[2]['nll'], 'ro', label = 'NLL')
+plt.plot(test[2]['nu_h'], [test[0]]*len(test[2]), 'b-', label = 'Threshold')
 plt.legend(loc='best')
 plt.title('Biting rate a_v')
 #plt.savefig('plots/fit_test/a_v_0_01.png')
 
 
-plt.plot(test[1]['nu_h'], test[1]['nll'], 'ro', label = 'NLL')
-plt.plot(test[1]['nu_h'], [test[0]]*len(test[2]), 'b-', label = 'Threshold')
-plt.legend(loc='best')
-plt.title('Biting rate a_v')
-#plt.savefig('plots/fit_test/a_v_0_01.png')
+# nll = list()
+# for p in param_seq:
+#                 if k in list(self.params.keys()):
+#                     self.params[k] = p
 
-
-plt.plot(test[3]['K_v'], test[3]['nll'], 'ro', label = 'NLL')
-plt.plot(test[3]['K_v'], [test[0]]*len(test[3]), 'b-', label = 'Threshold')
-plt.legend(loc='best')
+#                     #just need to put something in the params category, doesn't really matter what 
+#                 nll.append(fit_objective(self.params))
+#                 print(self.params[k])
+                
+# plt.plot(test[3]['K_v'], test[3]['nll'], 'ro', label = 'NLL')
+# plt.plot(test[3]['K_v'], [test[0]]*len(test[3]), 'b-', label = 'Threshold')
+# plt.legend(loc='best')
 
 
 #Results without fitting Sv

@@ -17,8 +17,8 @@ RESOLUTION: 1
 DENGUE:
   PARAMETERS:
     nu_h: 0.164
-    nu_v: 0.2 
-    gamma_h: 0.17 
+    nu_v: 0.164 
+    gamma_h: 0.167 
     mu_v: .0714 
     beta_h: 0.33
     beta_v: 0.33
@@ -31,10 +31,6 @@ DENGUE:
   FIT_METHOD: 'nbinom' #can be res, pois, nbinom, norm
   DISPERSION: 5
   FIT_PARAMS:
-    nu_h:
-      min: 0.0001
-      max: .4
-      proflike: 0.001
 #     beta_v:
 #       min: 0.1
 #       max: 0.9
@@ -42,7 +38,11 @@ DENGUE:
     a_v:
       min: 0
       max: 0.8
-      proflike: 0.001
+      proflike: 0.05
+#     nu_h:
+#       min: 0.0001
+#       max: .4
+#       proflike: 0.001
 #     gamma_h:
 #       min: 0.0001
 #       max: 0.5
@@ -73,7 +73,7 @@ DENGUE:
 #     max: 1000
 #data needs to be in exact formatting to compare to a given compartment
   FIT_DATA: 
-    PATH: ['fit_data/sim_data.csv']
+    PATH: ['fit_data/sim_data2.csv']
     res: ['weekly'] #can be weekly or daily, regardless set resolution to 1
     compartment: ['Dh']
     

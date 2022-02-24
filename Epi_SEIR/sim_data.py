@@ -16,16 +16,19 @@ model_df = pd.DataFrame(dict(zip(list(self.initial_states.keys()), self.model_ou
 
 week_out = model_df.iloc[::7, :].reset_index()
 week_out['Dh'] = week_out['Ch'].diff().fillna(1)
-sim_noise = np.round(week_out['Dh'] + abs(np.random.normal(scale=100, size=len(week_out['Dh']))))
-#sim_noise = [np.random.poisson(k) for k in week_out['Dh']]
+#sim_noise = np.round(week_out['Dh'] + abs(np.random.normal(scale=100, size=len(week_out['Dh']))))
+sim_noise2 = [np.random.poisson(k) for k in week_out['Dh']]
 
 week_out['Time'] = self.t_eval[::7]
 
-plt.plot(week_out['Time'], sim_noise, 'ro', label=f'sim data')
+plt.plot(week_out['Time'], sim_noise2, 'ro', label=f'sim data')
 plt.plot(week_out['Time'], week_out['Dh'], 'b-', label= f'model')
 plt.legend(loc='best')
 
 #sim_noise.to_csv('fit_data/sim_data.csv')
+
+sim_noise2 = pd.DataFrame({'Dh': sim_noise2})
+sim_noise2.to_csv('fit_data/sim_data2.csv', index = False)
 
 
 #made based on the following params
