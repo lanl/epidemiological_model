@@ -51,15 +51,13 @@ class DengueSEIRModel(fit.FitModel):
     
     def _biting_rate(self):
         """Calculates biting rate"""
-        b = self.params['sigma_h'] * self.params['sigma_v'] / \
+        self.b = self.params['sigma_h'] * self.params['sigma_v'] / \
             (self.params['sigma_h'] * self.Nh + self.params['sigma_v'] * self.Nv)
-        self.b_h = b * self.Nv
-        self.b_v = b * self.Nh
     
     def _force_of_infection(self):
         """Calculates force of infection"""
-        self.lambda_h = self.b_h * self.params['beta_h'] * self.states['Iv'] / self.Nv
-        self.lambda_v = self.b_v * self.params['beta_v'] * (self.states['Ih']) / self.Nh
+        self.lambda_h = self.b * self.params['beta_h'] * self.states['Iv'] 
+        self.lambda_v = self.b * self.params['beta_v'] * self.states['Ih']
         
     def _mosq_population_values(self, t):
         self.K_v = self.params['K'] - self.params['K_s'] * math.cos((2 * math.pi / 365))
