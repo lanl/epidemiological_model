@@ -22,14 +22,15 @@ DENGUE:
     mu_v: .0714 
     beta_h: 0.33
     beta_v: 0.33
-    a_v: 0.3
+    a_v: 0.7
     r_v: .2286
     #r_v: .5
     #K_v: 200000
     K_v: 4028296
   FIT: True
   FIT_METHOD: 'nbinom' #can be res, pois, nbinom, norm
-  DISPERSION: 5
+  DISPERSION: 0.0001
+  CALC_CI: False
   FIT_PARAMS:
 #     beta_v:
 #       min: 0.1
@@ -37,8 +38,13 @@ DENGUE:
 #       proflike: 0.05
     a_v:
       min: 0
-      max: 0.8
+      max: 1
       proflike: 0.05
+    dispersion:
+      min: 0.00001
+      max: 100
+      #max: 0.1
+      proflike: .9
 #     nu_h:
 #       min: 0.0001
 #       max: .4
@@ -73,7 +79,7 @@ DENGUE:
 #     max: 1000
 #data needs to be in exact formatting to compare to a given compartment
   FIT_DATA: 
-    PATH: ['fit_data/sim_data2.csv']
+    PATH: ['fit_data/sim_data3.csv']
     res: ['weekly'] #can be weekly or daily, regardless set resolution to 1
     compartment: ['Dh']
     

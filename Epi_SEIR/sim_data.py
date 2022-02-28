@@ -19,9 +19,15 @@ week_out['Dh'] = week_out['Ch'].diff().fillna(1)
 #sim_noise = np.round(week_out['Dh'] + abs(np.random.normal(scale=100, size=len(week_out['Dh']))))
 sim_noise2 = [np.random.poisson(k) for k in week_out['Dh']]
 
+sigma_squared = week_out['Dh'] + 0.25*(week_out['Dh']**2)
+p =  week_out['Dh']  / sigma_squared #[k/sigma**2 for k in mod_out]
+n =  week_out['Dh'] **2 / (sigma_squared -  week_out['Dh'])
+sim_noise3 = [np.random.negative_binomial(4.0,k) for k in p]
+        
+
 week_out['Time'] = self.t_eval[::7]
 
-plt.plot(week_out['Time'], sim_noise2, 'ro', label=f'sim data')
+plt.plot(week_out['Time'], sim_noise3, 'ro', label=f'sim data')
 plt.plot(week_out['Time'], week_out['Dh'], 'b-', label= f'model')
 plt.legend(loc='best')
 
@@ -29,6 +35,9 @@ plt.legend(loc='best')
 
 sim_noise2 = pd.DataFrame({'Dh': sim_noise2})
 sim_noise2.to_csv('fit_data/sim_data2.csv', index = False)
+
+sim_noise3 = pd.DataFrame({'Dh': sim_noise3})
+sim_noise3.to_csv('fit_data/sim_data3.csv', index = False)
 
 
 #made based on the following params

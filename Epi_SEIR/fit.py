@@ -45,6 +45,7 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
         if self.config_dict[disease_name]['FIT'] == True:
             self.fit_params = list(self.config_dict[disease_name]['FIT_PARAMS'].keys())
             self.fit_method = self.config_dict[disease_name]['FIT_METHOD']
+            self.calc_ci_bool = self.config_dict[disease_name]['CALC_CI']
             self.dispersion = self.config_dict[disease_name]['DISPERSION']
             self.fit_params_range = self.config_dict[disease_name]['FIT_PARAMS']
             self.fit_data_res = self.config_dict[disease_name]['FIT_DATA']['res']
@@ -80,6 +81,8 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
             for j in init_keys:
                 params_obj.add(j, value = self.initial_states[j], min = self.fit_params_range[j]['min'], max = self.fit_params_range[j]['max'])
                 #params_obj.add(j, self.initial_states[j])
+            if 'dispersion' in self.fit_params:
+                params_obj.add('dispersion', value = self.dispersion, min = self.fit_params_range['dispersion']['min'], max = self.fit_params_range['dispersion']['max'])
             return(params_obj)
     
     #adding this for the proflikelihood calculation
@@ -95,6 +98,8 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
             for j in init_keys:
                 params_obj.add(j, lik_fitparams[j].value, min = lik_fitparams[j].value*.1, max = lik_fitparams[j].value*1.9)
                 #params_obj.add(j, lik_fitparams[j].value)
+            if 'dispersion' in lik_fitparams:
+                params_obj.add('dispersion', lik_fitparams['dispersion'].value, min = lik_fitparams['dispersion'].value*.1, max = lik_fitparams['dispersion'].value*1.9)
             return(params_obj)
          
        
@@ -112,6 +117,8 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
             self.params[k] = params_fit[k]
         for j in init_keys:
             self.initial_states[j] = params_fit[j]
+        if 'dispersion' in params_fit:
+            self.dispersion = params_fit['dispersion']
             
         try:
             #Note we are not not inputting the parameters as arguments, but it is working without that
@@ -186,7 +193,7 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
                     week_out['Dh'] = week_out['Ch'].diff().fillna(1)
                     out = week_out[compartment]
                 elif res == "daily":
-                     #added below for getting daily ccases
+                     #added below for getting daily cases
                     self.model['Dh'] = self.model_df['Ch'].diff().fillna(1)
                     out = self.model_df[compartment]
                     #think sometime about weighting this based on the amount of data each source has
@@ -194,17 +201,13 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
                 mod_out = np.concatenate((mod_out,out))
                 #add a if negative barrier so we can maybe get away without not rounding the model output
                 #and make the filler not zero so we don't encounter NaN values
-                mod_out = np.where(mod_out <= 0, 0.00001, mod_out)
-            #sigma = 0.1*np.mean(data)  # example WLS assuming sigma = 0.1*mean(data)
-            #sigma = self.dispersion
+                mod_out = np.where(mod_out <= 0, 1e-323, mod_out)
+            #parameterization as seen in https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.nbinom.html 
             sigma_squared = mod_out + self.dispersion*(mod_out**2)
-            #https://stackoverflow.com/questions/62454956/parameterization-of-the-negative-binomial-in-scipy-via-mean-and-std
-            #I believe below is correct, but will want to double check
             p = mod_out / sigma_squared #[k/sigma**2 for k in mod_out]
-            n = mod_out**2 / (sigma_squared - mod_out) #[mod_out[i]*p[i]/(1.0-p[i]) for i in range(0, len(mod_out))]
-            #n is same as here https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.nbinom.html 
-            #p = [k/sigma**2 for k in mod_out]
+            n = mod_out**2 / (sigma_squared - mod_out) 
             return -sum(np.log(nbinom.pmf(np.round(data),n, np.array(p)) + 1e-323))
+        
         elif self.fit_method == 'norm':
             data = np.empty([0])
             mod_out = np.empty([0])
@@ -250,8 +253,8 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
         
     def proflike(self):
         threshold = self.fit_objective(self.fit_out.params) + chi2.ppf(.95, len(self.fit_params))/2
-        df_list = list()
-        df_list.append(threshold)
+        self.df_list = list()
+        self.df_list.append(threshold)
         #perc_dict = dict(zip(self.fit_params, [.25,.25, .25]))
         for k in self.fit_params:
             #reset self.params to the fit values for the start of every run
@@ -261,6 +264,8 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
                 self.params[j] = self.fit_out.params[j].value
             for h in init_keys:
                 self.initial_states[h] = self.fit_out.params[h].value
+            if 'dispersion' in self.fit_params:
+                self.dispersion = self.fit_out.params['dispersion'].value
             
             #only want to fit the other parameters
             lik_fitparams = self.fit_out.params.copy()
@@ -272,6 +277,8 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
                 param_seq = self._calc_param_range(self.params[k], perc = self.fit_params_range[k]['proflike'])
             elif k in list(self.initial_states.keys()):
                 param_seq = self._calc_param_range(self.initial_states[k], perc = self.fit_params_range[k]['proflike'])
+            elif k == 'dispersion':
+                param_seq = self._calc_param_range(self.dispersion, perc = self.fit_params_range['dispersion']['proflike'])
                 
             nll = list()
             fit_success = list()
@@ -282,6 +289,8 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
                     self.params[k] = p
                 elif k in list(self.initial_states.keys()):
                     self.initial_states[k] = p
+                elif k == 'dispersion':
+                    self.dispersion = p
                 
                 if len(self.fit_params) > 1:
                     fit = minimize(self.fit_objective, self._init_proflik_parameters(lik_fitparams), method = 'nelder')
@@ -296,14 +305,28 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
                     nll.append(self.fit_objective(self.params))
             
             df = pd.DataFrame({k:param_seq, 'nll': nll, 'success': fit_success})
-            df_list.append(df)
-        return df_list
-           
-        #next steps: 1) find some easy way to store the results for each parameter
-        #            2) add chi square threshhold and find some easy way to find intersection between fit (maybe NLL~loess(param_values))?
-        #.           3) find an easy way to save CIs for each parameter
-        #            4) Test this out with dengue data!        
-                                              
+            self.df_list.append(df)
+        return self.df_list
+    
+    def calc_ci(self):
+        self.CI_list = list()
+        for i in range(0, len(self.df_list) - 1):
+            #slightly weird indexing  because self.df_list[0] is the threshold value
+            #also examine frac value later, smaller values yield fits closer to the actual data points
+            lowess = sm.nonparametric.lowess(self.df_list[i + 1]['nll'], self.df_list[i + 1][self.fit_params[i]], frac = .1)
+            
+            lowess_x = list(zip(*lowess))[0]
+            lowess_y = list(zip(*lowess))[1]
+
+            f = interp1d(lowess_x, lowess_y, bounds_error=False)
+            f_thresh = lambda x: f(x) - self.df_list[0]
+
+            #five makes it a slightly arbitrary guess but not terrible since there are currently 20 points being ran
+            lb = scipy.optimize.newton(f_thresh, self.df_list[i + 1][self.fit_params[i]][5])
+            ub = scipy.optimize.newton(f_thresh, self.df_list[i + 1][self.fit_params[i]][self.df_list[i + 1] - 5])
+            
+            self.CI_list.append({'lb':lb, 'ub':ub})
+        return self.CI_list
         
     def save_fit_output(self, disease_name):
         #write a csv file with the parameter outputs
@@ -318,6 +341,15 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
                                        f'{disease_name}_parameter_output.txt')
         with open(path_param_out, 'w') as fh:
             fh.write(fit_report(self.fit_out))
+        if self.calc_bool == True:
+            fitted_params_CI = pd.DataFrame(columns=self.fit_params, index = ['Lower CI', 'Upper CI'])
+            for i in range(0, len(self.CI_list)):
+                CI = self.CI_list[i]
+                fitted_params_CI.loc['Lower CI', self.fit_params[i]] = CI['lb']
+                fitted_params_CI.loc['Upper CI', self.fit_params[i]] = CI['ub']
+            path_param_values_CI = os.path.join(self.config_dict['PARAMETER_FIT_DIR'],
+                                       f'{disease_name}_parameter_values_CI.csv')
+            fitted_params_CI.to_csv(path_param_values_CI)
     
 
     def error_check_resolution(self):
