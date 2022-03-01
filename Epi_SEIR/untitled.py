@@ -33,9 +33,10 @@ data = pd.read_csv('fit_data/sim_data3.csv')
 
 week_out['Time'] = fit_disease.t_eval[::7]
 
+
 plt.plot(week_out['Time'], data['Dh'], 'ro', label=f'data')
 plt.plot(week_out['Time'], week_out['Dh'], 'b-', label= f'fit')
-plt.title('Simulated a_v = 0.75, fit a_v = 0.7493, Simulated disp = 0.25, fit disp = 0.309')
+plt.title('Sim a_v = 0.75, fit a_v = 0.7493, Sim disp = 0.25, fit disp = 0.309')
 plt.legend(loc='best')
 #plt.savefig('plots/fit_test/nbinom/fit2_simdata3.png')
 
