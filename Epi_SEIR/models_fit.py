@@ -42,6 +42,9 @@ def fit():
 
     disease.logger.info(disease)
     disease.fit_constants()
+    disease.proflike()
+    if disease.calc_ci_bool == True:
+        disease.calc_ci()
     disease.save_fit_output(disease_name)
     disease.logger.info('SUCCESS')
     

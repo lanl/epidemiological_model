@@ -229,8 +229,8 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
                 data = np.concatenate((data,df))
                 mod_out = np.concatenate((mod_out,out))
                 #sigma = 0.1*np.mean(data)
-                sigma = self.dispersion
-            return -sum(np.log(norm.pdf(data,mod_out,sigma))) # example WLS assuming sigma = 0.1*mean(data)
+                sigma = np.sqrt(mod_out + self.dispersion*(mod_out**2))
+            return -sum(np.log(norm.pmf(data,mod_out,sigma))) # example WLS assuming sigma = 0.1*mean(data)
         
     
     @timer 

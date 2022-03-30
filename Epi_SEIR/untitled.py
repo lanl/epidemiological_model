@@ -51,7 +51,7 @@ plt.title('NLL of Biting rate a_v')
 #plt.savefig('plots/fit_test/a_v_0_001_simdata_no_round.png')
 #plt.savefig('plots/fit_test/a_v_0_0003_riodata_no_round.png')
 #plt.savefig('plots/fit_test/a_v_0_05_simdata2_nbinom.png')
-plt.savefig('plots/fit_test/nbinom/fit2_a_v_simdata3.png')
+plt.savefig('plots/fit_test/nbinom/fit2_a_v_simdata3_pres.png')
 
 plt.plot(test[2]['dispersion'], test[2]['nll'], 'ro', label = 'NLL')
 plt.plot(test[2]['dispersion'], [test[0]]*len(test[2]), 'b-', label = 'Threshold')
