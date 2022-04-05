@@ -127,8 +127,18 @@ class VectorBorneDiseaseModel(ABC):
     def model_func(self, t, y):
         pass
 
+    def calc_Ih_wnv(self, df):
+        """Calcualtees Ih compartment using Poisson distribution for WNV"""
+        rng = np.random.default_rng()
+        try:
+            df['Infected Humans'] = rng.poisson(lam=self.params['eta'] * df['Infected Vectors'])
+        except ValueError:
+            self.logger.exception(f"Used Normal distribution, lam = {math.trunc(self.params['eta']*df['Infected Vectors'])}")
+            df['Infected Humans'] = math.trunc(rng.normal(loc = self.params['eta']*df['Infected Vectors'], scale = math.sqrt(self.params['eta']*df['Infected Vectors'])))
+        return df
+    
     @timer
-    def run_model(self, disease_name):
+    def run_model(self, disease_name, verbose = True):
         """Runs ODE solver to generate model output"""
         keys = list(self.initial_states.keys())
         self.model_output = np.empty([0, len(keys)])
@@ -140,24 +150,23 @@ class VectorBorneDiseaseModel(ABC):
             self.logger.exception('Exception occurred running model')
             raise e
         self.model_output = out
-    
-    def calc_Ih_wnv(self, df):
-        """Calcualtees Ih compartment using Poisson distribution for WNV"""
-        rng = np.random.default_rng()
-        try:
-            df['Infected Humans'] = rng.poisson(lam=self.params['eta'] * df['Infected Vectors'])
-        except ValueError:
-            self.logger.exception(f"Used Normal distribution, lam = {math.trunc(self.params['eta']*df['Infected Vectors'])}")
-            df['Infected Humans'] = math.trunc(rng.normal(loc = self.params['eta']*df['Infected Vectors'], scale = math.sqrt(self.params['eta']*df['Infected Vectors'])))
-        return df
+        
+        if verbose == True:
+            self.df = pd.DataFrame(dict(zip(list(self.state_names_order.values()), self.model_output.T)))
+        elif verbose == False:
+            self.df = pd.DataFrame(dict(zip(list(self.state_names_order.keys()), self.model_output.T)))
+            
+        if disease_name == 'wnv':
+            self.df = self.calc_Ih_wnv(self.df)
     
     def save_output(self, disease_name, sim_labels = False, data = None):
         """Save output to file"""
-        self.df = pd.DataFrame(dict(zip(list(self.state_names_order.values()), self.model_output.T)))
-        if disease_name == 'wnv':
-            self.df = self.calc_Ih_wnv(self.df)
+#         self.df = pd.DataFrame(dict(zip(list(self.state_names_order.values()), self.model_output.T)))
+#         if disease_name == 'wnv':
+#             self.df = self.calc_Ih_wnv(self.df)
+#         self.df['Time'] = self.t_eval
         self.df['Time'] = self.t_eval
-        
+    
         if sim_labels == True:
             dict_keys = data.columns
             param_keys = [i for i in dict_keys if i in list(self.params.keys())]
