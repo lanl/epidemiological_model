@@ -312,22 +312,27 @@ class LogisticLinkModel(ABC):
         #join up to get the mosquito population data for each start date with the output data
         df_best['full_start_date'] = [datetime.strptime(str(df_best['year'][i]) + '-' + df_best['start_date'][i], '%Y-%m-%d') for i in range(0, len(df_best))]
         df_join = df_best.merge(self.date_mosq_final, how = 'left', left_on = 'full_start_date', right_on ='date')
-        df_join = df_join.drop(['full_start_date', self.data_col_names['date'], 'day_index'], axis = 1).rename(columns = {self.PBM_type: f'{self.pop_type}_mosq_start'})
+        #df_join = df_join.drop(['full_start_date', self.data_col_names['date'], 'day_index'], axis = 1).rename(columns = {self.PBM_type: f'{self.pop_type}_mosq_start'})
+        #now just setting the actual fitted start date as Sv here, and then there will not be an integration datset
+        df_join = df_join.drop(['full_start_date', self.data_col_names['date'], 'day_index'], axis = 1).rename(columns = {self.PBM_type: 'Sv'})
+        #if the starting value is zero we change it to 0.01
+        df_join['Sv'] = np.where(df_join['Sv'] == 0.0, 0.01, df_join['Sv'])
         #join up to get the mosquito population data for May 1st each year with the output data
         df_join['May_First'] = [datetime.strptime(str(k) + '-05-01', '%Y-%m-%d') for k in df_join['year']]
         df_join_final = df_join.merge(self.date_mosq_final, how = 'left', left_on = 'May_First', right_on ='date')
         self.full_out_df = df_join_final.drop(['May_First', self.data_col_names['date'], 'day_index'], axis = 1).rename(columns = {self.PBM_type: f'{self.pop_type}_mosq_May1'})
         #self.integration_df = self.full_out_df[['r', 'r_s', 'K', 'K_s', f'{self.pop_type}_mosq_May1']].rename(columns = {f'{self.pop_type}_mosq_May1': 'Sv'})
         #switching to the chosen start date - ask Marina about this
-        self.integration_df = self.full_out_df[['r', 'r_s', 'K', 'K_s', f'{self.pop_type}_mosq_start']].rename(columns = {f'{self.pop_type}_mosq_start': 'Sv'})
+        #self.integration_df = self.full_out_df[['r', 'r_s', 'K', 'K_s', f'{self.pop_type}_mosq_start']].rename(columns = {f'{self.pop_type}_mosq_start': 'Sv'})
 
     
     def save_output(self, name_tag):
-        output_path = os.path.join(self.config_dict['LLM_OUTPUT_DIR'], f'full_output/{self.pop_type}_output_{name_tag}.csv')
-        output_path2 = os.path.join(self.config_dict['LLM_OUTPUT_DIR'], f'{self.pop_type}_integration_output_{name_tag}.csv')
+        output_path = os.path.join(self.config_dict['LLM_OUTPUT_DIR'], f'{self.pop_type}_output_{name_tag}.csv')
+        #output_path = os.path.join(self.config_dict['LLM_OUTPUT_DIR'], f'full_output/{self.pop_type}_output_{name_tag}.csv')
+        #output_path2 = os.path.join(self.config_dict['LLM_OUTPUT_DIR'], f'{self.pop_type}_integration_output_{name_tag}.csv')
         
         self.full_out_df.to_csv(output_path, index=False)
-        self.integration_df.to_csv(output_path2, index=False)
+        #self.integration_df.to_csv(output_path2, index=False)
         
 #         output_path = os.path.join(self.config_dict['OUTPUT_DIR'],
 #                                            #f'{self.location}_{self.pop_type}_model_output_2005_2008.csv')

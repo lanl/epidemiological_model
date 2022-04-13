@@ -4,9 +4,7 @@
 
 PROJECT_ROOT: '.'
 LOGFILE_PATH: 'logs'
-MOSQUITOES_DIR: '/Users/mbarnard/Desktop/mosquito_pop_output'
 INITIAL_STATES_FILE_PATH: 'initial_states_input/initial_states.yaml'
-PARAMETER_FIT_DIR: 'param_fit_output'
 LLM_OUTPUT_DIR: 'LLM_output'
 OUTPUT_DIR: 'human_model_output'
 
@@ -15,17 +13,16 @@ OUTPUT_TYPE: '.csv' # default is .parquet
 DURATION: 363 # number of days to run the model
 RESOLUTION: 1
 
+
 DATES:
-  start1: '04-01'
-  start2: '06-01'
+  start1: '04-15'
+  start2: '05-15'
   end1: '09-01' 
   end2: '11-01' 
   start_year: '2005'
-  end_year: '2019'
-    
+  end_year: '2007'    
 POPULATION:
-  type: 'Active'
-  
+  type: 'Active'  
 DATA_COL_NAMES:
   date: 'date'
   total_mosq: 'TotMosq'
@@ -64,16 +61,23 @@ WNV:
   PARAMETERS:
     mu_v: 0.06
     mu_b: 0.004
-    alpha_v: 0.69
-    alpha_b: 0.74
-    beta_b: 0.44
+    gamma_b: 0.2 #guess for now
+    #alpha_v: 0.69
+    #alpha_b: 0.74
+    #beta_b: 0.44
+    alpha_v: 1
+    alpha_b: 1
+    beta_b: 1
     eta: 0.003
-    #K: 9596.401 # from Toronto 2004 season fitting
-    #K_s: 8946.468
-    #r: 0.00438 
-    #r_s: 0.00976
-    K_v: 15000
-    r_v: 0.2286
+    K: 292870.0294 # from Toronto 20018 season fitting
+    K_s: 289323.6226
+    r: -0.015161776
+    r_s: -0.04379221728
+#     K_v: 15000
+#     r_v: 0.2286
+    rho: 0.003
+    rho_s: 0.001
+    theta: 0.05
     nu_v: 0.10
     nu_b: 0.20 #guess for now
   FIT: False

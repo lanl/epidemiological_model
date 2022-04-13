@@ -10,3 +10,6 @@ plots/*
 !param_fit_output
 param_fit_output/*
 !param_fit_output/old
+!LLM_output/
+LLM_output/*
+!LLM_output/old
