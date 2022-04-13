@@ -55,13 +55,20 @@ class WNVSEIRModel(fit.FitModel):
         self.lambda_v = self.params['alpha_v']*self.params['beta_b']/self.Nb
         self.lambda_b = self.params['alpha_b']*self.params['beta_b']/self.Nb
     
-#     def _mosq_population_values(self, t):
-#         self.K_v = self.params['K'] + self.params['K_s'] * math.sin((2 * math.pi / 365) * t - math.pi / 2)
-#         self.r_v = self.params['r'] + self.params['r_s'] * math.sin((2 * math.pi / 365) * t - math.pi / 2)
+    def _mosq_population_values(self, t):
+        self.K_v = self.params['K'] + self.params['K_s'] * math.cos((2 * math.pi / 365) * t)
+        self.r_v = self.params['r'] + self.params['r_s'] * math.cos((2 * math.pi / 365) * t)
+    
+    def _bird_population_values(self, t):
+        self.psi_b = self.params['rho'] + self.params['rho_s'] * math.sin(self.params['theta'] * t)
 
     def _birth_rate(self):
         """Caclualtes vector natural birth rate"""
-        self.psi_v = self.params['r_v'] + self.params['mu_v']
+        self.psi_v = self.r_v + self.params['mu_v']
+        
+#     def _birth_rate(self):
+#         """Caclualtes vector natural birth rate"""
+#         self.psi_v = self.params['r_v'] + self.params['mu_v']
 
     def model_func(self, t, y):
         """Defines system of ODEs for dengue model
@@ -80,17 +87,19 @@ class WNVSEIRModel(fit.FitModel):
 
         Parameters:
             mu_v: Vector death rate.\n
-            mu_b: Bird death/recovery rate. \n
+            mu_b: Bird natural death rate. \n
             beta_b: Biting rate under frequency dependence. \n
             alpha_v: Probability of virus transmission to vector, per infectious bite.\n
             alpha_b: Probability of virus transmission to bird, per infectious bit.\n
             psi_v: Vector birth rate. \n
+            psi_b: bird recruitment rate
             K_v: Vector carrying capacity.\n
             r_v: Vector growth rate.\n
             lambda_v: vector force of infection. \n
             lambda_b: Bird force of infection. \n
             nu_v: Vector latent period. \n
             nu_b: Bird latent period. \n
+            gamma_b: Bird recovery rate. \n
             eta: Contact rate * probability of transmission to humans
 
 
@@ -104,17 +113,17 @@ class WNVSEIRModel(fit.FitModel):
 
         # Find forces of infection
         self._force_of_infection()
+
+        # Find vector carrying capacity and growth rate
+        self._mosq_population_values(t)
         
         # Find vector natural birth rate
         self._birth_rate()
+        
+        # Find vector carrying capacity and growth rate
+        self._bird_population_values(t)
 
-        #Find vector carrying capacity and growth rate
-#        self._mosq_population_values(t)
-
-#         ddt['Sv'] = self.r_v * (1 - (self.Nv / self.K_v)) * self.Nv - \
-#             self.lambda_v * self.states['Sv'] * self.states['Ib'] - \
-#             self.params['mu_v'] * self.states['Sv']
-        ddt['Sv'] = (self.psi_v - self.params['r_v'] * self.Nv / self.params['K_v']) * self.Nv - \
+        ddt['Sv'] = (self.psi_v - self.r_v * self.Nv / self.K_v) * self.Nv - \
              self.lambda_v * self.states['Sv'] * self.states['Ib'] - \
              self.params['mu_v'] * self.states['Sv']
         ddt['Ev'] = self.lambda_v * self.states['Sv'] * self.states['Ib'] - \
@@ -122,12 +131,16 @@ class WNVSEIRModel(fit.FitModel):
             self.params['mu_v'] * self.states['Ev']
         ddt['Iv'] = self.params['nu_v'] * self.states['Ev'] - \
             self.params['mu_v'] * self.states['Iv']
-        ddt['Sb'] = -self.lambda_b * self.states['Iv'] * self.states['Sb']
+        ddt['Sb'] = self.psi_b * self.Nb - \
+            self.lambda_b * self.states['Iv'] * self.states['Sb'] - \
+            self.params['mu_b'] * self.states['Sb']
         ddt['Eb'] = self.lambda_b * self.states['Iv'] * self.states['Sb'] - \
-            self.params['nu_b'] * self.states['Eb']
+            self.params['nu_b'] * self.states['Eb'] - \
+            self.params['mu_b'] * self.states['Eb']
         ddt['Ib'] = self.params['nu_b'] * self.states['Eb'] - \
-            self.params['mu_b'] * self.states['Ib']
-        ddt['Rb'] = self.params['mu_b'] * self.states['Ib']
+            self.params['gamma_b'] * self.states['Ib'] - \
+            self.params['mu_b'] * self.states['Ib'] 
+        ddt['Rb'] = self.params['gamma_b'] * self.states['Ib'] 
 
         return tuple(ddt.values())
     
@@ -146,12 +159,12 @@ class WNVSEIRModel(fit.FitModel):
             self.logger.exception('Bird population size cannot be zero')
             raise e
 
-        try:
-            if self.params['K_v'] == 0:
-                raise ValueError('Vector carry capacity cannot be zero')
-        except ValueError as e:
-            self.logger.exception('Vector carry capacity cannot be zero')
-            raise e
+#         try:
+#             if self.params['K_v'] == 0:
+#                 raise ValueError('Vector carry capacity cannot be zero')
+#         except ValueError as e:
+#             self.logger.exception('Vector carry capacity cannot be zero')
+#             raise e
     
     def error_zero_to_one_params(self):
         """check if parameters that should be in [0,1] are
