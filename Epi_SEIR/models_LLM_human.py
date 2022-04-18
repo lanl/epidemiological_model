@@ -5,7 +5,7 @@ given paramters from config.yaml configuration file.
     Typical usage example:
 
     python models_main.py -c <absolute path to config.yaml> -d <disease name
-    [dengue][wnv]> -f <show model output figures> -sf <save model output figures>
+    [dengue][wnv]> -m <absolute path to mosquito data directory>
 """
 import sys
 import os
@@ -45,14 +45,17 @@ def main():
     #sort the filenames so the file name order will match the anming tag order
     LLM_output = sorted([k for k in os.listdir(mosq.config_dict['LLM_OUTPUT_DIR']) if '.csv' in k])
     disease_name = args.disease_name.lower()
+    file_name_list = list()
     for i in range(0, len(LLM_output)):
         LLM_data = pd.read_csv(os.path.join(mosq.config_dict['LLM_OUTPUT_DIR'], LLM_output[i]))
         date_df = LLM_data[['start_date', 'end_date', 'year']]
         param_data = LLM_data[['r', 'r_s', 'K', 'K_s', 'Sv']]
         data_list = list()
         new_initial_states = dict()
+        #set output path and add to file name list
+        output_file = f'{disease_name}_model_output_{naming_tag[i]}.csv'
+        file_name_list.append(output_file)
         for k in range(0,len(param_data.index)):
-            print(k)
             params_k = param_data.iloc[k,].to_dict()
             dates_k = date_df.iloc[k,].to_dict()
             date_vec = pd.date_range(start=f"{dates_k['year']}-{dates_k['start_date']}", end = f"{dates_k['year'] + 1}-{dates_k['end_date']}")
@@ -74,7 +77,7 @@ def main():
             #need to add the +1 to get the correct step size
             disease.t_eval = np.linspace(0, disease.config_dict['DURATION'], disease.config_dict['DURATION']*disease.config_dict['RESOLUTION'] + 1)
             
-            disease.logger.info(disease)
+            #disease.logger.info(disease)
             disease.run_model(disease_name, verbose = False)
             #add if statement so that if the solver breaks we just fill the missing bottom of the data with nans
             if len(disease.df) != len(date_vec):
@@ -87,12 +90,26 @@ def main():
                 #new_initial_states = pull_new_states_df.iloc[-1].to_dict()
             disease.df['Date'] = date_vec
             data_list.append(disease.df)
-            disease.logger.info('SUCCESS')
+            disease.logger.info(f'{naming_tag[i]}, {dates_k["year"]} success')
+            
+        disease.logger.info(f'{naming_tag[i]} SUCCESS')
             
         final_df = pd.concat(data_list).rename(columns = disease.state_names_order)
-        output_path = os.path.join(disease.config_dict['OUTPUT_DIR'],
-                                           f'{disease_name}_model_output_{naming_tag[i]}.csv')
+        output_path = os.path.join(disease.config_dict['OUTPUT_DIR'], output_file) 
         final_df.to_csv(output_path, index=False)
+   
+    #final success statement - log it and print into the console
+    file_name_list_add = [os.path.join(disease.config_dict['OUTPUT_DIR'], k) for k in file_name_list]
+    success_vec = [os.path.isfile(k) for k in file_name_list_add]
+    if sum(success_vec) == len(mosq_data_paths):
+        disease.logger.info(f'ALL HPU RUNS SUCCESSFUL')
+        print(f'ALL HPU RUNS SUCCESSFUL')
+    else:
+        false_index = [i for i in range(0, len(success_vec)) if success_vec[i] == False]
+        fail_hpus = [naming_tag[i] for i in false_index]
+        log_fail = ' and '.join(fail_hpus)
+        disease.logger.info(f'Run FAILED for the following HPUs: {log_fail}')
+        print(f'Run FAILED for the following HPUs: {log_fail}')
         
 
 
