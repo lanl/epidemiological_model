@@ -127,8 +127,34 @@ class VectorBorneDiseaseModel(ABC):
     def model_func(self, t, y):
         pass
 
+
+    def calc_Ih_wnv(self, df, verbose = True):
+        """Calcualtees Ih compartment using Poisson distribution for WNV"""
+        rng = np.random.default_rng()
+        if verbose == True:
+            try:
+                df['Infected Humans'] = rng.poisson(lam=self.params['eta'] * df['Infected Vectors'])
+            except ValueError:
+                self.logger.exception(f"Used Normal distribution, lam = {np.trunc(self.params['eta']*df['Infected Vectors'])}")
+                #added an absolute value around the sd in the normal so we never have sd < 0
+                df['Infected Humans'] = [math.trunc(k) for k in rng.normal(loc = self.params['eta']*df['Infected Vectors'], scale = np.sqrt(abs(self.params['eta']*df['Infected Vectors'])))]
+        elif verbose == False:
+            try:
+                df['Ih'] = rng.poisson(lam=self.params['eta'] * df['Iv'])
+            except ValueError:
+                self.logger.exception(f"Used Normal distribution, lam = {np.trunc(self.params['eta']*df['Iv'])}")
+                #added an absolute value around the sd in the normal so we never have sd < 0
+                df['Ih'] = [math.trunc(k) for k in rng.normal(loc = self.params['eta']*df['Iv'], scale = np.sqrt(abs(self.params['eta']*df['Iv'])))]
+        return df
+    
+    def calc_Dh(self, df):
+        #note this dependent on the fact that there is a cummulative human (Ch) column\
+        #currently not adding a verbose option because this is just for model fitting purposes at the moment
+        df['Dh'] = df['Ch'].diff()
+        return df
+    
     @timer
-    def run_model(self, disease_name):
+    def run_model(self, disease_name, verbose = True, calc_daily = False):
         """Runs ODE solver to generate model output"""
         keys = list(self.initial_states.keys())
         self.model_output = np.empty([0, len(keys)])
@@ -140,22 +166,20 @@ class VectorBorneDiseaseModel(ABC):
             self.logger.exception('Exception occurred running model')
             raise e
         self.model_output = out
-    
-    def calc_Ih_wnv(self, df):
-        """Calcualtees Ih compartment using Poisson distribution for WNV"""
-        rng = np.random.default_rng()
-        try:
-            df['Infected Humans'] = rng.poisson(lam=self.params['eta'] * df['Infected Vectors'])
-        except ValueError:
-            self.logger.exception(f"Used Normal distribution, lam = {math.trunc(self.params['eta']*df['Infected Vectors'])}")
-            df['Infected Humans'] = math.trunc(rng.normal(loc = self.params['eta']*df['Infected Vectors'], scale = math.sqrt(self.params['eta']*df['Infected Vectors'])))
-        return df
+        
+        if verbose == True:
+            self.df = pd.DataFrame(dict(zip(list(self.state_names_order.values()), self.model_output.T)))
+        elif verbose == False:
+            self.df = pd.DataFrame(dict(zip(list(self.state_names_order.keys()), self.model_output.T)))
+            
+        if disease_name == 'wnv':
+            self.df = self.calc_Ih_wnv(self.df, verbose = verbose)
+        if calc_daily == True:
+            self.df = self.calc_Dh(self.df)
+
     
     def save_output(self, disease_name, sim_labels = False, data = None):
         """Save output to file"""
-        self.df = pd.DataFrame(dict(zip(list(self.state_names_order.values()), self.model_output.T)))
-        if disease_name == 'wnv':
-            self.df = self.calc_Ih_wnv(self.df)
         self.df['Time'] = self.t_eval
         
         if sim_labels == True:

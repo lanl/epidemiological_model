@@ -12,12 +12,17 @@ import numpy as np
 import yaml
 import pandas as pd
 import numdifftools
+import matplotlib.pyplot as plt
+import statsmodels.api as sm
+
 from scipy.integrate import solve_ivp
 from lmfit import Parameters, minimize, fit_report
 from scipy.stats import poisson
 from scipy.stats import norm
 from scipy.stats import nbinom
 from scipy.stats import chi2
+from scipy.optimize import newton
+from scipy.interpolate import interp1d
 
 import vbdm
 
@@ -103,13 +108,7 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
             return(params_obj)
          
        
-    def fit_run_model(self, params_fit):
-        keys = list(self.initial_states.keys())
-        self.model_output = np.empty([0, len(keys)])
-        
-        #param_keys = [i for i in self.fit_params if i in list(self.params.keys())]
-        #init_keys = [i for i in self.fit_params if i in list(self.initial_states.keys())]
-        
+    def fit_run_model(self, params_fit, disease_name):
         param_keys = [i for i in params_fit if i in list(self.params.keys())]
         init_keys = [i for i in params_fit if i in list(self.initial_states.keys())]
         
@@ -119,84 +118,62 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
             self.initial_states[j] = params_fit[j]
         if 'dispersion' in params_fit:
             self.dispersion = params_fit['dispersion']
+        
+        if 'Dh' in self.fit_data_compartment:
+            self.run_model(disease_name, False, True)
+        else:
+            self.run_model(disease_name, False)
             
-        try:
-            #Note we are not not inputting the parameters as arguments, but it is working without that
-            sol = solve_ivp(self.model_func, self.t, list(self.initial_states.values()), t_eval=self.t_eval)
-            out = sol.y.T
-        except Exception as e:
-            self.logger.exception('Exception occurred running model for fitting')
-            raise e
-        #Note: columns are abbrevations (ex. Rh) instead of full name (ex. Recovered Humans) here
-        self.model_df = pd.DataFrame(dict(zip(list(self.initial_states.keys()), out.T)))
     
-    def fit_objective(self, params_fit):
-        if self.fit_method == 'res':
-            resid = np.empty([0])
-            self.fit_run_model(params_fit)
-            for i in range(0,len(self.fit_data)):
-                res = self.fit_data_res[i]
-                compartment = self.fit_data_compartment[i]
-                df = self.fit_data[i][compartment]
-                if res == "weekly":
-                    week_out = self.model_df.iloc[::7, :].reset_index()
-                    #added below for getting weekly cases
-                    week_out['Dh'] = week_out['Ch'].diff().fillna(0)
-                    out = week_out[compartment]
-                elif res == "daily":
-                     #added below for getting daily ccases
-                    self.model['Dh'] = self.model_df['Ch'].diff().fillna(0)
-                    out = self.model_df[compartment]
-                    #think sometime about weighting this based on the amount of data each source has
-                resid = np.concatenate((resid,out- df))
-                #already flat here because of concatenating the residuals
-            return resid
-        elif self.fit_method == 'pois':
+    def fit_objective(self, params_fit, disease_name):
+        if self.fit_method == 'pois':
             data = np.empty(shape = 0)
             mod_out = np.empty(shape = 0)
-            self.fit_run_model(params_fit)
+            self.fit_run_model(params_fit, disease_name)
             for i in range(0,len(self.fit_data)):
                 res = self.fit_data_res[i]
                 compartment = self.fit_data_compartment[i]
                 df = self.fit_data[i][compartment]
+                #drop nas in the compartment - mainly to drop the first obs if we are fitting daily cases
+                prep_df = self.df.copy()
+                prep_df = prep_df[prep_df[compartment].isna() == False].reset_index(drop = True)
                 if res == "weekly":
-                    week_out = self.model_df.iloc[::7, :].reset_index()
-                    #added below for getting weekly cases - fill with 1 now to avoid the 0 poisson output
-                    week_out['Dh'] = week_out['Ch'].diff().fillna(1)
-                    out = week_out[compartment]
+                    if compartment == 'Dh':
+                        week_agg = prep_df.groupby(prep_df.index // 7).sum()
+                        out = week_agg[compartment]
+                    else:
+                        week_out = prep_df.iloc[::7, :].reset_index()
+                        out = week_out[compartment]
                 elif res == "daily":
-                     #added below for getting daily ccases
-                    self.model['Dh'] = self.model_df['Ch'].diff().fillna(1)
-                    out = self.model_df[compartment]
-                    #think sometime about weighting this based on the amount of data each source has
+                    out = prep_df[compartment]
+                #think sometime about weighting this based on the amount of data each source has
                 data = np.concatenate((data,df))
                 mod_out = np.concatenate((mod_out,out))
                 #add a if negative barrier so we can maybe get away without not rounding the model output
                 mod_out = np.where(mod_out < 0, 0, mod_out)
             #adding a fudge factor for the log currently, because getting all zeros due to terrible fit
-            #return -sum(np.log(poisson.pmf(np.round(data),np.round(mod_out)) + 0.0001))
-            #return -sum(np.log(poisson.pmf(np.round(data),np.round(mod_out))))
-            #return -sum(np.log(poisson.pmf(np.round(data),np.round(mod_out)) + 1e-323))
             return -sum(np.log(poisson.pmf(np.round(data),mod_out) + 1e-323))
                 
         elif self.fit_method == 'nbinom':
             data = np.empty(shape = 0)
             mod_out = np.empty(shape = 0)
-            self.fit_run_model(params_fit)
+            self.fit_run_model(params_fit, disease_name)
             for i in range(0,len(self.fit_data)):
                 res = self.fit_data_res[i]
                 compartment = self.fit_data_compartment[i]
                 df = self.fit_data[i][compartment]
+                #drop nas in the compartment - mainly to drop the first obs if we are fitting daily cases
+                prep_df = self.df.copy()
+                prep_df = prep_df[prep_df[compartment].isna() == False].reset_index(drop = True)
                 if res == "weekly":
-                    week_out = self.model_df.iloc[::7, :].reset_index()
-                    #added below for getting weekly cases
-                    week_out['Dh'] = week_out['Ch'].diff().fillna(1)
-                    out = week_out[compartment]
+                    if compartment == 'Dh':
+                        week_agg = prep_df.groupby(prep_df.index // 7).sum()
+                        out = week_agg[compartment]
+                    else:
+                        week_out = prep_df.iloc[::7, :].reset_index()
+                        out = week_out[compartment]
                 elif res == "daily":
-                     #added below for getting daily cases
-                    self.model['Dh'] = self.model_df['Ch'].diff().fillna(1)
-                    out = self.model_df[compartment]
-                    #think sometime about weighting this based on the amount of data each source has
+                    out = prep_df[compartment]
                 data = np.concatenate((data,df))
                 mod_out = np.concatenate((mod_out,out))
                 #add a if negative barrier so we can maybe get away without not rounding the model output
@@ -211,36 +188,36 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
         elif self.fit_method == 'norm':
             data = np.empty([0])
             mod_out = np.empty([0])
-            self.fit_run_model(params_fit)
+            self.fit_run_model(params_fit, disease_name)
             for i in range(0,len(self.fit_data)):
                 res = self.fit_data_res[i]
                 compartment = self.fit_data_compartment[i]
                 df = self.fit_data[i][compartment]
+                #drop nas in the compartment - mainly to drop the first obs if we are fitting daily cases
+                prep_df = self.df.copy()
+                prep_df = prep_df[prep_df[compartment].isna() == False].reset_index(drop = True)
                 if res == "weekly":
-                    week_out = self.model_df.iloc[::7, :].reset_index()
-                    #added below for getting weekly cases
-                    week_out['Dh'] = week_out['Ch'].diff().fillna(0)
-                    out = week_out[compartment]
+                    if compartment == 'Dh':
+                        week_agg = prep_df.groupby(prep_df.index // 7).sum()
+                        out = week_agg[compartment]
+                    else:
+                        week_out = prep_df.iloc[::7, :].reset_index()
+                        out = week_out[compartment]
                 elif res == "daily":
-                    #added below for getting daily ccases
-                    self.model['Dh'] = self.model_df['Ch'].diff().fillna(0)
-                    out = self.model_df[compartment]
-                    #think sometime about weighting this based on the amount of data each source has
+                    out = prep_df[compartment]
                 data = np.concatenate((data,df))
                 mod_out = np.concatenate((mod_out,out))
-                #sigma = 0.1*np.mean(data)
+                #ask ethan if below is correct for a normaly distribution as well
                 sigma = np.sqrt(mod_out + self.dispersion*(mod_out**2))
             return -sum(np.log(norm.pmf(data,mod_out,sigma))) # example WLS assuming sigma = 0.1*mean(data)
         
     
     @timer 
-    def fit_constants(self):
-        #should return self.fit_out.success here as well 
+    def fit_constants(self, disease_name):
         try:
-            if self.fit_method == 'res':
-                self.fit_out = minimize(self.fit_objective, self.init_fit_parameters())
-            else:
-                self.fit_out = minimize(self.fit_objective, self.init_fit_parameters(), method = 'nelder')
+            self.fit_out = minimize(self.fit_objective, self.init_fit_parameters(), kws = {'disease_name': disease_name}, method = 'nelder')
+            if self.fit_out.success != True:
+                self.logger.exeption('Minimization algorithm for fitting failed')
         except Exception as e:
             self.logger.exception('Exception occurred when running minimization for model fitting')
             raise e
@@ -251,8 +228,8 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
         param_seq = np.linspace((1-perc)*param, (1 + perc)*param, 2*num)
         return param_seq
         
-    def proflike(self):
-        threshold = self.fit_objective(self.fit_out.params) + chi2.ppf(.95, len(self.fit_params))/2
+    def proflike(self, disease_name):
+        threshold = self.fit_objective(self.fit_out.params, disease_name) + chi2.ppf(.95, len(self.fit_params))/2
         self.df_list = list()
         self.df_list.append(threshold)
         #perc_dict = dict(zip(self.fit_params, [.25,.25, .25]))
@@ -293,21 +270,30 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
                     self.dispersion = p
                 
                 if len(self.fit_params) > 1:
-                    fit = minimize(self.fit_objective, self._init_proflik_parameters(lik_fitparams), method = 'nelder')
+                    fit = minimize(self.fit_objective, self._init_proflik_parameters(lik_fitparams), kws = {'disease_name': disease_name}, method = 'nelder')
                     #update guesses for the next round
                     for i in lik_fitparams:
                         lik_fitparams[i].value = fit.params[i].value
                     fit_success.append(fit.success)
-                    nll.append(self.fit_objective(fit.params))
+                    nll.append(self.fit_objective(fit.params, disease_name))
                 else:
                     #just need to put something in the params category, doesn't really matter what 
                     fit_success.append(np.nan)
-                    nll.append(self.fit_objective(self.params))
+                    nll.append(self.fit_objective(self.params, disease_name))
             
             df = pd.DataFrame({k:param_seq, 'nll': nll, 'success': fit_success})
             self.df_list.append(df)
-        return self.df_list
+        #return self.df_list
     
+    def plot_proflike(self):
+        for i in range(1, len(self.df_list)):
+            plt.plot(self.df_list[i][self.df_list[i].columns[0]], self.df_list[i]['nll'], 'ro', label = 'NLL')
+            plt.plot(self.df_list[i][self.df_list[i].columns[0]], [self.df_list[0]]*len(self.df_list[i]), 'b-', label = 'Threshold')
+            plt.legend(loc='best')
+            plt.title(f'NLL of {self.df_list[i].columns[0]}')
+            plt.show()
+            plt.close()
+        
     def calc_ci(self):
         self.CI_list = list()
         for i in range(0, len(self.df_list) - 1):
@@ -322,11 +308,10 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
             f_thresh = lambda x: f(x) - self.df_list[0]
 
             #five makes it a slightly arbitrary guess but not terrible since there are currently 20 points being ran
-            lb = scipy.optimize.newton(f_thresh, self.df_list[i + 1][self.fit_params[i]][5])
-            ub = scipy.optimize.newton(f_thresh, self.df_list[i + 1][self.fit_params[i]][self.df_list[i + 1] - 5])
+            lb = newton(f_thresh, self.df_list[i + 1][self.fit_params[i]][5])
+            ub = newton(f_thresh, self.df_list[i + 1][self.fit_params[i]][len(self.df_list[i + 1]) - 5])
             
             self.CI_list.append({'lb':lb, 'ub':ub})
-        return self.CI_list
         
     def save_fit_output(self, disease_name):
         #write a csv file with the parameter outputs
@@ -341,7 +326,7 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
                                        f'{disease_name}_parameter_output.txt')
         with open(path_param_out, 'w') as fh:
             fh.write(fit_report(self.fit_out))
-        if self.calc_bool == True:
+        if self.calc_ci_bool == True:
             fitted_params_CI = pd.DataFrame(columns=self.fit_params, index = ['Lower CI', 'Upper CI'])
             for i in range(0, len(self.CI_list)):
                 CI = self.CI_list[i]
