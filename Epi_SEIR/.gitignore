@@ -10,3 +10,4 @@ plots/*
 !param_fit_output
 param_fit_output/*
 !param_fit_output/old
+aux_fit_data_code/
