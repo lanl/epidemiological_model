@@ -84,7 +84,10 @@ def create_arg_parser_exp():
     parser.set_defaults(generate_params=False)
     parser.add_argument('-p', '--param_data_file', action='store', 
                         type=lambda x: is_valid_file(parser, x))
-    #not giving -f option because too many plots would come up
+    #giving -f option but only for sequencing through parameters for fitting data
+    #ultimately -sf will only do something for models_params and -f will only do something for models_param_guess
+    parser.add_argument('-f', '--figure', dest='figure', action='store_true')
+    parser.set_defaults(figure=False)
     parser.add_argument('-sf', '--save_figure', dest='save_figure', action='store_true')
     parser.set_defaults(save_figure=False)
 
@@ -150,7 +153,7 @@ def create_arg_parser_fit():
                         type=lambda x: is_disease(parser, x))
                         # default='dengue')
     parser.add_argument('-p', '--best_guess_params', dest='run_fit_model', action='store_true')
-    parser.set_defaults(best_guess_params=True)
+    parser.set_defaults(best_guess_params=False)
     parser.add_argument('-rm', '--run_fit_model', dest='run_fit_model', action='store_true')
     parser.set_defaults(run_fit_model=False)
     parser.add_argument('-f', '--figure', dest='figure', action='store_true')
