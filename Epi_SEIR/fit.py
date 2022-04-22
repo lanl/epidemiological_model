@@ -182,7 +182,14 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
             #parameterization as seen in https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.nbinom.html 
             sigma_squared = mod_out + self.dispersion*(mod_out**2)
             p = mod_out / sigma_squared #[k/sigma**2 for k in mod_out]
-            n = mod_out**2 / (sigma_squared - mod_out) 
+            #add below so the model won't error out when mod_out and sigma squared are 1e-323
+            div_vec = sigma_squared - mod_out
+            if 0 in div_vec:
+                div_vec = [x if x !=0 else 1e-232 for x in div_vec]
+            n = mod_out**2 / div_vec
+            #can't have n be zero otherwise nbinom errors out
+            if 0 in n:
+                n = [x if x !=0 else 1e-232 for x in n]
             return -sum(np.log(nbinom.pmf(np.round(data),n, np.array(p)) + 1e-323))
         
         elif self.fit_method == 'norm':
@@ -361,13 +368,13 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
         
         check if fitting compartment names matches a column name in corresponding fitting data
         """
-        #commenting this out, because this will not always be true with how we need to move to daily/weekly cases
-        #try:
-           # if sum([i in list(self.initial_states.keys()) for i in self.fit_data_compartment]) != len(self.fit_data_compartment):
-               # raise ValueError('Fitting data compartment names must match initial state names')
-        #except ValueError as e:
-            #self.logger.exception('Fitting data compartment names must match initial state names')
-            #raise e
+        try:
+            #added the two states that we sometimes add after running the model
+            if sum([i in (list(self.initial_states.keys()) + ['Ih', 'Dh']) for i in self.fit_data_compartment]) != len(self.fit_data_compartment):
+                raise ValueError('Fitting data compartment names must match initial state names')
+        except ValueError as e:
+            self.logger.exception('Fitting data compartment names must match initial state names')
+            raise e
         
         data_colnames = [i.columns for i in self.fit_data]
         try:

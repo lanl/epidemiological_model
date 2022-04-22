@@ -22,7 +22,7 @@ DENGUE:
     mu_v: .0714 
     beta_h: 0.33
     beta_v: 0.33
-    a_v: 0.7
+    a_v: 0.1
     r_v: .2286
     K_v: 4028296
   FIT: True
@@ -62,14 +62,13 @@ WNV:
     nu_v: 0.10
     nu_b: 0.20 #guess for now
   FIT: False
-  FIT_METHOD: 'pois' #can be res, pois, nbinom, normal
+  FIT_METHOD: 'pois' #can be pois, nbinom, normal
+  DISPERSION: 0.0001
+  CALC_CI: False
   FIT_PARAMS:
     nu_v:
       min: 0.07
       max: .14
-    mu_v:
-      min: 0.016
-      max: .33
     Sv:
       min: 5000
       max: 30000
