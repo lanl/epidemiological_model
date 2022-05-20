@@ -32,7 +32,7 @@ DENGUE:
     position: 5
   Iv:
     name: 'Infected Vectors'
-    value: 8202
+    value: 100
     position: 6
 WNV:
   Sv:
