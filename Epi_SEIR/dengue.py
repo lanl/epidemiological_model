@@ -59,6 +59,15 @@ class DengueSEIRModel(fit.FitModel):
         self.lambda_h = self.b * self.params['beta_h'] * self.states['Iv'] 
         self.lambda_v = self.b * self.params['beta_v'] * self.states['Ih']
         
+    #def _birth_rate(self,t):
+        #"""Caclualtes vector natural birth rate"""
+        #if t < 180:
+            #self.psi_v = self.params['r_v'] + self.params['mu_v']
+        #else:
+            #self.psi_v = 0
+            #self.r_v = self.psi_v - self.params['mu_v']
+    
+    
     def _mosq_population_values(self, t):
         self.K_v = self.params['K'] - self.params['K_s'] * math.cos((2 * math.pi / 365))
         self.r_v = self.params['r'] - self.params['r_s'] * math.cos((2 * math.pi / 365))
@@ -122,7 +131,7 @@ class DengueSEIRModel(fit.FitModel):
 
         # Find force of infection
         self._force_of_infection()
-        
+
         # Find mosquito carrying capcity and growth rate from LLM fit
         self._mosq_population_values(t)
         
@@ -149,6 +158,7 @@ class DengueSEIRModel(fit.FitModel):
         ddt['Rh'] = self.params['gamma_h'] * self.states['Ih'] - \
             self.params['alpha_h'] * self.states['Rh'] - \
             self.params['mu_h'] * self.states['Rh']
+        ddt['Ch'] = self.params['nu_h'] * self.states['Eh']
         ddt['Sv'] = self.hNv * self.Nv - \
             self.lambda_v * self.states['Sv'] - \
             self.params['mu_v'] * self.states['Sv']

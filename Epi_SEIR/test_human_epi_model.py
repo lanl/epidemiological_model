@@ -121,7 +121,7 @@ param_dict_list_wnv = gen_new_params('wnv')
 dengue = DengueSEIRModel('config/unit_testing/working_config_file.yaml')
 wnv = WNVSEIRModel('config/unit_testing/working_config_file.yaml')
 
-eq_points_dengue = [{'Sh': dengue.initial_states['Sh'], 'Eh': 0, 'Ih':0, 'Rh': 0, 'Sv': 0, 'Ev': 0, 'Iv': 0}]
+eq_points_dengue = [{'Sh': dengue.initial_states['Sh'], 'Eh': 0, 'Ih':0, 'Rh': 0, 'Ch': 0, 'Sv': 0, 'Ev': 0, 'Iv': 0}]
 #{'Sh': dengue.initial_states['Sh'], 'Eh': 0, 'Ih':0, 'Rh': 0, 'Sv': dengue.params['K_v'], 'Ev': 0, 'Iv': 0}]
 #find new eq points if there are some later
 #eq_points_wnv = #[{'Sv': 0, 'Ev': 0, 'Iv': 0, 'Sb': wnv.initial_states['Sb'], 'Eb': 0, 'Ib': 0, 'Rb': 0, 'Ih': 0}]
@@ -338,7 +338,7 @@ class TestDengue:
                 Test that fitting framework is returning numeric values for all parameters desired and that the values are in the designated range
             """
             disease_fit = DengueSEIRModel('config/unit_testing/fit/working_config_fit_file.yaml')
-            disease_fit.fit_constants()
+            disease_fit.fit_constants('dengue')
             assert len(disease_fit.fit_out.params) == len(disease_fit.fit_params)
             for k in disease_fit.fit_params:
                 assert check_float(disease_fit.fit_out.params[k].value) == True
@@ -554,7 +554,7 @@ class TestWNV:
                 Test that fitting framework is returning numeric values for all parameters desired and that the values are in the designated range
             """
             disease_fit = WNVSEIRModel('config/unit_testing/fit/working_config_fit_file.yaml')
-            disease_fit.fit_constants()
+            disease_fit.fit_constants('wnv')
             assert len(disease_fit.fit_out.params) == len(disease_fit.fit_params)
             for k in disease_fit.fit_params:
                 assert check_float(disease_fit.fit_out.params[k].value) == True

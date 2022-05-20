@@ -147,8 +147,14 @@ class VectorBorneDiseaseModel(ABC):
                 df['Ih'] = [math.trunc(k) for k in rng.normal(loc = self.params['eta']*df['Iv'], scale = np.sqrt(abs(self.params['eta']*df['Iv'])))]
         return df
     
+    def calc_Dh(self, df):
+        #note this dependent on the fact that there is a cummulative human (Ch) column\
+        #currently not adding a verbose option because this is just for model fitting purposes at the moment
+        df['Dh'] = df['Ch'].diff()
+        return df
+    
     @timer
-    def run_model(self, disease_name, verbose = True):
+    def run_model(self, disease_name, verbose = True, calc_daily = False):
         """Runs ODE solver to generate model output"""
         keys = list(self.initial_states.keys())
         self.model_output = np.empty([0, len(keys)])
@@ -168,6 +174,9 @@ class VectorBorneDiseaseModel(ABC):
             
         if disease_name == 'wnv':
             self.df = self.calc_Ih_wnv(self.df, verbose = verbose)
+        if calc_daily == True:
+            self.df = self.calc_Dh(self.df)
+
     
     def save_output(self, disease_name, sim_labels = False, data = None):
         """Save output to file"""

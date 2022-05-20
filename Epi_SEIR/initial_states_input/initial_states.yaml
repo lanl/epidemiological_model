@@ -8,7 +8,7 @@
 DENGUE:
   Sh:
     name: 'Susceptible Humans'
-    value: 6700000
+    value: 6748000
     position: 0
   Eh:
     name: 'Exposed Humans'
@@ -16,24 +16,29 @@ DENGUE:
     position: 1
   Ih:
     name: 'Infected Humans'
-    value: 60
+    value: 0
     position: 2
   Rh:
     name: 'Recovered Humans'
     value: 0
     position: 3
+  Ch:
+    name: 'Cummulative Infected Humans' #added for fitting purposes
+    value: 0
+    position: 4
   Sv:
     name: 'Susceptible Vectors'
-    value: 50000000
-    position: 4
+    value: 2513848
+    position: 5
   Ev:
     name: 'Exposed Vectors'
     value: 0
-    position: 5
+    position: 6
   Iv:
     name: 'Infected Vectors'
-    value: 100
-    position: 6
+    #value: 500
+    value: 94
+    position: 7
 WNV:
   Sv:
     name: 'Susceptible Vectors'
