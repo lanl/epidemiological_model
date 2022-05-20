@@ -52,6 +52,44 @@ def create_arg_parser():
 
     return parser
 
+def create_arg_parser_LLM():
+    """Configures command line argument parser for models_main.py
+
+    Checks if the argument is a valid file.
+
+    Returns:
+        parser object.
+    """
+
+    def is_valid_file(parser, arg):
+        if not os.path.isfile(arg):
+            parser.error(f'File {arg} not found.')
+        else:
+            return arg
+        
+    def is_valid_dir(parser, arg):
+        if not os.path.isdir(arg):
+            parser.error(f'Directory {arg} not found.')
+        else:
+            return arg
+
+    def is_disease(parser, arg):
+        if arg.lower() not in ['wnv', 'dengue']:
+            parser.error('Specify [wnv] or [dengue]')
+        else:
+            return arg
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-c', '--config_file', action='store',
+                        type=lambda x: is_valid_file(parser, x))
+                        # default='config/local_test_config.yaml')
+    parser.add_argument('-d', '--disease_name', action='store',
+                        type=lambda x: is_disease(parser, x))
+    parser.add_argument('-m', '--mosquito_dir', action = 'store',
+                        type=lambda x: is_valid_dir(parser, x))
+
+    return parser
+
 def create_arg_parser_exp():
     """Configures command line argument parser for models_params.py
 
