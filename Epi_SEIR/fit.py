@@ -11,7 +11,6 @@ from abc import abstractmethod
 import numpy as np
 import yaml
 import pandas as pd
-import numdifftools
 import matplotlib.pyplot as plt
 import statsmodels.api as sm
 
