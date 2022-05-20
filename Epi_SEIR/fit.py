@@ -214,9 +214,14 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
                     out = prep_df[compartment]
                 data = np.concatenate((data,df))
                 mod_out = np.concatenate((mod_out,out))
-                #ask ethan if below is correct for a normaly distribution as well
-                sigma = np.sqrt(mod_out + self.dispersion*(mod_out**2))
-            return -sum(np.log(norm.pmf(data,mod_out,sigma))) # example WLS assuming sigma = 0.1*mean(data)
+                #check with ethan if below is correct for a normaly distribution as well
+#                 sigma_squared = mod_out + self.dispersion*(mod_out**2)
+#                 sigma_squared = np.where(sigma_squared <= 0, 1e-232, sigma_squared)
+#                 sigma = np.sqrt(sigma_squared)
+                #actually will just do sigma = self.dispersion*mod_out for now
+                sigma = self.dispersion*mod_out
+                sigma = np.where(sigma <= 0, 1e-232, sigma)
+            return -sum(np.log(norm.pdf(data,mod_out,sigma)))
         
     
     @timer 
@@ -239,7 +244,6 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
         threshold = self.fit_objective(self.fit_out.params, disease_name) + chi2.ppf(.95, len(self.fit_params))/2
         self.df_list = list()
         self.df_list.append(threshold)
-        #perc_dict = dict(zip(self.fit_params, [.25,.25, .25]))
         for k in self.fit_params:
             #reset self.params to the fit values for the start of every run
             param_keys = [i for i in self.fit_params if i in list(self.params.keys())]
