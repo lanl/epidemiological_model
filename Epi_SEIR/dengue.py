@@ -174,13 +174,6 @@ class DengueSEIRModel(fit.FitModel):
         except ValueError as e:
             self.logger.exception('Human population size cannot be zero')
             raise e
-
-        #try:
-            #if self.params['K_v'] == 0:
-                #raise ValueError('Vector carry capacity cannot be zero')
-        #except ValueError as e:
-            #self.logger.exception('Vector carry capacity cannot be zero')
-            #raise e
     
     def error_zero_to_one_params(self):
         """check if parameters that should be in [0,1] are
@@ -213,16 +206,16 @@ class DengueSEIRModel(fit.FitModel):
             self.logger.exception('gamma_h must be in [0,1]')
             raise e
         
-#         try:
-#             if self.params['beta_h'] < 0 or self.params['beta_h'] > 1:
-#                 raise ValueError('beta_h must be in [0,1]')
-#         except ValueError as e:
-#             self.logger.exception('beta_h must be in [0,1]')
-#             raise e
+        try:
+            if self.params['beta_h'] < 0 or self.params['beta_h'] > 1:
+                raise ValueError('beta_h must be in [0,1]')
+        except ValueError as e:
+            self.logger.exception('beta_h must be in [0,1]')
+            raise e
             
-#         try:
-#             if self.params['beta_v'] < 0 or self.params['beta_v'] > 1:
-#                 raise ValueError('beta_v must be in [0,1]')
-#         except ValueError as e:
-#             self.logger.exception('beta_v must be in [0,1]')
-#             raise e
+        try:
+            if self.params['beta_v'] < 0 or self.params['beta_v'] > 1:
+                raise ValueError('beta_v must be in [0,1]')
+        except ValueError as e:
+            self.logger.exception('beta_v must be in [0,1]')
+            raise e
