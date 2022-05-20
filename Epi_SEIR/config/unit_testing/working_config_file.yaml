@@ -16,15 +16,21 @@ RESOLUTION: 10 # how many points to run per day
 
 DENGUE:
   PARAMETERS:
+    psi_h: 0.0000391
     nu_h: 0.164 
-    nu_v: 0.164 
+    nu_v: 0.0667 #25C values 
     gamma_h: 0.167 
-    mu_v: .0714 
+    mu_v: .0332 #25C values 
+    mu_h: 0.0000391
+    sigma_h: 19
+    sigma_v: 0.5
     beta_h: 0.33
     beta_v: 0.33
-    a_v: 0.75
-    r_v: .2286
-    K_v: 200000
+    r: 0.0087 #all these values are from Toronto 2014 fits
+    K: 328948.585
+    r_s: -0.0267
+    K_s: 323830.319
+    alpha_h: 0.00011 #just a guess, this means they could be reinfected 25 years later 
   FIT: False
   FIT_PARAMS:
     nu_h:
@@ -36,23 +42,32 @@ DENGUE:
     Sv:
       min: 10000000
       max: 60000000
+#data needs to be in exact formatting to compare to a given compartment
   FIT_DATA: 
     PATH: ['fit_data/old/rio_fit_data_2010.csv']
-    res: ['weekly']
+    res: ['weekly'] #can be weekly or daily, regardless set resolution to 1
     compartment: ['Rh']
     
 WNV:
   PARAMETERS:
     mu_v: 0.06
     mu_b: 0.004
+    gamma_b: 0.2 #guess for now
     alpha_v: 0.69
     alpha_b: 0.74
     beta_b: 0.44
     eta: 0.003
-    K_v: 15000
-    r_v: 0.2286
+    K: 292870.0294 # from Toronto 20018 season fitting
+    K_s: 289323.6226
+    r: -0.015161776
+    r_s: -0.04379221728
+#     K_v: 15000
+#     r_v: 0.2286
+    rho: 0.0003
+    rho_s: 0.001
+    theta: 0.01
     nu_v: 0.10
-    nu_b: 0.20
+    nu_b: 0.20 #guess for now
   FIT: False
   FIT_PARAMS:
     nu_v:

@@ -6,6 +6,7 @@ in root configuration file.
 
 """
 
+import math
 import numpy as np
 import yaml
 import os
@@ -86,7 +87,7 @@ class VectorBorneDiseaseModel(ABC):
 #                              f' with {len(self.mosq)} days available')
 
         self.error_check_mosq_initial_states()
-        
+    
         #EXTRACT and CALCULATE model run times (moving this here for now instead of model_func() for new fitting method)
         self.t = (0, self.config_dict['DURATION'])
         #need to add the +1 to get the correct step size
@@ -126,7 +127,6 @@ class VectorBorneDiseaseModel(ABC):
     @abstractmethod
     def model_func(self, t, y):
         pass
-
 
     def calc_Ih_wnv(self, df, verbose = True):
         """Calcualtees Ih compartment using Poisson distribution for WNV"""
@@ -180,8 +180,12 @@ class VectorBorneDiseaseModel(ABC):
     
     def save_output(self, disease_name, sim_labels = False, data = None):
         """Save output to file"""
+#         self.df = pd.DataFrame(dict(zip(list(self.state_names_order.values()), self.model_output.T)))
+#         if disease_name == 'wnv':
+#             self.df = self.calc_Ih_wnv(self.df)
+#         self.df['Time'] = self.t_eval
         self.df['Time'] = self.t_eval
-        
+    
         if sim_labels == True:
             dict_keys = data.columns
             param_keys = [i for i in dict_keys if i in list(self.params.keys())]

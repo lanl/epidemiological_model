@@ -2,17 +2,17 @@
 # Vector Borne Disease Model Configuration #
 #------------------------------------------#
 
-PROJECT_ROOT: 'HUMAN_EPI_MODEL_PATH' # (e.g., '/Users/jkeithley/Documents/CIMMID/human/dengue_model/Epi_SEIR')
-LOGFILE_PATH: 'HUMAN_EPI_LOGS_PATH' # (e.g., '/Users/jkeithley/Documents/CIMMID/human/dengue_model/Epi_SEIR/logs') 
-INITIAL_STATES_FILE_PATH: 'HUMAN_EPI_MODEL_PATH/initial_states_input/initial_states.yaml' # (e.g., '/Users/jkeithley/Documents/CIMMID/human/dengue_model/Epi_SEIR/initial_states_input/initial_states.yaml')
-LLM_OUTPUT_DIR: 'HUMAN_EPI_MODEL_PATH/LLM_output'
-OUTPUT_DIR: 'HUMAN_EPI_MODEL_OUTPUT_PATH' # (e.g., '/Users/jkeithley/Documents/CIMMID/human/dengue_model/Epi_SEIR/human_model_output')
+PROJECT_ROOT: '.'
+LOGFILE_PATH: 'logs'
+INITIAL_STATES_FILE_PATH: 'initial_states_input/initial_states.yaml'
+LLM_OUTPUT_DIR: 'LLM_output'
+OUTPUT_DIR: 'human_model_output'
 
-# Add unit test specification?
-OUTPUT_TYPE: 'csv' # default is .parquet
+OUTPUT_TYPE: '.csv' # default is .parquet
 
 DURATION: 363 # number of days to run the model
 RESOLUTION: 1
+
 
 DATES:
   start1: '04-15'

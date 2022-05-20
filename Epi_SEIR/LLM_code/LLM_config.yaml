@@ -1,0 +1,26 @@
+#------------------------------------#
+# Logistic Link Model Configuration  #
+#------------------------------------#
+
+PROJECT_ROOT: '.'
+LOGFILE_PATH: 'logs'
+DATA_PATH: 'fit_data/MosqPBM_out_updated.csv'
+OUTPUT_DIR: 'fit_output'
+
+DATES:
+  start1: '04-01'
+  start2: '06-01'
+  end1: '09-01' 
+  end2: '11-01' 
+  start_year: '2005'
+  end_year: '2019'
+    
+POPULATION:
+  location: 'Toronto'
+  type: 'Total'
+  
+DATA_COL_NAMES:
+  location: 'location'
+  date: 'date'
+  total_mosq: 'TotMosq'
+  active_mosq: 'modeled.mosq'

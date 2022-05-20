@@ -54,7 +54,7 @@ WNV:
     position: 2
   Sb:
     name: 'Susceptible Birds'
-    value: 500
+    value: 1000
     position: 3
   Eb:
     name: 'Exposed Birds'
