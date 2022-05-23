@@ -48,12 +48,12 @@ class WNVSEIRModel(fit.FitModel):
     def _population_sizes(self):
         """Calculates population sizes of human and vector compartments"""
         self.Nv = sum([self.states['Sv'], self.states['Ev'], self.states['Iv']])
-        self.Nb = sum([self.states['Sb'], self.states['Eb'], self.states['Ib'], self.states['Rb']])
+        self.Nb = sum([self.states['Sb'], self.states['Eb'], self.states['Ib'], self.params['m'] * self.states['Rb']])
 
     def _force_of_infection(self):
         """Calculates force of infection"""
-        self.lambda_v = self.params['alpha_v']*self.params['beta_b']/self.Nb
-        self.lambda_b = self.params['alpha_b']*self.params['beta_b']/self.Nb
+        self.lambda_v = self.params['beta_v']*self.params['alpha']/self.Nb
+        self.lambda_b = self.params['beta_b']*self.params['alpha']/self.Nb
     
     def _mosq_population_values(self, t):
         self.K_v = self.params['K'] + self.params['K_s'] * math.cos((2 * math.pi / 365) * t)
@@ -64,11 +64,7 @@ class WNVSEIRModel(fit.FitModel):
 
     def _birth_rate(self):
         """Caclualtes vector natural birth rate"""
-        self.psi_v = self.r_v + self.params['mu_v']
-        
-#     def _birth_rate(self):
-#         """Caclualtes vector natural birth rate"""
-#         self.psi_v = self.params['r_v'] + self.params['mu_v']
+        self.psi_v = self.r_v + self.params['mu_v']   
 
     def model_func(self, t, y):
         """Defines system of ODEs for dengue model
@@ -88,11 +84,11 @@ class WNVSEIRModel(fit.FitModel):
         Parameters:
             mu_v: Vector death rate.\n
             mu_b: Bird natural death rate. \n
-            beta_b: Biting rate under frequency dependence. \n
-            alpha_v: Probability of virus transmission to vector, per infectious bite.\n
-            alpha_b: Probability of virus transmission to bird, per infectious bit.\n
+            alpha: Biting rate under frequency dependence. \n
+            beta_v: Probability of virus transmission to vector, per infectious bite.\n
+            beta_b: Probability of virus transmission to bird, per infectious bit.\n
             psi_v: Vector birth rate. \n
-            psi_b: bird recruitment rate
+            psi_b: bird recruitment rate. \n
             K_v: Vector carrying capacity.\n
             r_v: Vector growth rate.\n
             lambda_v: vector force of infection. \n
@@ -100,7 +96,8 @@ class WNVSEIRModel(fit.FitModel):
             nu_v: Vector latent period. \n
             nu_b: Bird latent period. \n
             gamma_b: Bird recovery rate. \n
-            eta: Contact rate * probability of transmission to humans
+            eta: Contact rate * probability of transmission to humans. \n
+            m: Proportion of recovered birds that survived the WNV infection.
 
 
         """
@@ -140,7 +137,8 @@ class WNVSEIRModel(fit.FitModel):
         ddt['Ib'] = self.params['nu_b'] * self.states['Eb'] - \
             self.params['gamma_b'] * self.states['Ib'] - \
             self.params['mu_b'] * self.states['Ib'] 
-        ddt['Rb'] = self.params['gamma_b'] * self.states['Ib'] 
+        ddt['Rb'] = self.params['gamma_b'] * self.states['Ib'] - \
+            self.params['mu_b'] * self.states['Rb']
 
         return tuple(ddt.values())
     
@@ -153,18 +151,12 @@ class WNVSEIRModel(fit.FitModel):
 
         # EXTRACT list of position
         try:
-            if sum([self.initial_states['Sb'], self.initial_states['Eb'], self.initial_states['Ib'], self.initial_states['Rb']]) == 0:
+            if sum([self.initial_states['Sb'], self.initial_states['Eb'], self.initial_states['Ib'], self.params['m'] * self.initial_states['Rb']]) == 0:
                 raise ValueError('Bird population size cannot be zero')
         except ValueError as e:
             self.logger.exception('Bird population size cannot be zero')
             raise e
 
-#         try:
-#             if self.params['K_v'] == 0:
-#                 raise ValueError('Vector carry capacity cannot be zero')
-#         except ValueError as e:
-#             self.logger.exception('Vector carry capacity cannot be zero')
-#             raise e
     
     def error_zero_to_one_params(self):
         """check if parameters that should be in [0,1] are
@@ -198,7 +190,7 @@ class WNVSEIRModel(fit.FitModel):
             raise e
         
         try:
-            if self.params['beta_b'] < 0 or self.params['beta_b'] > 1:
+            if self.params['alpha'] < 0 or self.params['beta_b'] > 1:
                 raise ValueError('beta_b must be in [0,1]')
         except ValueError as e:
             self.logger.exception('beta_b must be in [0,1]')
