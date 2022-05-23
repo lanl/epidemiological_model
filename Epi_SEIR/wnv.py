@@ -190,10 +190,10 @@ class WNVSEIRModel(fit.FitModel):
             raise e
         
         try:
-            if self.params['alpha'] < 0 or self.params['beta_b'] > 1:
-                raise ValueError('beta_b must be in [0,1]')
+            if self.params['alpha'] < 0 or self.params['alpha'] > 1:
+                raise ValueError('alpha must be in [0,1]')
         except ValueError as e:
-            self.logger.exception('beta_b must be in [0,1]')
+            self.logger.exception('alpha must be in [0,1]')
             raise e
             
         try:

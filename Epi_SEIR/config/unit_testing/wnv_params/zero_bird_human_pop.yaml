@@ -45,14 +45,21 @@ WNV:
   PARAMETERS:
     mu_v: 0.06
     mu_b: 0.004
-    alpha_v: 0.69
-    alpha_b: 0.74
-    beta_b: 0.44
+    gamma_b: 0.2 #guess for now
+    beta_v: 0.69
+    beta_b: 0.74
+    alpha: 0.44
     eta: 0.003
-    K_v: 15000
-    r_v: 0.2286
+    K: 292870.0294 # from Toronto 2018 season fitting
+    K_s: 289323.6226
+    r: -0.015161776
+    r_s: -0.04379221728
+    rho: 0.003
+    rho_s: 0.001
+    theta: 0.05
     nu_v: 0.10
-    nu_b: 0.20
+    nu_b: 0.20 #guess for now
+    m: 0.80 #guess for now
   FIT: False
   FIT_PARAMS:
     nu_v:
