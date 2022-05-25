@@ -11,7 +11,7 @@ OUTPUT_DIR: 'human_model_output'
 
 OUTPUT_TYPE: '.csv' # default is .parquet
 
-DURATION: 398 # number of days to run the model
+DURATION: 170 # number of days to run the model
 RESOLUTION: 1
 
 DENGUE:
@@ -26,27 +26,27 @@ DENGUE:
     sigma_v: 0.5
     beta_h: 0.33
     beta_v: 0.33
-    r: 0.0087 #all these values are from Toronto 2014 fits
-    K: 328948.585
-    r_s: -0.0267
-    K_s: 323830.319
+    K: 292870.0294 # from Toronto 2018 season fitting
+    K_s: 289323.6226
+    r: -0.015161776
+    r_s: -0.04379221728
     alpha_h: 0.00011 #just a guess, this means they could be reinfected 25 years later 
   FIT: True
   FIT_METHOD: 'nbinom' #can be pois, nbinom, norm
-  DISPERSION: 0.0001
+  DISPERSION: 0.1
   CALC_CI: True
   FIT_PARAMS:
     beta_v:
       min: 0
       max: 1
-      proflike: 0.1
+      proflike: 0.3
     dispersion:
       min: 0.00001
-      max: 100
-      proflike: .9
+      max: 10
+      proflike: 3.9
 #data needs to be in exact formatting to compare to a given compartment
   FIT_DATA: 
-    PATH: ['fit_data/old/dengue_sim_data3.csv']
+    PATH: ['fit_data/old/dengue_sim_data.csv']
     res: ['weekly'] #can be weekly or daily, regardless set resolution to 1
     compartment: ['Dh']
     

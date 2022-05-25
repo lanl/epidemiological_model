@@ -235,8 +235,10 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
     
     #not going to add the specifics of the numbers calculated within the range to the config file at the moment 
     #need to make sure below is within the min/max range listed in the config file
-    def _calc_param_range(self, param, perc = .01, num = 10):
+    def _calc_param_range(self, param, perc = .01, num = 20):
         param_seq = np.linspace((1-perc)*param, (1 + perc)*param, 2*num)
+        #check so that we will never go below zero even if we need a large range
+        param_seq = [k for k in param_seq if k > 0]
         return param_seq
         
     def proflike(self, disease_name):
@@ -293,7 +295,6 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
             
             df = pd.DataFrame({k:param_seq, 'nll': nll, 'success': fit_success})
             self.df_list.append(df)
-        #return self.df_list
     
     def plot_proflike(self):
         for i in range(1, len(self.df_list)):
@@ -313,13 +314,18 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
             
             lowess_x = list(zip(*lowess))[0]
             lowess_y = list(zip(*lowess))[1]
-
-            f = interp1d(lowess_x, lowess_y, bounds_error=False)
-            f_thresh = lambda x: f(x) - self.df_list[0]
-
-            #five makes it a slightly arbitrary guess but not terrible since there are currently 20 points being ran
-            lb = newton(f_thresh, self.df_list[i + 1][self.fit_params[i]][5])
-            ub = newton(f_thresh, self.df_list[i + 1][self.fit_params[i]][len(self.df_list[i + 1]) - 5])
+            
+            lowess_x_l = lowess_x[0:round(len(lowess_x)/2)]
+            lowess_y_l = lowess_y[0:round(len(lowess_y)/2)]
+            
+            lowess_x_u = lowess_x[round(len(lowess_x)/2):len(lowess_x)]
+            lowess_y_u = lowess_y[round(len(lowess_y)/2):len(lowess_y)]
+            
+            f_l = interp1d(lowess_y_l, lowess_x_l, bounds_error=False)
+            f_u = interp1d(lowess_y_u, lowess_x_u, bounds_error=False)
+            
+            lb = f_l(self.df_list[0])
+            ub = f_u(self.df_list[0])
             
             self.CI_list.append({'lb':lb, 'ub':ub})
         

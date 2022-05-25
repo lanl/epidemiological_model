@@ -1,16 +1,13 @@
 [[Fit Statistics]]
-    # fitting method   = leastsq
-    # function evals   = 4338
-    # data points      = 52
-    # variables        = 3
-    chi-square         = 3.3663e+09
-    reduced chi-square = 68700949.0
-    Akaike info crit   = 941.264208
-    Bayesian info crit = 947.117939
+    # fitting method   = Nelder-Mead
+    # function evals   = 66
+    # data points      = 1
+    # variables        = 2
+    chi-square         = 3186.78462
+    reduced chi-square = 3186.78462
+    Akaike info crit   = 12.0667677
+    Bayesian info crit = 8.06676773
 ##  Warning: uncertainties could not be estimated:
-    gamma_h:  at boundary
-    Sv:       at boundary
 [[Variables]]
-    nu_h:     0.09037914 (init = 0.106)
-    gamma_h:  0.08000000 (init = 0.167)
-    Sv:       59999909.2 (init = 5e+07)
+    beta_v:      0.37732733 (init = 0.33)
+    dispersion:  0.20041895 (init = 0.1)
