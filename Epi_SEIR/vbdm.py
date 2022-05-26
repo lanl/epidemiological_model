@@ -101,10 +101,14 @@ class VectorBorneDiseaseModel(ABC):
         dict_keys = list(param_dict.keys())
         param_keys = [i for i in dict_keys if i in list(obj.params.keys())]
         init_keys = [i for i in dict_keys if i in list(obj.initial_states.keys())]
+        dispersion = [i for i in dict_keys if i == 'dispersion']
         for k in param_keys:
             obj.params[k] = param_dict[k]
         for j in init_keys:
             obj.initial_states[j] = param_dict[j]
+        if len(dispersion) != 0:
+            obj.dispersion = param_dict['dispersion']
+            
             
         obj.logger.info(f"\n\nParameters and/or initial states changed: {param_dict}\n")
         return obj
@@ -405,7 +409,7 @@ class VectorBorneDiseaseModel(ABC):
         constants = {**self.params, **self.initial_states}
         
         try:
-            if len([x for x in list(param_dict.keys()) if x in list(constants.keys())]) != len(list(param_dict.keys())):
+            if len([x for x in list(param_dict.keys()) if ((x in list(constants.keys())) | (x == 'dispersion'))]) != len(list(param_dict.keys())):
                 raise ValueError('Parameter dictionary names do not match model parameter names')
         except ValueError as e:
             self.logger.exception('Parameter dictionary names do not match model parameter names')
