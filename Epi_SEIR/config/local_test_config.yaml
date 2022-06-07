@@ -11,7 +11,7 @@ OUTPUT_DIR: 'human_model_output'
 
 OUTPUT_TYPE: '.csv' # default is .parquet
 
-DURATION: 170 # number of days to run the model
+DURATION: 170 # number of days to run the model (need 170 to do dengue fitting)
 RESOLUTION: 1
 
 DENGUE:
@@ -26,10 +26,10 @@ DENGUE:
     sigma_v: 0.5
     beta_h: 0.33
     beta_v: 0.33
-    K: 292870.0294 # from Toronto 2018 season fitting
-    K_s: 289323.6226
-    r: -0.015161776
-    r_s: -0.04379221728
+    K: 16602.67751 # from Toronto 2018 new season fitting
+    K_s: 10897.56034
+    r: 0.01289681279
+    r_s: -0.1546516224
     alpha_h: 0.00011 #just a guess, this means they could be reinfected 25 years later 
   FIT: True
   FIT_METHOD: 'nbinom' #can be pois, nbinom, norm
@@ -56,16 +56,16 @@ WNV:
     mu_b: 0.004
     gamma_b: 0.2 #guess for now
     beta_v: 0.69
-    beta_b: 0.74
-    alpha: 0.44
+    beta_b: 0.6 #makte this smaller for now
+    alpha: 0.41 #make this smaller for now
     eta: 0.003
-    K: 292870.0294 # from Toronto 2018 season fitting
-    K_s: 289323.6226
-    r: -0.015161776
-    r_s: -0.04379221728
+    K: 16602.67751 # from Toronto 2018 new season fitting
+    K_s: 10897.56034
+    r: 0.01289681279
+    r_s: -0.1546516224
     rho: 0.003
     rho_s: 0.001
-    theta: 0.05
+    theta: 0.009
     nu_v: 0.10
     nu_b: 0.20 #guess for now
     m: 0.80 #guess for now
