@@ -13,6 +13,7 @@ import yaml
 import pandas as pd
 import matplotlib.pyplot as plt
 import statsmodels.api as sm
+import datetime
 
 from scipy.integrate import solve_ivp
 from lmfit import Parameters, minimize, fit_report
@@ -136,6 +137,21 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
                 #drop nas in the compartment - mainly to drop the first obs if we are fitting daily cases
                 prep_df = self.df.copy()
                 prep_df = prep_df[prep_df[compartment].isna() == False].reset_index(drop = True)
+                if type(res) == dict:
+                    start = res['monthly']
+                    end = datetime.datetime.strptime(start, "%Y-%m-%d") + datetime.timedelta(days=self.config_dict['DURATION'])
+                    prep_df['date'] = pd.date_range(start=start,end=end).to_pydatetime().tolist()
+                    prep_df.set_index('date', inplace=True)
+                    if compartment == 'Dh':
+                        week_agg = prep_df.resample('MS').sum().reset_index(drop = True)
+                        if datetime.datetime.strptime(start, "%Y-%m-%d").day != 1:
+                            week_agg = week_agg.loc[1:,]
+                        out = week_agg[compartment]
+                    else:
+                        select_dates = [k for k in prep_df['date'] if k.day == 1]
+                        week_out = prep_df.iloc[::7, :].reset_index()
+                        out = week_out[compartment]
+                    
                 if res == "weekly":
                     if compartment == 'Dh':
                         week_agg = prep_df.groupby(prep_df.index // 7).sum()

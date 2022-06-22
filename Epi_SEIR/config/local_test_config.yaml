@@ -11,7 +11,8 @@ OUTPUT_DIR: 'human_model_output'
 
 OUTPUT_TYPE: '.csv' # default is .parquet
 
-DURATION: 170 # number of days to run the model (need 170 to do dengue fitting)
+#DURATION: 170 # number of days to run the model (need 170 to do dengue fitting)
+DURATION: 167
 RESOLUTION: 1
 
 DENGUE:
@@ -83,5 +84,5 @@ WNV:
 #data needs to be in exact formatting to compare to a given compartment
   FIT_DATA: 
     PATH: ['fit_data/old/Toronto_totmosq_2004.csv']
-    res: ['daily'] #can be weekly or daily, regardless set resolution to 1
+    res: [{'monthly':'2018-05-17'}] #can be weekly or daily, regardless set resolution to 1
     compartment: ['Sv']
