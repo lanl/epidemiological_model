@@ -136,19 +136,21 @@ class VectorBorneDiseaseModel(ABC):
         """Calcualtees Ih compartment using Poisson distribution for WNV"""
         rng = np.random.default_rng()
         if verbose == True:
-            try:
-                df['Infected Humans'] = rng.poisson(lam=self.params['eta'] * df['Infected Vectors'])
-            except ValueError:
-                self.logger.exception(f"Used Normal distribution, lam = {np.trunc(self.params['eta']*df['Infected Vectors'])}")
-                #added an absolute value around the sd in the normal so we never have sd < 0
-                df['Infected Humans'] = [math.trunc(k) for k in rng.normal(loc = self.params['eta']*df['Infected Vectors'], scale = np.sqrt(abs(self.params['eta']*df['Infected Vectors'])))]
+            df['Infected Humans'] = self.params['eta'] * df['Infected Vectors']
+#             try:
+#                 df['Infected Humans'] = rng.poisson(lam=self.params['eta'] * df['Infected Vectors'])
+#             except ValueError:
+#                 self.logger.exception(f"Used Normal distribution, lam = {np.trunc(self.params['eta']*df['Infected Vectors'])}")
+#                 #added an absolute value around the sd in the normal so we never have sd < 0
+#                 df['Infected Humans'] = [math.trunc(k) for k in rng.normal(loc = self.params['eta']*df['Infected Vectors'], scale = np.sqrt(abs(self.params['eta']*df['Infected Vectors'])))]
         elif verbose == False:
-            try:
-                df['Ih'] = rng.poisson(lam=self.params['eta'] * df['Iv'])
-            except ValueError:
-                self.logger.exception(f"Used Normal distribution, lam = {np.trunc(self.params['eta']*df['Iv'])}")
-                #added an absolute value around the sd in the normal so we never have sd < 0
-                df['Ih'] = [math.trunc(k) for k in rng.normal(loc = self.params['eta']*df['Iv'], scale = np.sqrt(abs(self.params['eta']*df['Iv'])))]
+            df['Ih'] = self.params['eta'] * df['Iv']
+#             try:
+#                 df['Ih'] = rng.poisson(lam=self.params['eta'] * df['Iv'])
+#             except ValueError:
+#                 self.logger.exception(f"Used Normal distribution, lam = {np.trunc(self.params['eta']*df['Iv'])}")
+#                 #added an absolute value around the sd in the normal so we never have sd < 0
+#                 df['Ih'] = [math.trunc(k) for k in rng.normal(loc = self.params['eta']*df['Iv'], scale = np.sqrt(abs(self.params['eta']*df['Iv'])))]
         return df
     
     def calc_Dh(self, df):

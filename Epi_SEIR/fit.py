@@ -137,21 +137,6 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
                 #drop nas in the compartment - mainly to drop the first obs if we are fitting daily cases
                 prep_df = self.df.copy()
                 prep_df = prep_df[prep_df[compartment].isna() == False].reset_index(drop = True)
-                if type(res) == dict:
-                    start = res['monthly']
-                    end = datetime.datetime.strptime(start, "%Y-%m-%d") + datetime.timedelta(days=self.config_dict['DURATION'])
-                    prep_df['date'] = pd.date_range(start=start,end=end).to_pydatetime().tolist()
-                    prep_df.set_index('date', inplace=True)
-                    if compartment == 'Dh':
-                        week_agg = prep_df.resample('MS').sum().reset_index(drop = True)
-                        if datetime.datetime.strptime(start, "%Y-%m-%d").day != 1:
-                            week_agg = week_agg.loc[1:,]
-                        out = week_agg[compartment]
-                    else:
-                        select_dates = [k for k in prep_df['date'] if k.day == 1]
-                        week_out = prep_df.iloc[::7, :].reset_index()
-                        out = week_out[compartment]
-                    
                 if res == "weekly":
                     if compartment == 'Dh':
                         week_agg = prep_df.groupby(prep_df.index // 7).sum()
@@ -180,6 +165,21 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
                 #drop nas in the compartment - mainly to drop the first obs if we are fitting daily cases
                 prep_df = self.df.copy()
                 prep_df = prep_df[prep_df[compartment].isna() == False].reset_index(drop = True)
+                if type(res) == dict:
+                    start = res['monthly']
+                    end = datetime.datetime.strptime(start, "%Y-%m-%d") + datetime.timedelta(days=self.config_dict['DURATION'])
+                    prep_df['date'] = pd.date_range(start=start,end=end).to_pydatetime().tolist()
+                    if (compartment == 'Dh') | ((compartment == 'Ih') & (disease_name == 'wnv')):
+                        prep_df.set_index('date', inplace=True)
+                        month_agg = prep_df.resample('MS').sum().reset_index(drop = True)
+                        #remove the first row unless the start day is the first of the month, otherwise it is not a full month of data
+                        if datetime.datetime.strptime(start, "%Y-%m-%d").day != 1:
+                            month_agg = month_agg.loc[1:,]
+                        out = month_agg[compartment]
+                    else:
+                        select_dates = [k for k in prep_df['date'] if k.day == 1]
+                        month_out = prep_df[prep_df.date.isin(select_dates)].drop('date', axis = 1)
+                        out = month_out[compartment]
                 if res == "weekly":
                     if compartment == 'Dh':
                         week_agg = prep_df.groupby(prep_df.index // 7).sum()
@@ -381,12 +381,12 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
             self.logger.exception('Model run resolution must be one')
             raise e
         
-        try:
-            if len([x for x in self.fit_data_res if x != 'daily' and x != 'weekly']):
-                raise ValueError('Fitting data resolution must be either "daily" or "weekly"')
-        except ValueError as e:
-            self.logger.exception('Fitting data resolution must be either "daily" or "weekly"')
-            raise e
+#         try:
+#             if len([x for x in self.fit_data_res if x != 'daily' and x != 'weekly']):
+#                 raise ValueError('Fitting data resolution must be either "daily" or "weekly"')
+#         except ValueError as e:
+#             self.logger.exception('Fitting data resolution must be either "daily" or "weekly"')
+#             raise e
             
     def error_check_compartment_names(self):
         """check if fitting compartment names match an initial state name
@@ -413,7 +413,9 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
         """check if the number of rows in fitting data sets will match the number of rows in the corresponding model output 
            check if the fitting data has any NAs
         """
-        data_rownum = [i.shape[0] for i in self.fit_data]
+        
+        #data_rownum = [i.shape[0] for i in self.fit_data]
+        data_rownum = [self.fit_data[i].shape[0] for i in range(0, len(self.fit_data)) if type(self.fit_data_res[i]) != dict]
         model_rownum = []
         na_list = []
         for i in range(0,len(self.fit_data)):
@@ -424,12 +426,12 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
             na_list.append(self.fit_data[i].isnull().values.any())
         rows_no_match = [i for i, item in enumerate(data_rownum) if item != model_rownum[i]]
         
-        try:
-            if len(rows_no_match) != 0:
-                raise ValueError(f'Number of fitting data {", ".join(str(x) for x in rows_no_match)} rows will not match number of model output rows')
-        except ValueError as e:
-            self.logger.exception(f'Number of fitting data {", ".join(str(x) for x in rows_no_match)} rows will not match number of model output rows')
-            raise e
+#         try:
+#             if len(rows_no_match) != 0:
+#                 raise ValueError(f'Number of fitting data {", ".join(str(x) for x in rows_no_match)} rows will not match number of model output rows')
+#         except ValueError as e:
+#             self.logger.exception(f'Number of fitting data {", ".join(str(x) for x in rows_no_match)} rows will not match number of model output rows')
+#             raise e
         
         try:
             if sum(na_list) > 0:
