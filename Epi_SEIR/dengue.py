@@ -143,7 +143,8 @@ class DengueSEIRModel(fit.FitModel):
         
         # Find hNv value
         self._calc_hNv()
-
+        print(t)
+        
         # System of equations
         ddt['Sh'] = self.params['psi_h'] * self.H0 - \
             self.lambda_h * self.states['Sh'] + \
