@@ -13,7 +13,7 @@ import pickle
 import yaml
 
 def sine(x):
-    return math.sin(x)
+    return math.sin(x) + 1.2
 
 def main():
     with open('config/local_timedeptest_config.yaml', 'r') as in_file:
