@@ -16,7 +16,6 @@ RESOLUTION: 1
 
 DENGUE:
   PARAMETERS:
-    biting_rate: 'parameters/test_spline.pkl'
     psi_h: 0.0000391
     nu_h: 0.164 
     nu_v: 0.0667 #25C values 
