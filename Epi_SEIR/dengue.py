@@ -19,6 +19,8 @@ from utils import create_logger
 import sys
 import math
 import fit
+import pickle
+from scipy.interpolate import splev
 
 class DengueSEIRModel(fit.FitModel):
 
@@ -35,6 +37,16 @@ class DengueSEIRModel(fit.FitModel):
             self.logger.disabled = True
         
         super().__init__(config_file, 'DENGUE')
+
+        # Read in time dependent parameter splines
+        try:
+            with open(self.config_dict['DENGUE']['PARAMETERS']['biting_rate'], "rb") as file:
+                self.biting_rate = pickle.load(file)
+        except FileNotFoundError as e:
+            self.logger.exception('Biting rate parameter spline file not found.')
+            raise e
+        else:
+            self.logger.info('Biting rate parameter spline file successfully opened.')
         
         self.error_zero_constants()
         self.error_zero_to_one_params()
@@ -50,9 +62,13 @@ class DengueSEIRModel(fit.FitModel):
         self.Nv = sum([self.states['Sv'], self.states['Ev'], self.states['Iv']])
     
     def _biting_rate(self):
-        """Calculates biting rate"""
-        self.b = self.params['sigma_h'] * self.params['sigma_v'] / \
-            (self.params['sigma_h'] * self.Nh + self.params['sigma_v'] * self.Nv)
+        """Calculates biting rate DEPRECATED"""
+        # evaluate a spline in main function. make spline a class attribute read in from a
+        # .pkl
+
+        # OLD TWO LINES
+        #self.b = self.params['sigma_h'] * self.params['sigma_v'] / \
+        #    (self.params['sigma_h'] * self.Nh + self.params['sigma_v'] * self.Nv)
     
     def _force_of_infection(self):
         """Calculates force of infection"""
@@ -127,7 +143,8 @@ class DengueSEIRModel(fit.FitModel):
         self._population_sizes()
 
         # Find biting rate
-        self._biting_rate()
+        #self._biting_rate()
+        self.b = splev([t], self.biting_rate)[0]
 
         # Find force of infection
         self._force_of_infection()
@@ -143,7 +160,6 @@ class DengueSEIRModel(fit.FitModel):
         
         # Find hNv value
         self._calc_hNv()
-        print(t)
         
         # System of equations
         ddt['Sh'] = self.params['psi_h'] * self.H0 - \
