@@ -40,7 +40,8 @@ class DengueSEIRModel(fit.FitModel):
 
         # Read in time dependent parameter splines
         try:
-            with open(self.config_dict['DENGUE']['PARAMETERS']['biting_rate'], "rb") as file:
+            #with open(self.config_dict['DENGUE']['PARAMETERS']['biting_rate'], "rb") as file:
+            with open('parameters/test_spline.pkl', "rb") as file:
                 self.biting_rate = pickle.load(file)
         except FileNotFoundError as e:
             self.logger.exception('Biting rate parameter spline file not found.')
