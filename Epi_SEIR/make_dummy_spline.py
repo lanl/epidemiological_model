@@ -1,5 +1,3 @@
-
-
 """NOT PART OF MAIN MODEL: FOR TESTING PURPOSES ONLY
 produces a dummy spline for testing time-dependent parameter capability in
 model run
