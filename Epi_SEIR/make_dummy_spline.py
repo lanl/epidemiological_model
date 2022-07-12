@@ -4,14 +4,14 @@ model run
 """
 
 from numpy import linspace
-from scipy.interpolate import splrep, splev
+from scipy.interpolate import CubicSpline
 import math
 import numpy as np
 import pickle
 import yaml
 
 def sine(x):
-    return math.sin(x) + 1.2
+    return 0.0002 * math.sin(x/0.0004) + 0.0014
 
 def main():
     with open('config/local_timedeptest_config.yaml', 'r') as in_file:
@@ -28,11 +28,13 @@ def main():
     knots = list(linspace(0, duration, number_knots+2))
     knots.remove(0)
     knots.remove(duration)
+    print('x:', x)
+    print('y:', y)
 
-    spl = splrep(x, y, k=3, t=knots)
+    spl = CubicSpline(x, y)
     
     # evaluate spline at time step 4.1
-    #print(splev([4.1], spl)[0])
+    #print(spl([4.1])[0])
 
     pickle.dump(spl, open("parameters/test_spline.pkl", "wb"))
     

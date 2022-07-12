@@ -20,7 +20,8 @@ import sys
 import math
 import fit
 import pickle
-from scipy.interpolate import splev
+# This package needed if using scipy.interpolate.splrep to define spline
+#from scipy.interpolate import splev
 
 class DengueSEIRModel(fit.FitModel):
 
@@ -145,7 +146,9 @@ class DengueSEIRModel(fit.FitModel):
 
         # Find biting rate
         #self._biting_rate()
-        self.b = splev([t], self.biting_rate)[0]
+        #self.b = splev([t], self.biting_rate)[0]
+        self.b = self.biting_rate([t])[0]
+        print(self.b)
 
         # Find force of infection
         self._force_of_infection()

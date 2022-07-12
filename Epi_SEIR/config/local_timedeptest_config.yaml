@@ -45,6 +45,13 @@ DENGUE:
       min: 0.00001
       max: 10
       proflike: 3.9
+  TIMEDEP_FIT_PARAMS:
+    biting_rate:
+      initial_guess: 0.0014
+      min: 0
+      max: 100
+      num_points: 3
+      proflike: 40
 #data needs to be in exact formatting to compare to a given compartment
   FIT_DATA: 
     PATH: ['fit_data/old/dengue_sim_data.csv']
