@@ -20,6 +20,8 @@ import sys
 import math
 import fit
 import pickle
+import numpy as np
+from scipy.interpolate import CubicSpline
 # This package needed if using scipy.interpolate.splrep to define spline
 #from scipy.interpolate import splev
 
@@ -39,16 +41,21 @@ class DengueSEIRModel(fit.FitModel):
         
         super().__init__(config_file, 'DENGUE')
 
+        # Define constant spline that is equivalent to fixed parameter when fitting process is not used
+        self.params['biting_rate'] = CubicSpline(np.linspace(0, self.config_dict['DURATION'], 3), self.params['biting_rate']*np.ones(3))
+
+        # This block shall be used when spline as file read in. After fitting, store in best guess?
+        # How to handle when we are just running model without best guess? 
         # Read in time dependent parameter splines
-        try:
-            #with open(self.config_dict['DENGUE']['PARAMETERS']['biting_rate'], "rb") as file:
-            with open('parameters/test_spline.pkl', "rb") as file:
-                self.biting_rate = pickle.load(file)
-        except FileNotFoundError as e:
-            self.logger.exception('Biting rate parameter spline file not found.')
-            raise e
-        else:
-            self.logger.info('Biting rate parameter spline file successfully opened.')
+        #try:
+        #    #with open(self.config_dict['DENGUE']['PARAMETERS']['biting_rate'], "rb") as file:
+        #    with open('parameters/test_spline.pkl', "rb") as file:
+        #        self.biting_rate = pickle.load(file)
+        #except FileNotFoundError as e:
+        #    self.logger.exception('Biting rate parameter spline file not found.')
+        #    raise e
+        #else:
+        #    self.logger.info('Biting rate parameter spline file successfully opened.')
         
         self.error_zero_constants()
         self.error_zero_to_one_params()
@@ -147,8 +154,10 @@ class DengueSEIRModel(fit.FitModel):
         # Find biting rate
         #self._biting_rate()
         #self.b = splev([t], self.biting_rate)[0]
-        self.b = self.biting_rate([t])[0]
+        self.b = self.params['biting_rate']([t])[0]
         print(self.b)
+        if self.b < 0:
+            exit()
 
         # Find force of infection
         self._force_of_infection()

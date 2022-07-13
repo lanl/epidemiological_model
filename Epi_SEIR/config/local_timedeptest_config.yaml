@@ -16,7 +16,8 @@ RESOLUTION: 1
 
 DENGUE:
   PARAMETERS:
-    biting_rate: 'parameters/test_spline.pkl' #DUMMY SPLINE, NOT FOR REAL MODEL
+    biting_rate: 0.0014
+    #biting_rate: 'parameters/test_spline.pkl' #DUMMY SPLINE, NOT FOR REAL MODEL
     psi_h: 0.0000391
     nu_h: 0.164 
     nu_v: 0.0667 #25C values 
@@ -47,7 +48,7 @@ DENGUE:
       proflike: 3.9
   TIMEDEP_FIT_PARAMS:
     biting_rate:
-      initial_guess: 0.0014
+      initial: 0.0014
       min: 0
       max: 100
       num_points: 3
