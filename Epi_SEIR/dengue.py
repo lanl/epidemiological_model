@@ -157,6 +157,7 @@ class DengueSEIRModel(fit.FitModel):
         self.b = self.params['biting_rate']([t])[0]
         print(self.b)
         if self.b < 0:
+            print('damn, biting rate went negative :(')
             exit()
 
         # Find force of infection

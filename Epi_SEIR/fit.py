@@ -99,9 +99,6 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
                 for i in range(self.timedep_fit_params_range[k]['num_points']):
                     params_obj.add(f'{k}{i}', value = self.timedep_fit_params_range[k]['initial'], min = self.timedep_fit_params_range[k]['min'], max = self.timedep_fit_params_range[k]['max'])
 
-            # TODO remove
-            #params_obj.pretty_print()
-
             return(params_obj)
     
     #adding this for the proflikelihood calculation
@@ -144,8 +141,8 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
                 y.append(params_fit[f'{k}{i}'].value)
             spl = CubicSpline(np.linspace(0, self.config_dict['DURATION'], self.timedep_fit_params_range[k]['num_points']), y)
             self.params[k] = spl
-            # TODO graph spline to see what it looks like
 
+            # TODO graph spline to see what it looks like
             # Begin temp graphing
             plt.plot(x, spl(x), 'o', x, y)
             plt.title('temp graph')
