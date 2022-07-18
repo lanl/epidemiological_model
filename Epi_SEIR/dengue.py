@@ -41,6 +41,7 @@ class DengueSEIRModel(fit.FitModel):
         
         super().__init__(config_file, 'DENGUE')
 
+        # TODO code review
         # Define constant spline that is equivalent to fixed parameter when fitting process is not used
         self.params['biting_rate'] = CubicSpline(np.linspace(0, self.config_dict['DURATION'], 3), self.params['biting_rate']*np.ones(3))
 
@@ -154,7 +155,7 @@ class DengueSEIRModel(fit.FitModel):
         # Find biting rate
         #self._biting_rate()
         #self.b = splev([t], self.biting_rate)[0]
-        self.b = self.params['biting_rate']([t])[0]
+        self.b = self.params['biting_rate']([t])[0] # TODO code review
         print(self.b)
         if self.b < 0:
             print('damn, biting rate went negative :(')

@@ -48,12 +48,12 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
     
         if self.config_dict[disease_name]['FIT'] == True:
             self.fit_params = list(self.config_dict[disease_name]['FIT_PARAMS'].keys())
-            self.timedep_fit_params = list(self.config_dict[disease_name]['TIMEDEP_FIT_PARAMS'].keys())
+            self.timedep_fit_params = list(self.config_dict[disease_name]['TIMEDEP_FIT_PARAMS'].keys()) # TODO code review
             self.fit_method = self.config_dict[disease_name]['FIT_METHOD']
             self.calc_ci_bool = self.config_dict[disease_name]['CALC_CI']
             self.dispersion = self.config_dict[disease_name]['DISPERSION']
             self.fit_params_range = self.config_dict[disease_name]['FIT_PARAMS']
-            self.timedep_fit_params_range = self.config_dict[disease_name]['TIMEDEP_FIT_PARAMS']
+            self.timedep_fit_params_range = self.config_dict[disease_name]['TIMEDEP_FIT_PARAMS'] # TODO code review
             self.fit_data_res = self.config_dict[disease_name]['FIT_DATA']['res']
             self.fit_data_compartment = self.config_dict[disease_name]['FIT_DATA']['compartment']
             self.fit_data = []
