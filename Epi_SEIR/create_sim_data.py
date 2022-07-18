@@ -25,10 +25,11 @@ n =  week_out['Dh'] **2 / (sigma_squared -  week_out['Dh'])
 sim_noise = [np.random.negative_binomial(4.0,k) for k in p]
         
 #plot to see what the simulated data looks like
-week_out['Time'] = self.t_eval[::7][1:len(self.t_eval)]
+week_out['Time'] = self.t_eval[::7][0:len(self.t_eval)]
 plt.plot(week_out['Time'], sim_noise, 'ro', label=f'sim data')
 plt.plot(week_out['Time'], week_out['Dh'], 'b-', label= f'model')
 plt.legend(loc='best')
+plt.show()
 
-sim_noise = pd.DataFrame({'Dh': sim_noise_newmod})
+#sim_noise = pd.DataFrame({'Dh': sim_noise_newmod})
 #then you can save the dataset to the fit_data folder

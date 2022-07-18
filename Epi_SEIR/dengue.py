@@ -156,7 +156,7 @@ class DengueSEIRModel(fit.FitModel):
         #self._biting_rate()
         #self.b = splev([t], self.biting_rate)[0]
         self.b = self.params['biting_rate']([t])[0] # TODO code review
-        print(self.b)
+        #print(self.b)
         if self.b < 0:
             print('damn, biting rate went negative :(')
             exit()
