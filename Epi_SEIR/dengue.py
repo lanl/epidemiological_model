@@ -41,22 +41,23 @@ class DengueSEIRModel(fit.FitModel):
         
         super().__init__(config_file, 'DENGUE')
 
-        # TODO code review
-        # Define constant spline that is equivalent to fixed parameter when fitting process is not used
-        self.params['biting_rate'] = CubicSpline(np.linspace(0, self.config_dict['DURATION'], 3), self.params['biting_rate']*np.ones(3))
-
-        # This block shall be used when spline as file read in. After fitting, store in best guess?
-        # How to handle when we are just running model without best guess? 
-        # Read in time dependent parameter splines
-        #try:
-        #    #with open(self.config_dict['DENGUE']['PARAMETERS']['biting_rate'], "rb") as file:
-        #    with open('parameters/test_spline.pkl', "rb") as file:
-        #        self.biting_rate = pickle.load(file)
-        #except FileNotFoundError as e:
-        #    self.logger.exception('Biting rate parameter spline file not found.')
-        #    raise e
-        #else:
-        #    self.logger.info('Biting rate parameter spline file successfully opened.')
+        if isinstance(self.params['biting_rate'], str):
+            # This block shall be used when spline as file read in. After fitting, store in best guess?
+            # How to handle when we are just running model without best guess? 
+            # Read in time dependent parameter splines
+            try:
+                #with open(self.config_dict['DENGUE']['PARAMETERS']['biting_rate'], "rb") as file:
+                with open(self.params['biting_rate'], "rb") as file:
+                    self.params['biting_rate'] = pickle.load(file)
+            except FileNotFoundError as e:
+                self.logger.exception('Biting rate parameter spline file not found.')
+                raise e
+            else:
+                self.logger.info('Biting rate parameter spline file successfully opened.')
+        else:
+            # TODO code review
+            # Define constant spline that is equivalent to fixed parameter when fitting process is not used
+            self.params['biting_rate'] = CubicSpline(np.linspace(0, self.config_dict['DURATION'], 3), self.params['biting_rate']*np.ones(3))
         
         self.error_zero_constants()
         self.error_zero_to_one_params()
