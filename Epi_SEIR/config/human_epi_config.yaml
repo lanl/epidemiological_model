@@ -31,6 +31,8 @@ DATA_COL_NAMES:
   
 DENGUE:
   PARAMETERS:
+    #biting_rate: 0.0014
+    biting_rate: 'parameters/test_spline.pkl' #DUMMY SPLINE, NOT FOR REAL MODEL
     psi_h: 0.0000391
     nu_h: 0.164 
     nu_v: 0.0667 #25C values 
@@ -47,6 +49,9 @@ DENGUE:
     r_s: -0.04379221728
     alpha_h: 0.00011 #just a guess, this means they could be reinfected 25 years later 
   FIT: False
+  FIT_METHOD: 'nbinom' #can be pois, nbinom, norm
+  DISPERSION: 0.1
+  CALC_CI: True
   FIT_PARAMS:
     nu_h:
       min: 0.07
@@ -57,6 +62,13 @@ DENGUE:
     Sv:
       min: 10000000
       max: 60000000
+  TIMEDEP_FIT_PARAMS:
+    biting_rate:
+      initial: 0.0014
+      min: 0
+      max: 100
+      num_points: 3
+      proflike: 40
 #data needs to be in exact formatting to compare to a given compartment
   FIT_DATA: 
     PATH: ['fit_data/old/rio_fit_data_2010.csv']
@@ -83,6 +95,9 @@ WNV:
     nu_b: 0.20 #guess for now
     m: 0.80 #guess for now
   FIT: False
+  FIT_METHOD: 'pois' #can be pois, nbinom, normal
+  DISPERSION: 0.0001
+  CALC_CI: False
   FIT_PARAMS:
     nu_v:
       min: 0.07
