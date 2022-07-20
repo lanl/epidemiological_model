@@ -144,9 +144,9 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
 
             # TODO graph spline to see what it looks like
             # Begin temp graphing
-            plt.plot(x, spl(x), 'o', x, y)
-            plt.title('temp graph')
-            plt.show()
+            #plt.plot(x, spl(x), 'o', x, y)
+            #plt.title('temp graph')
+            #plt.show()
             # End temp graphing
             
         if 'Dh' in self.fit_data_compartment:
