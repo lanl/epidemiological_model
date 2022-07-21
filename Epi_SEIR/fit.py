@@ -97,7 +97,8 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
             timedep_param_keys = [i for i in self.timedep_fit_params if i in list(self.params.keys())]
             for k in timedep_param_keys:
                 for i in range(self.timedep_fit_params_range[k]['num_points']):
-                    params_obj.add(f'{k}{i}', value = self.timedep_fit_params_range[k]['initial'], min = self.timedep_fit_params_range[k]['min'], max = self.timedep_fit_params_range[k]['max'])
+                    # Put parameter values on a log scale to avoid issues when 0
+                    params_obj.add(f'{k}{i}', value = np.log(self.timedep_fit_params_range[k]['initial']), min = self.timedep_fit_params_range[k]['min'], max = self.timedep_fit_params_range[k]['max'])
 
             return(params_obj)
     
@@ -138,7 +139,8 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
             x = np.linspace(0, self.config_dict['DURATION'], self.timedep_fit_params_range[k]['num_points'])
             y = []
             for i in range(self.timedep_fit_params_range[k]['num_points']):
-                y.append(params_fit[f'{k}{i}'].value)
+                # Extract parameters from log scale
+                y.append(np.exp(params_fit[f'{k}{i}'].value))
             spl = CubicSpline(np.linspace(0, self.config_dict['DURATION'], self.timedep_fit_params_range[k]['num_points']), y)
             self.params[k] = spl
 

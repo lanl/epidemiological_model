@@ -11,7 +11,7 @@ import pickle
 import yaml
 
 def main():
-    with open('config/local_timedeptest_config.yaml', 'r') as in_file:
+    with open('config/local_test_config.yaml', 'r') as in_file:
         config_dict = yaml.safe_load(in_file)
 
     duration = config_dict['DURATION']
@@ -20,10 +20,13 @@ def main():
 
     print(duration, resolution)
 
+    x = np.linspace(0, duration, 3)
+    y = biting_rate*np.ones(3)
+
     print('x:', x)
     print('y:', y)
 
-    spl = CubicSpline(np.linspace(0, duration, 3), biting_rate*np.ones(3))
+    spl = CubicSpline(x, y)
     
     # evaluate spline at time step 4.1
     #print(spl([4.1])[0])
