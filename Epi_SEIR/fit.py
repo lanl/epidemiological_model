@@ -58,7 +58,7 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
             self.fit_data_compartment = self.config_dict[disease_name]['FIT_DATA']['compartment']
             self.fit_data = []
             for k in self.config_dict[disease_name]['FIT_DATA']['PATH']:
-                    self.fit_data.append(pd.read_csv(k))
+                self.fit_data.append(pd.read_csv(k))
                     
             self.error_check_resolution()
             self.error_check_compartment_names()
@@ -121,7 +121,7 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
          
        
     def fit_run_model(self, params_fit, disease_name):
-        params_fit.pretty_print()
+        #params_fit.pretty_print()
         param_keys = [i for i in params_fit if i in list(self.params.keys())]
         init_keys = [i for i in params_fit if i in list(self.initial_states.keys())]
 
