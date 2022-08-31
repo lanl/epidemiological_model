@@ -5,13 +5,14 @@
 PROJECT_ROOT: '.'
 LOGFILE_PATH: 'logs'
 MOSQUITOES_FILE_PATH: 'mosquitoes/mosq.csv'
+TEMPERATURE_FILE_PATH: 'temperature/temp_data_rio2000.csv' # added temperature path
 INITIAL_STATES_FILE_PATH: 'initial_states_input/initial_states.yaml'
 PARAMETER_FIT_DIR: 'param_fit_output'
 OUTPUT_DIR: 'human_model_output'
 
 OUTPUT_TYPE: '.csv' # default is .parquet
 
-DURATION: 170 # number of days to run the model
+DURATION: 712 #356 #6936 # number of days to run the model
 RESOLUTION: 1
 
 DENGUE:
@@ -20,23 +21,23 @@ DENGUE:
     nu_h: 0.164 
     nu_v: 0.0667 #25C values 
     gamma_h: 0.167 
-    mu_v: .0332 #25C values 
+    mu_v: 0.0332 #25C values 
     mu_h: 0.0000391
     sigma_h: 19
-    sigma_v: 0.5
+    sigma_v: 1
     beta_h: 0.33
     beta_v: 0.33
-    K: 292870.0294 # from Toronto 2018 season fitting
-    K_s: 289323.6226
-    r: -0.015161776
-    r_s: -0.04379221728
+    K:  3.388034714 #1.214820216 #292870.0294 # from Toronto 2018 season fitting
+    K_s: 1.357075202 #289323.6226
+    r:  0.021051973 #1.1415291 #-0.015161776
+    r_s: -0.026711893 #-0.009504186 #-0.04379221728
     alpha_h: 0.00011 #just a guess, this means they could be reinfected 25 years later 
-  FIT: True
+  FIT: False
   FIT_METHOD: 'nbinom' #can be pois, nbinom, norm
   DISPERSION: 0.1
   CALC_CI: True
   FIT_PARAMS:
-    beta_v:
+    sigma_v:  # it was beta_v
       min: 0
       max: 1
       proflike: 0.3
@@ -46,7 +47,7 @@ DENGUE:
       proflike: 3.9
 #data needs to be in exact formatting to compare to a given compartment
   FIT_DATA: 
-    PATH: ['fit_data/old/dengue_sim_data.csv']
+    PATH: ['fit_data/old/model_input_rio2000.csv']
     res: ['weekly'] #can be weekly or daily, regardless set resolution to 1
     compartment: ['Dh']
     

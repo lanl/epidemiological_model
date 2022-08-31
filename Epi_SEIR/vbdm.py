@@ -93,6 +93,7 @@ class VectorBorneDiseaseModel(ABC):
         #need to add the +1 to get the correct step size
         self.t_eval = np.linspace(0, self.config_dict['DURATION'], self.config_dict['DURATION']*self.config_dict['RESOLUTION'] + 1)
         
+        
     @classmethod
     def param_dict(cls, config_file, disease_name, param_dict):
         """Takes in a dictionary file that edits the parameter values for the model"""

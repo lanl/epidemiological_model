@@ -1,4 +1,4 @@
-"""Main script to execute vector borne disease models simulation
+ """Main script to execute vector borne disease models simulation
 Run from run_main.sh script. Instantiates VBDM (Vector Borne Disease Model)
 given paramters from config.yaml configuration file.
 

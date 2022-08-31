@@ -19,6 +19,8 @@ from utils import create_logger
 import sys
 import math
 import fit
+import pandas as pd
+import numpy as np
 
 class DengueSEIRModel(fit.FitModel):
 
@@ -38,6 +40,7 @@ class DengueSEIRModel(fit.FitModel):
         
         self.error_zero_constants()
         self.error_zero_to_one_params()
+        self.Temp = np.array(pd.read_csv(self.config_dict['TEMPERATURE_FILE_PATH'])['t2m']) #added temperature
     
     @classmethod
     def param_dict(cls, config_file, param_dict):
@@ -69,8 +72,8 @@ class DengueSEIRModel(fit.FitModel):
     
     
     def _mosq_population_values(self, t):
-        self.K_v = self.params['K'] - self.params['K_s'] * math.cos((2 * math.pi / 365))
-        self.r_v = self.params['r'] - self.params['r_s'] * math.cos((2 * math.pi / 365))
+        self.K_v = self.params['K'] - self.params['K_s'] * math.cos((2 * math.pi*t / 365))
+        self.r_v = self.params['r'] - self.params['r_s'] * math.cos((2 * math.pi*t / 365))
     
     def _initial_human_pop(self):
         self.H0 = sum([self.initial_states['Sh'], self.initial_states['Eh'], self.initial_states['Ih'], self.initial_states['Rh']])
@@ -81,6 +84,11 @@ class DengueSEIRModel(fit.FitModel):
     
     def _calc_hNv(self):
         self.hNv = self.psi_v - self.r_v * self.Nv / self.K_v
+        
+    
+    def calculate_current_temp(self,t):
+        #self.currentT= self.Temp[int(t)]
+        self.EIP_Temp= np.exp(0.8-0.20*self.Temp[int(t)])
 
     def model_func(self, t, y):
         """Defines system of ODEs for dengue model.
@@ -143,6 +151,8 @@ class DengueSEIRModel(fit.FitModel):
         
         # Find hNv value
         self._calc_hNv()
+        
+        self.calculate_current_temp(t) # ADDED TEMPERATURE ARRAY
 
         # System of equations
         ddt['Sh'] = self.params['psi_h'] * self.H0 - \
@@ -162,11 +172,20 @@ class DengueSEIRModel(fit.FitModel):
         ddt['Sv'] = self.hNv * self.Nv - \
             self.lambda_v * self.states['Sv'] - \
             self.params['mu_v'] * self.states['Sv']
+        #ddt['Ev'] = self.lambda_v * self.states['Sv'] - \
+        #    self.params['nu_v'] * self.states['Ev'] - \
+        #    self.params['mu_v'] * self.states['Ev']
+        #ddt['Iv'] = self.params['nu_v'] * self.states['Ev'] - \
+        #    self.params['mu_v'] * self.states['Iv']
+        
+        
+        
         ddt['Ev'] = self.lambda_v * self.states['Sv'] - \
-            self.params['nu_v'] * self.states['Ev'] - \
+            self.EIP_Temp* self.states['Ev'] - \
             self.params['mu_v'] * self.states['Ev']
-        ddt['Iv'] = self.params['nu_v'] * self.states['Ev'] - \
+        ddt['Iv'] = self.EIP_Temp * self.states['Ev'] - \
             self.params['mu_v'] * self.states['Iv']
+        #print(self.EIP_Temp)
 
         return tuple(ddt.values())
     
