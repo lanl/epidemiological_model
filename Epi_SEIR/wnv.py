@@ -56,11 +56,11 @@ class WNVSEIRModel(fit.FitModel):
         self.lambda_b = self.params['beta_b']*self.params['alpha']/self.Nb
     
     def _mosq_population_values(self, t):
-        self.K_v = self.params['K'] + self.params['K_s'] * math.cos((2 * math.pi / 365) * t)
-        self.r_v = self.params['r'] + self.params['r_s'] * math.cos((2 * math.pi / 365) * t)
+        self.K_v = self.params['K'] - self.params['K_s'] * math.cos((2 * math.pi / 365) * t)
+        self.r_v = self.params['r'] - self.params['r_s'] * math.cos((2 * math.pi / 365) * t)
     
     def _bird_population_values(self, t):
-        self.psi_b = self.params['rho'] + self.params['rho_s'] * math.sin(self.params['theta'] * t)
+        self.psi_b = self.params['rho'] - self.params['rho_s'] * math.cos(self.params['theta'] * (t+55))
 
     def _birth_rate(self):
         """Caclualtes vector natural birth rate"""
