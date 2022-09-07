@@ -133,6 +133,46 @@ class VectorBorneDiseaseModel(ABC):
     def model_func(self, t, y):
         pass
 
+    def RK4(self, t, disease_name):
+        """4th order Runge Kutta solver for non-autonomous logistic model"""
+
+        # total number of steps
+        delta_t = 1
+        n = int((1 / delta_t) * len(t))     
+        
+        # initialize vector
+        S = np.zeros([int(n), len(self.state_names_order)])
+        
+        # initial condition
+        S[0] = list(self.initial_states.values())
+
+        for i in np.arange(0,n-1):
+            t_i = i * delta_t
+            k1 = delta_t * self.model_func(t_i, S[i])
+            k2 = delta_t * self.model_func(t_i + (delta_t)/2, S[i] + np.array(k1)/2)
+            k3 = delta_t * self.model_func(t_i + (delta_t)/2, S[i] + np.array(k2)/2)
+            k4 = delta_t * self.model_func(t_i + (delta_t), S[i] + np.array(k3))
+
+            comp_value = S[i] + (np.array(k1) + 2 * np.array(k2) + 2 * np.array(k3) + np.array(k4)) / 6
+            S[i+1] = comp_value
+            
+            # if new computed Sv value exceeds the max possible
+            #   carrying capacity, set it equal to the previous value
+            #   This avoids the risk of exceeding carrying capacity
+            if disease_name == 'wnv':
+                j = 0
+            else:
+                j = 5
+            # comp_val > Kb + abs(Ks)
+            if comp_value[j] > self.params['K'] + abs(self.params['K_s']):
+                S[i+1][j] = S[i][j]
+            elif comp_value[j] < 0:
+                S[i+1][j] = S[i][j]
+            else:
+                S[i+1][j] = comp_value[j]    
+                
+        return S
+    
     def calc_Ih_wnv(self, df, verbose = True):
         """Calcualtees Ih compartment using Poisson distribution for WNV"""
         rng = np.random.default_rng()
@@ -165,8 +205,10 @@ class VectorBorneDiseaseModel(ABC):
         self.model_output = np.empty([0, len(keys)])
             
         try:
-            sol = solve_ivp(self.model_func, self.t, list(self.initial_states.values()), t_eval=self.t_eval)
-            out = sol.y.T
+            #sol = solve_ivp(self.model_func, self.t, list(self.initial_states.values()), t_eval=self.t_eval)
+            #out = sol.y.T
+            sol = self.RK4(self.t_eval, disease_name)
+            out = sol
         except Exception as e:
             self.logger.exception('Exception occurred running model')
             raise e
