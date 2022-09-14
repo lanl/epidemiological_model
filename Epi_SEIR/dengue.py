@@ -172,19 +172,19 @@ class DengueSEIRModel(fit.FitModel):
         ddt['Sv'] = self.hNv * self.Nv - \
             self.lambda_v * self.states['Sv'] - \
             self.params['mu_v'] * self.states['Sv']
-        ddt['Ev'] = self.lambda_v * self.states['Sv'] - \
-            self.params['nu_v'] * self.states['Ev'] - \
-            self.params['mu_v'] * self.states['Ev']
-        ddt['Iv'] = self.params['nu_v'] * self.states['Ev'] - \
-            self.params['mu_v'] * self.states['Iv']
-        
-        
-        
         #ddt['Ev'] = self.lambda_v * self.states['Sv'] - \
-        #    self.EIP_Temp* self.states['Ev'] - \
+        #    self.params['nu_v'] * self.states['Ev'] - \
         #    self.params['mu_v'] * self.states['Ev']
-        #ddt['Iv'] = self.EIP_Temp * self.states['Ev'] - \
+        #ddt['Iv'] = self.params['nu_v'] * self.states['Ev'] - \
         #    self.params['mu_v'] * self.states['Iv']
+        
+        
+        
+        ddt['Ev'] = self.lambda_v * self.states['Sv'] - \
+            self.EIP_Temp* self.states['Ev'] - \
+            self.params['mu_v'] * self.states['Ev']
+        ddt['Iv'] = self.EIP_Temp * self.states['Ev'] - \
+            self.params['mu_v'] * self.states['Iv']
         #print(self.EIP_Temp)
 
         return tuple(ddt.values())
