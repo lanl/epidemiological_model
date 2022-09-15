@@ -6,6 +6,7 @@ PROJECT_ROOT: '.'
 LOGFILE_PATH: 'logs'
 MOSQUITOES_FILE_PATH: 'mosquitoes/mosq.csv'
 TEMPERATURE_FILE_PATH: 'temperature/temp_data_goiania2012_2half.csv' # added temperature path
+# MOSQUITOES_FILE_PATH: 'mosquitoes/mosq.csv'
 INITIAL_STATES_FILE_PATH: 'initial_states_input/initial_states.yaml'
 PARAMETER_FIT_DIR: 'param_fit_output'
 OUTPUT_DIR: 'human_model_output'
@@ -13,10 +14,13 @@ OUTPUT_DIR: 'human_model_output'
 OUTPUT_TYPE: '.csv' # default is .parquet
 
 DURATION: 170 #356 #6936 # number of days to run the model
+
 RESOLUTION: 1
 
 DENGUE:
   PARAMETERS:
+    biting_rate: 0.0014
+    #biting_rate: 'parameters/test_spline.pkl' #DUMMY SPLINE, NOT FOR REAL MODEL
     psi_h: 0.0000391
     nu_h: 0.164 
     nu_v: 0.0667 #25C values 
@@ -45,6 +49,13 @@ DENGUE:
       min: 0.00001
       max: 10
       proflike: 3.9
+  TIMEDEP_FIT_PARAMS:
+    biting_rate:
+      initial: 0.0014
+      min: 0
+      max: 100
+      num_points: 3
+      proflike: 40
 #data needs to be in exact formatting to compare to a given compartment
   FIT_DATA: 
     PATH: ['fit_data/old/model_input_goiania2012_2half.csv']
