@@ -190,7 +190,7 @@ def create_arg_parser_fit():
     parser.add_argument('-d', '--disease_name', action='store',
                         type=lambda x: is_disease(parser, x))
                         # default='dengue')
-    parser.add_argument('-p', '--best_guess_params', dest='run_fit_model', action='store_true')
+    parser.add_argument('-p', '--best_guess_params', dest='best_guess_params', action='store_true')
     parser.set_defaults(best_guess_params=False)
     parser.add_argument('-rm', '--run_fit_model', dest='run_fit_model', action='store_true')
     parser.set_defaults(run_fit_model=False)
