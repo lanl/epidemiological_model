@@ -21,7 +21,7 @@ from scipy.stats import norm
 from scipy.stats import nbinom
 from scipy.stats import chi2
 from scipy.optimize import newton
-from scipy.interpolate import interp1d
+from scipy.interpolate import interp1d, CubicSpline
 
 import vbdm
 
@@ -48,15 +48,17 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
     
         if self.config_dict[disease_name]['FIT'] == True:
             self.fit_params = list(self.config_dict[disease_name]['FIT_PARAMS'].keys())
+            self.timedep_fit_params = list(self.config_dict[disease_name]['TIMEDEP_FIT_PARAMS'].keys()) # TODO code review
             self.fit_method = self.config_dict[disease_name]['FIT_METHOD']
             self.calc_ci_bool = self.config_dict[disease_name]['CALC_CI']
             self.dispersion = self.config_dict[disease_name]['DISPERSION']
             self.fit_params_range = self.config_dict[disease_name]['FIT_PARAMS']
+            self.timedep_fit_params_range = self.config_dict[disease_name]['TIMEDEP_FIT_PARAMS'] # TODO code review
             self.fit_data_res = self.config_dict[disease_name]['FIT_DATA']['res']
             self.fit_data_compartment = self.config_dict[disease_name]['FIT_DATA']['compartment']
             self.fit_data = []
             for k in self.config_dict[disease_name]['FIT_DATA']['PATH']:
-                    self.fit_data.append(pd.read_csv(k))
+                self.fit_data.append(pd.read_csv(k))
                     
             self.error_check_resolution()
             self.error_check_compartment_names()
@@ -67,7 +69,7 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
     @classmethod
     def param_dict(cls, config_file, disease_name, param_dict):
         """Inherit vbdm param_dict class method"""
-        return super(FitModel, cls).param_dict(config_file = config_file, disease_name = disease_name, param_dict =  param_dict)
+        return super(FitModel, cls).param_dict(config_file = config_file, disease_name = disease_name, param_dict = param_dict)
 
     @abstractmethod
     def model_func(self, t, y):
@@ -76,6 +78,8 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
     def init_fit_parameters(self):
         #create the Parameter objects
             params_obj = Parameters()
+
+            # Fixed Parameters
             #add selected parameters and guesses into the framework
             param_keys = [i for i in self.fit_params if i in list(self.params.keys())]
             init_keys = [i for i in self.fit_params if i in list(self.initial_states.keys())]
@@ -87,6 +91,15 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
                 #params_obj.add(j, self.initial_states[j])
             if 'dispersion' in self.fit_params:
                 params_obj.add('dispersion', value = self.dispersion, min = self.fit_params_range['dispersion']['min'], max = self.fit_params_range['dispersion']['max'])
+            
+            # TODO code review
+            # Time Dependent Parameters
+            timedep_param_keys = [i for i in self.timedep_fit_params if i in list(self.params.keys())]
+            for k in timedep_param_keys:
+                for i in range(self.timedep_fit_params_range[k]['num_points']):
+                    # Put parameter values on a log scale to avoid issues when 0
+                    params_obj.add(f'{k}{i}', value = np.log(self.timedep_fit_params_range[k]['initial']), min = self.timedep_fit_params_range[k]['min'], max = self.timedep_fit_params_range[k]['max'])
+
             return(params_obj)
     
     #adding this for the proflikelihood calculation
@@ -108,8 +121,10 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
          
        
     def fit_run_model(self, params_fit, disease_name):
+        #params_fit.pretty_print()
         param_keys = [i for i in params_fit if i in list(self.params.keys())]
         init_keys = [i for i in params_fit if i in list(self.initial_states.keys())]
+
         
         for k in param_keys:
             self.params[k] = params_fit[k]
@@ -118,6 +133,24 @@ class FitModel(vbdm.VectorBorneDiseaseModel):
         if 'dispersion' in params_fit:
             self.dispersion = params_fit['dispersion']
         
+        # TODO CODE REVIEW
+        timedep_param_keys = [i for i in self.timedep_fit_params if i in list(self.params.keys())]
+        for k in timedep_param_keys:
+            x = np.linspace(0, self.config_dict['DURATION'], self.timedep_fit_params_range[k]['num_points'])
+            y = []
+            for i in range(self.timedep_fit_params_range[k]['num_points']):
+                # Extract parameters from log scale
+                y.append(np.exp(params_fit[f'{k}{i}'].value))
+            spl = CubicSpline(np.linspace(0, self.config_dict['DURATION'], self.timedep_fit_params_range[k]['num_points']), y)
+            self.params[k] = spl
+
+            # TODO graph spline to see what it looks like
+            # Begin temp graphing
+            #plt.plot(x, spl(x), 'o', x, y)
+            #plt.title('temp graph')
+            #plt.show()
+            # End temp graphing
+            
         if 'Dh' in self.fit_data_compartment:
             self.run_model(disease_name, False, True)
         else:
