@@ -19,8 +19,16 @@ from utils import create_logger
 import sys
 import math
 import fit
+
 import pandas as pd
 import numpy as np
+
+import pickle
+import numpy as np
+from scipy.interpolate import CubicSpline
+# This package needed if using scipy.interpolate.splrep to define spline
+from scipy.interpolate import splev
+
 
 class DengueSEIRModel(fit.FitModel):
 
@@ -37,6 +45,24 @@ class DengueSEIRModel(fit.FitModel):
             self.logger.disabled = True
         
         super().__init__(config_file, 'DENGUE')
+
+        if isinstance(self.params['biting_rate'], str):
+            # This block shall be used when spline as file read in. After fitting, store in best guess?
+            # How to handle when we are just running model without best guess? 
+            # Read in time dependent parameter splines
+            try:
+                #with open(self.config_dict['DENGUE']['PARAMETERS']['biting_rate'], "rb") as file:
+                with open(self.params['biting_rate'], "rb") as file:
+                    self.params['biting_rate'] = pickle.load(file)
+            except FileNotFoundError as e:
+                self.logger.exception('Biting rate parameter spline file not found.')
+                raise e
+            else:
+                self.logger.info('Biting rate parameter spline file successfully opened.')
+        else:
+            # TODO code review
+            # Define constant spline that is equivalent to fixed parameter when fitting process is not used
+            self.params['biting_rate'] = CubicSpline(np.linspace(0, self.config_dict['DURATION'], 3), self.params['biting_rate']*np.ones(3))
         
         self.error_zero_constants()
         self.error_zero_to_one_params()
@@ -53,9 +79,13 @@ class DengueSEIRModel(fit.FitModel):
         self.Nv = sum([self.states['Sv'], self.states['Ev'], self.states['Iv']])
     
     def _biting_rate(self):
-        """Calculates biting rate"""
-        self.b = self.params['sigma_h'] * self.params['sigma_v'] / \
-            (self.params['sigma_h'] * self.Nh + self.params['sigma_v'] * self.Nv)
+        """Calculates biting rate DEPRECATED"""
+        # evaluate a spline in main function. make spline a class attribute read in from a
+        # .pkl
+
+        # OLD TWO LINES
+        #self.b = self.params['sigma_h'] * self.params['sigma_v'] / \
+        #    (self.params['sigma_h'] * self.Nh + self.params['sigma_v'] * self.Nv)
     
     def _force_of_infection(self):
         """Calculates force of infection"""
@@ -135,7 +165,14 @@ class DengueSEIRModel(fit.FitModel):
         self._population_sizes()
 
         # Find biting rate
-        self._biting_rate()
+        #self._biting_rate()
+        #self.b = splev([t], self.biting_rate)[0]
+        self.b = self.params['biting_rate']([t])[0] # TODO code review
+        #print(self.b)
+        if self.b < 0:
+            self.b = 0
+            #print(self.b)
+            #exit()
 
         # Find force of infection
         self._force_of_infection()
@@ -152,6 +189,7 @@ class DengueSEIRModel(fit.FitModel):
         # Find hNv value
         self._calc_hNv()
         
+
         self.calculate_current_temp(t) # ADDED TEMPERATURE ARRAY
 
         # System of equations
