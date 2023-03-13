@@ -5,7 +5,8 @@
 PROJECT_ROOT: '.'
 LOGFILE_PATH: 'logs'
 MOSQUITOES_FILE_PATH: 'mosquitoes/mosq.csv'
-TEMPERATURE_FILE_PATH: 'temperature/temp_data_rio2000.csv' # added temperature path
+TEMPERATURE_FILE_PATH: 'temperature/temp_data_goiania2012_2half.csv' # added temperature path
+# MOSQUITOES_FILE_PATH: 'mosquitoes/mosq.csv'
 INITIAL_STATES_FILE_PATH: 'initial_states_input/initial_states.yaml'
 PARAMETER_FIT_DIR: 'param_fit_output'
 OUTPUT_DIR: 'human_model_output'
@@ -17,6 +18,8 @@ RESOLUTION: 1
 
 DENGUE:
   PARAMETERS:
+    biting_rate: 0.0014
+    #biting_rate: 'parameters/test_spline.pkl' #DUMMY SPLINE, NOT FOR REAL MODEL
     psi_h: 0.0000391
     nu_h: 0.164 
     nu_v: 0.0667 #25C values 
@@ -24,15 +27,15 @@ DENGUE:
     mu_v: 0.0332 #25C values 
     mu_h: 0.0000391
     sigma_h: 19
-    sigma_v: 1
+    sigma_v: 0.5
     beta_h: 0.33
     beta_v: 0.33
-    K:  3.388034714 #1.214820216 #292870.0294 # from Toronto 2018 season fitting
-    K_s: 1.357075202 #289323.6226
-    r:  0.021051973 #1.1415291 #-0.015161776
-    r_s: -0.026711893 #-0.009504186 #-0.04379221728
+    K:  4815539.656 #1.214820216 #292870.0294 # from Toronto 2018 season fitting
+    K_s: 599837.1227 #289323.6226
+    r:  0.026914851 #1.1415291 #-0.015161776
+    r_s: -0.033653383 #-0.009504186 #-0.04379221728
     alpha_h: 0.00011 #just a guess, this means they could be reinfected 25 years later 
-  FIT: False
+  FIT: True
   FIT_METHOD: 'nbinom' #can be pois, nbinom, norm
   DISPERSION: 0.1
   CALC_CI: True
@@ -45,9 +48,16 @@ DENGUE:
       min: 0.00001
       max: 10
       proflike: 3.9
+  TIMEDEP_FIT_PARAMS:
+    biting_rate:
+      initial: 0.0014
+      min: 0
+      max: 100
+      num_points: 3
+      proflike: 40
 #data needs to be in exact formatting to compare to a given compartment
   FIT_DATA: 
-    PATH: ['fit_data/old/model_input_rio2000.csv']
+    PATH: ['fit_data/old/model_input_goiania2012_2half.csv']
     res: ['weekly'] #can be weekly or daily, regardless set resolution to 1
     compartment: ['Dh']
     
