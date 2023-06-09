@@ -46,9 +46,9 @@ class WNVSEIRModel(fit.FitModel):
         return super(WNVSEIRModel, cls).param_dict(config_file = config_file, disease_name = 'WNV', param_dict =  param_dict)
 
     def _population_sizes(self):
-        """Calculates population sizes of human and vector compartments"""
+        """Calculates population sizes of bird and vector compartments"""
         self.Nv = sum([self.states['Sv'], self.states['Ev'], self.states['Iv']])
-        self.Nb = sum([self.states['Sb'], self.states['Eb'], self.states['Ib'], self.params['m'] * self.states['Rb']])
+        self.Nb = sum([self.states['Sb'], self.states['Eb'], self.states['Ib'], self.states['Rb']])
 
     def _force_of_infection(self):
         """Calculates force of infection"""
@@ -56,15 +56,17 @@ class WNVSEIRModel(fit.FitModel):
         self.lambda_b = self.params['beta_b']*self.params['alpha']/self.Nb
     
     def _mosq_population_values(self, t):
-        self.K_v = self.params['K'] + self.params['K_s'] * math.cos((2 * math.pi / 365) * t)
-        self.r_v = self.params['r'] + self.params['r_s'] * math.cos((2 * math.pi / 365) * t)
+        self.K_v = self.params['K'] - self.params['K_s'] * math.cos((2 * math.pi / 365) * t)
+        self.r_v = self.params['r'] - self.params['r_s'] * math.cos((2 * math.pi / 365) * t)
     
     def _bird_population_values(self, t):
-        self.psi_b = self.params['rho'] + self.params['rho_s'] * math.sin(self.params['theta'] * t)
-
+        self.r_b = self.params['phi'] - self.params['phi_s'] * math.cos(self.params['omega'] * (t + self.params['delta_t']))
+        #self.r_b = 0*t
+        
     def _birth_rate(self):
-        """Caclualtes vector natural birth rate"""
+        """Caclualtes natural birth rates for vectors and birds"""
         self.psi_v = self.r_v + self.params['mu_v']   
+        self.psi_b = self.r_b + self.params['mu_b']
 
     def model_func(self, t, y):
         """Defines system of ODEs for dengue model
@@ -87,14 +89,14 @@ class WNVSEIRModel(fit.FitModel):
             alpha: Biting rate under frequency dependence. \n
             beta_v: Probability of virus transmission to vector, per infectious bite.\n
             beta_b: Probability of virus transmission to bird, per infectious bit.\n
-            psi_v: Vector birth rate. \n
-            psi_b: bird recruitment rate. \n
-            K_v: Vector carrying capacity.\n
-            r_v: Vector growth rate.\n
-            lambda_v: vector force of infection. \n
+            psi_v: Time-varying vector birth rate. \n
+            psi_b: Time-varying bird recruitment rate. \n
+            K_v: Time-varying vector carrying capacity.\n
+            r_v: Time-varying vector net growth rate.\n
+            lambda_v: Vector force of infection. \n
             lambda_b: Bird force of infection. \n
-            nu_v: Vector latent period. \n
-            nu_b: Bird latent period. \n
+            nu_v: Vector latent rate. \n
+            nu_b: Bird latent rate. \n
             gamma_b: Bird recovery rate. \n
             eta: Contact rate * probability of transmission to humans. \n
             m: Proportion of recovered birds that survived the WNV infection.
@@ -114,11 +116,11 @@ class WNVSEIRModel(fit.FitModel):
         # Find vector carrying capacity and growth rate
         self._mosq_population_values(t)
         
-        # Find vector natural birth rate
-        self._birth_rate()
-        
         # Find vector carrying capacity and growth rate
         self._bird_population_values(t)
+        
+        # Find vector natural birth rate
+        self._birth_rate()
 
         ddt['Sv'] = (self.psi_v - self.r_v * self.Nv / self.K_v) * self.Nv - \
              self.lambda_v * self.states['Sv'] * self.states['Ib'] - \

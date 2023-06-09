@@ -157,6 +157,42 @@ class VectorBorneDiseaseModel(ABC):
         df['Dh'] = df['Ch'].diff()
         return df
     
+    def RK4(self):
+
+        """4th order Runge Kutta solver"""
+        # currently only runs for timestep of 1
+    
+        # total number of steps
+        timestep = 1
+        #n = int((1 / timestep) * len(t))     
+        n = self.config_dict['DURATION'] + 1
+        
+        # initialize vector of states
+        state_vec = np.zeros([n, len(self.initial_states)])
+    
+        # initial condition
+        state_vec[0] = list(self.initial_states.values()) 
+
+        for i in np.arange(0,n-1):
+            t_i = i * timestep
+            k1 = timestep * self.model_func(t_i, state_vec[i])
+            k1_array = np.array(k1)
+            k2 = timestep * self.model_func(t_i + timestep/2, state_vec[i] + k1_array/2)
+            k2_array = np.array(k2)
+            k3 = timestep * self.model_func(t_i + timestep/2, state_vec[i] + k2_array/2)
+            k3_array = np.array(k3)
+            k4 = timestep * self.model_func(t_i + timestep, state_vec[i] + k3_array)
+            k4_array = np.array(k4)
+            
+            comp_value = state_vec[i] + (k1_array + 2 * k2_array + 2 * k3_array + k4_array) / 6
+        
+            state_vec[i+1] = comp_value
+
+            if sum(comp_value[0:3]) > self.params['K'] + abs(self.params['K_s']):
+                state_vec[i+1][0:3] = state_vec[i][0:3]
+                
+        return state_vec
+      
     @timer
     def run_model(self, disease_name, verbose = True, calc_daily = False):
         """Runs ODE solver to generate model output"""
@@ -166,6 +202,9 @@ class VectorBorneDiseaseModel(ABC):
         try:
             sol = solve_ivp(self.model_func, self.t, list(self.initial_states.values()), t_eval=self.t_eval)
             out = sol.y.T
+            #sol = self.RK4()
+            #out = sol
+            
         except Exception as e:
             self.logger.exception('Exception occurred running model')
             raise e
@@ -234,7 +273,6 @@ class VectorBorneDiseaseModel(ABC):
     def plot_output(self, disease_name, sim_labels = False, save_figure = False):
         human_vec = [x for x in self.df.columns if "Human" in x or "Time" in x]
         vector_vec = [x for x in self.df.columns if "Vector" in x or "Time" in x]
-    
         if disease_name.lower() == "wnv":
             bird_vec = [x for x in self.df.columns if "Bird" in x or "Time" in x]
 
