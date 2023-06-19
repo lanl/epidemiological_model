@@ -49,12 +49,26 @@ class WNVSEIRModel(fit.FitModel):
         """Calculates population sizes of bird and vector compartments"""
         self.Nv = sum([self.states['Sv'], self.states['Ev'], self.states['Iv']])
         self.Nb = sum([self.states['Sb'], self.states['Eb'], self.states['Ib'], self.states['Rb']])
+    
+    #def _susceptible_sizes(self):
+    #    """Calculates population sizes of bird and vector compartments"""
+    #    if sum([self.states['Ev'], self.states['Iv']]) > self.states['Nv']:
+    #        self.Sv = 0
+    #    else:
+    #        self.Sv = self.states['Nv'] - self.states['Ev'] - self.states['Iv']
+        
+    #    if sum([self.states['Eb'], self.states['Ib'], self.states['Rb']]) > self.states['Nb']:
+    #        self.Sb = 0
+    #    else:
+    #        self.Sb = self.states['Nb'] - self.states['Eb'] - self.states['Ib'] - self.states['Rb']
 
     def _force_of_infection(self):
         """Calculates force of infection"""
         self.lambda_v = self.params['beta_v']*self.params['alpha']/self.Nb
         self.lambda_b = self.params['beta_b']*self.params['alpha']/self.Nb
-    
+        #self.lambda_v = self.params['beta_v']*self.params['alpha']/self.states['Nb']
+        #self.lambda_b = self.params['beta_b']*self.params['alpha']/self.states['Nb']
+            
     def _mosq_population_values(self, t):
         self.K_v = self.params['K'] - self.params['K_s'] * math.cos((2 * math.pi / 365) * t)
         self.r_v = self.params['r'] - self.params['r_s'] * math.cos((2 * math.pi / 365) * t)
@@ -109,7 +123,8 @@ class WNVSEIRModel(fit.FitModel):
 
         # Find population size
         self._population_sizes()
-
+        #self._susceptible_sizes()
+        
         # Find forces of infection
         self._force_of_infection()
 
@@ -121,27 +136,59 @@ class WNVSEIRModel(fit.FitModel):
         
         # Find vector natural birth rate
         self._birth_rate()
-
-        ddt['Sv'] = (self.psi_v - self.r_v * self.Nv / self.K_v) * self.Nv - \
-             self.lambda_v * self.states['Sv'] * self.states['Ib'] - \
-             self.params['mu_v'] * self.states['Sv']
-        ddt['Ev'] = self.lambda_v * self.states['Sv'] * self.states['Ib'] - \
-            self.params['nu_v'] * self.states['Ev'] - \
-            self.params['mu_v'] * self.states['Ev']
-        ddt['Iv'] = self.params['nu_v'] * self.states['Ev'] - \
-            self.params['mu_v'] * self.states['Iv']
-        ddt['Sb'] = self.psi_b * self.Nb - \
-            self.lambda_b * self.states['Iv'] * self.states['Sb'] - \
-            self.params['mu_b'] * self.states['Sb']
-        ddt['Eb'] = self.lambda_b * self.states['Iv'] * self.states['Sb'] - \
-            self.params['nu_b'] * self.states['Eb'] - \
-            self.params['mu_b'] * self.states['Eb']
-        ddt['Ib'] = self.params['nu_b'] * self.states['Eb'] - \
-            self.params['gamma_b'] * self.states['Ib'] - \
-            self.params['mu_b'] * self.states['Ib'] 
-        ddt['Rb'] = self.params['gamma_b'] * self.states['Ib'] - \
-            self.params['mu_b'] * self.states['Rb']
-
+        
+        if self.r_v > 0:
+        # original Sv, Ev, Sb, Eb differential equations
+            ddt['Sv'] = (self.psi_v - self.r_v * self.Nv / self.K_v) * self.Nv - \
+                self.lambda_v * self.states['Sv'] * self.states['Ib'] - \
+                self.params['mu_v'] * self.states['Sv']
+            ddt['Ev'] = self.lambda_v * self.states['Sv'] * self.states['Ib'] - \
+                self.params['nu_v'] * self.states['Ev'] - \
+                self.params['mu_v'] * self.states['Ev']
+            ddt['Iv'] = self.params['nu_v'] * self.states['Ev'] - \
+                self.params['mu_v'] * self.states['Iv']
+        else:
+            ddt['Sv'] = (1 - self.states['Sv'] / self.K_v) * self.r_v * self.states['Sv'] - \
+                self.lambda_v * self.states['Sv'] * self.states['Ib']
+            ddt['Ev'] = (1 - self.states['Ev'] / self.K_v) * self.r_v * self.states['Ev'] + \
+                self.lambda_v * self.states['Sv'] * self.states['Ib'] - \
+                self.params['nu_v'] * self.states['Ev']
+            ddt['Iv'] = (1 - self.states['Iv'] / self.K_v) * self.r_v * self.states['Iv'] + \
+                self.params['nu_v'] * self.states['Ev']
+        
+        if self.r_b > 0:
+            ddt['Sb'] = self.psi_b * self.Nb - \
+                self.lambda_b * self.states['Iv'] * self.states['Sb'] - \
+                self.params['mu_b'] * self.states['Sb']
+            ddt['Eb'] = self.lambda_b * self.states['Iv'] * self.states['Sb'] - \
+                self.params['nu_b'] * self.states['Eb'] - \
+                self.params['mu_b'] * self.states['Eb']
+            ddt['Ib'] = self.params['nu_b'] * self.states['Eb'] - \
+                self.params['gamma_b'] * self.states['Ib'] - \
+                self.params['mu_b'] * self.states['Ib'] 
+            ddt['Rb'] = self.params['gamma_b'] * self.states['Ib'] - \
+                self.params['mu_b'] * self.states['Rb']
+        else:
+            ddt['Sb'] = self.r_b * self.states['Sb'] - \
+                self.lambda_b * self.states['Iv'] * self.states['Sb']
+            ddt['Eb'] = self.r_b * self.states['Eb'] + \
+                self.lambda_b * self.states['Iv'] * self.states['Sb'] - \
+                self.params['nu_b'] * self.states['Eb']
+            ddt['Ib'] = self.r_b * self.states['Ib'] + \
+                self.params['nu_b'] * self.states['Eb'] - \
+                self.params['gamma_b'] * self.states['Ib']
+            ddt['Rb'] = self.r_b * self.states['Rb'] + \
+                self.params['gamma_b'] * self.states['Ib']
+            
+        #ddt['Nv'] = (1 - self.states['Nv']/self.K_v) * self.r_v * self.states['Nv']
+        #ddt['Ev'] = self.lambda_v * self.Sv * self.states['Ib'] - \
+        #        self.params['nu_v'] * self.states['Ev'] - \
+        #        self.params['mu_v'] * self.states['Ev']
+        #ddt['Nb'] = self.r_b * self.states['Nb']
+        #ddt['Eb'] = self.lambda_b * self.states['Iv'] * self.Sb - \
+        #    self.params['nu_b'] * self.states['Eb'] - \
+        #    self.params['mu_b'] * self.states['Eb']
+        
         return tuple(ddt.values())
     
     
@@ -154,6 +201,7 @@ class WNVSEIRModel(fit.FitModel):
         # EXTRACT list of position
         try:
             if sum([self.initial_states['Sb'], self.initial_states['Eb'], self.initial_states['Ib'], self.params['m'] * self.initial_states['Rb']]) == 0:
+            #if sum([self.initial_states['Nb'], self.initial_states['Eb'], self.initial_states['Ib'], self.params['m'] * self.initial_states['Rb']]) == 0:
                 raise ValueError('Bird population size cannot be zero')
         except ValueError as e:
             self.logger.exception('Bird population size cannot be zero')

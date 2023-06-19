@@ -42,8 +42,12 @@ DENGUE:
 WNV:
   Sv:
     name: 'Susceptible Vectors'
-    value: 499
+    value: 187
     position: 0
+  #Nv:
+  #  name: 'Total Vectors'
+  #  value: 187
+  #  position: 0
   Ev:
     name: 'Exposed Vectors'
     value: 1
@@ -54,8 +58,12 @@ WNV:
     position: 2
   Sb:
     name: 'Susceptible Birds'
-    value: 263
+    value: 317
     position: 3
+  #Nb:
+  #  name: 'Total Birds'
+  #  value: 317
+  #  position: 3
   Eb:
     name: 'Exposed Birds'
     value: 0

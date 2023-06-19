@@ -200,10 +200,10 @@ class VectorBorneDiseaseModel(ABC):
         self.model_output = np.empty([0, len(keys)])
             
         try:
-            sol = solve_ivp(self.model_func, self.t, list(self.initial_states.values()), t_eval=self.t_eval)
-            out = sol.y.T
-            #sol = self.RK4()
-            #out = sol
+            #sol = solve_ivp(self.model_func, self.t, list(self.initial_states.values()), t_eval=self.t_eval)
+            #out = sol.y.T
+            sol = self.RK4()
+            out = sol
             
         except Exception as e:
             self.logger.exception('Exception occurred running model')
