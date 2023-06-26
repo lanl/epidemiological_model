@@ -148,12 +148,12 @@ class WNVSEIRModel(fit.FitModel):
             ddt['Iv'] = self.params['nu_v'] * self.states['Ev'] - \
                 self.params['mu_v'] * self.states['Iv']
         else:
-            ddt['Sv'] = (1 - self.states['Sv'] / self.K_v) * self.r_v * self.states['Sv'] - \
+            ddt['Sv'] = (1 - self.Nv / self.K_v) * self.r_v * self.states['Sv'] - \
                 self.lambda_v * self.states['Sv'] * self.states['Ib']
-            ddt['Ev'] = (1 - self.states['Ev'] / self.K_v) * self.r_v * self.states['Ev'] + \
+            ddt['Ev'] = (1 - self.Nv / self.K_v) * self.r_v * self.states['Ev'] + \
                 self.lambda_v * self.states['Sv'] * self.states['Ib'] - \
                 self.params['nu_v'] * self.states['Ev']
-            ddt['Iv'] = (1 - self.states['Iv'] / self.K_v) * self.r_v * self.states['Iv'] + \
+            ddt['Iv'] = (1 - self.Nv / self.K_v) * self.r_v * self.states['Iv'] + \
                 self.params['nu_v'] * self.states['Ev']
         
         if self.r_b > 0:
