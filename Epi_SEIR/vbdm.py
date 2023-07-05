@@ -17,6 +17,7 @@ from utils import timer
 from scipy.integrate import solve_ivp
 from abc import ABC, abstractmethod
 import matplotlib.pyplot as plt
+from datetime import datetime
 
 
 class VectorBorneDiseaseModel(ABC):
@@ -41,7 +42,28 @@ class VectorBorneDiseaseModel(ABC):
 
         # Read parameters
         self.params = self.config_dict[disease_name]['PARAMETERS']
-
+        
+        self.year = self.config_dict['YEAR']
+        self.LLM_params = pd.read_csv(self.config_dict['LLM_FILE'])
+        self.bird_params = pd.read_csv(self.config_dict['BIRD_FILE'])
+        
+        self.LLM_params.index = self.LLM_params['year']
+        self.bird_params.index = self.bird_params['year']
+        
+        self.r = self.LLM_params['r'][self.year]
+        self.r_s = self.LLM_params['r_s'][self.year]
+        self.K = self.LLM_params['K'][self.year]
+        self.K_s = self.LLM_params['K_s'][self.year]
+        self.phi = self.bird_params['phi'][self.year]
+        self.phi_s = self.bird_params['phi_s'][self.year]
+        self.omega = self.bird_params['omega'][self.year]
+        self.delta_t = self.bird_params['delta_t'][self.year]
+        
+        self.LLM_params['start_date'] = [datetime.strptime(k, '%Y-%m-%d') for k in self.LLM_params['start_date']]
+        self.LLM_params['end_date'] = [datetime.strptime(k, '%Y-%m-%d') for k in self.LLM_params['end_date']]
+        
+        self.duration = (self.LLM_params['end_date'][self.year] - self.LLM_params['start_date'][self.year]).days
+        
         self.logger.info(f"\n\nParameters for model: {self.params}\n")
 
         # Read initial states
@@ -89,9 +111,12 @@ class VectorBorneDiseaseModel(ABC):
         self.error_check_mosq_initial_states()
     
         #EXTRACT and CALCULATE model run times (moving this here for now instead of model_func() for new fitting method)
-        self.t = (0, self.config_dict['DURATION'])
+        #self.t = (0, self.config_dict['DURATION'])
+        self.t = (0, self.duration)
+        
         #need to add the +1 to get the correct step size
-        self.t_eval = np.linspace(0, self.config_dict['DURATION'], self.config_dict['DURATION']*self.config_dict['RESOLUTION'] + 1)
+        #self.t_eval = np.linspace(0, self.config_dict['DURATION'], self.config_dict['DURATION']*self.config_dict['RESOLUTION'] + 1)
+        self.t_eval = np.linspace(0, self.duration, self.duration*self.config_dict['RESOLUTION'] + 1)
         
     @classmethod
     def param_dict(cls, config_file, disease_name, param_dict):
@@ -165,7 +190,8 @@ class VectorBorneDiseaseModel(ABC):
         # total number of steps
         timestep = 1
         #n = int((1 / timestep) * len(t))     
-        n = self.config_dict['DURATION'] + 1
+        #n = self.config_dict['DURATION'] + 1
+        n = self.duration + 1
         
         # initialize vector of states
         state_vec = np.zeros([n, len(self.initial_states)])
@@ -188,7 +214,8 @@ class VectorBorneDiseaseModel(ABC):
         
             state_vec[i+1] = comp_value
 
-            if sum(comp_value[0:3]) > self.params['K'] + abs(self.params['K_s']):
+            #if sum(comp_value[0:3]) > self.params['K'] + abs(self.params['K_s']):
+            if sum(comp_value[0:3]) > self.K + abs(self.K_s):
                 state_vec[i+1][0:3] = state_vec[i][0:3]
                 
         return state_vec
@@ -417,12 +444,12 @@ class VectorBorneDiseaseModel(ABC):
 #             self.logger.exception('Mosquito initial states must be positive')
 #             raise e
 
-        try:
-            if not self.config_dict['DURATION'] > 0:
-                raise ValueError('Simulation duration must be positive')
-        except ValueError as e:
-            self.logger.exception('Simulation duration must be positive')
-            raise e
+#        try:
+#            if not self.config_dict['DURATION'] > 0:
+#                raise ValueError('Simulation duration must be positive')
+#        except ValueError as e:
+#            self.logger.exception('Simulation duration must be positive')
+#            raise e
 
 #         try:
 #             if self.config_dict['DURATION'] > len(self.mosq):

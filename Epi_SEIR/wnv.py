@@ -18,6 +18,7 @@ by inputting a dictionary of different parameter values
 from utils import create_logger
 import fit
 import numpy as np
+import pandas as pd
 import math
 
 
@@ -39,6 +40,22 @@ class WNVSEIRModel(fit.FitModel):
         
         self.error_zero_constants()
         self.error_zero_to_one_params()
+        
+        self.year = int(self.config_dict['YEAR'])
+        self.LLM_params = pd.read_csv(self.config_dict['LLM_FILE'])
+        self.bird_params = pd.read_csv(self.config_dict['BIRD_FILE'])
+        
+        self.LLM_params.index = self.LLM_params['year']
+        self.bird_params.index = self.bird_params['year']
+        
+        self.r = self.LLM_params['r'][self.year]
+        self.r_s = self.LLM_params['r_s'][self.year]
+        self.K = self.LLM_params['K'][self.year]
+        self.K_s = self.LLM_params['K_s'][self.year]
+        self.phi = self.bird_params['phi'][self.year]
+        self.phi_s = self.bird_params['phi_s'][self.year]
+        self.omega = self.bird_params['omega'][self.year]
+        self.delta_t = self.bird_params['delta_t'][self.year]
         
     @classmethod
     def param_dict(cls, config_file, param_dict):
@@ -70,11 +87,14 @@ class WNVSEIRModel(fit.FitModel):
         #self.lambda_b = self.params['beta_b']*self.params['alpha']/self.states['Nb']
             
     def _mosq_population_values(self, t):
-        self.K_v = self.params['K'] - self.params['K_s'] * math.cos((2 * math.pi / 365) * t)
-        self.r_v = self.params['r'] - self.params['r_s'] * math.cos((2 * math.pi / 365) * t)
+        #self.K_v = self.params['K'] - self.params['K_s'] * math.cos((2 * math.pi / 365) * t)
+        #self.r_v = self.params['r'] - self.params['r_s'] * math.cos((2 * math.pi / 365) * t)
+        self.K_v = self.K - self.K_s * math.cos((2 * math.pi / 365) * t)
+        self.r_v = self.r - self.r_s * math.cos((2 * math.pi / 365) * t)
     
     def _bird_population_values(self, t):
-        self.r_b = self.params['phi'] - self.params['phi_s'] * math.cos(self.params['omega'] * (t + self.params['delta_t']))
+        #self.r_b = self.params['phi'] - self.params['phi_s'] * math.cos(self.params['omega'] * (t + self.params['delta_t']))
+        self.r_b = self.phi - self.phi_s * math.cos(self.omega * (t + self.delta_t))
         #self.r_b = 0*t
         
     def _birth_rate(self):

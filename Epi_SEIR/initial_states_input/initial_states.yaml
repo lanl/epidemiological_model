@@ -2,6 +2,10 @@
 # Vector Borne Disease Model Initial States #
 #-------------------------------------------#
 
+# LINKAGE_PARAM_PATH: 'C:/Users/357214/Documents/logistic-link-model/fit_output'
+LLM_FILE: 'C:/Users/357214/Documents/logistic-link-model/fit_output/Toronto_Total_integration_output_2005_2019.csv'
+BIRD_FILE: 'C:/Users/357214/Documents/logistic-link-model/fit_output/Toronto_Bird_RA_integration_output_2005_2017.csv'
+
 # NOTE 'position' argument determines order in 
 # which output will be generated
 

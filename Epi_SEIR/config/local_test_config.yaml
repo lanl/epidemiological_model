@@ -6,13 +6,17 @@ PROJECT_ROOT: '.'
 LOGFILE_PATH: 'logs'
 # MOSQUITOES_FILE_PATH: 'mosquitoes/mosq.csv'
 INITIAL_STATES_FILE_PATH: 'initial_states_input/initial_states.yaml'
+LLM_FILE: 'C:/Users/357214/Documents/logistic-link-model/fit_output/Toronto_Total_integration_output_2005_2019.csv'
+BIRD_FILE: 'C:/Users/357214/Documents/logistic-link-model/fit_output/Toronto_Bird_RA_integration_output_2005_2017.csv'
 PARAMETER_FIT_DIR: 'param_fit_output'
 OUTPUT_DIR: 'human_model_output'
 
 OUTPUT_TYPE: '.csv' # default is .parquet
 
-DURATION: 170 # number of days to run the model
+#DURATION: 170 # number of days to run the model
 RESOLUTION: 1
+YEAR: 2008
+YEAR_POSITION: 0
 
 DENGUE:
   PARAMETERS:
@@ -68,14 +72,14 @@ WNV:
     beta_b: 0.74 # per bite probability of vector-to-bird transmission
     alpha: 0.44 # frequency dependent biting rate
     eta: 0.003 # contact rate * probability of transmission to humans
-    r: -0.0649 # baseline vector net growth rate
-    r_s: -0.3282 # scaling factor for baseline vector net growth rate
-    K: 26770 # baseline vector carrying capacity
-    K_s: 24995 # scaling factor for vector carrying capacity
-    phi: -0.00035 # baseline bird net growth rate
-    phi_s: -0.00962 # scaling factor for bird net growth rate
-    omega: 0.01 # frequency of bird net growth rate
-    delta_t: 160 # days between start of bird season and mosquito season
+    #r: -0.0649 # baseline vector net growth rate
+    #r_s: -0.3282 # scaling factor for baseline vector net growth rate
+    #K: 26770 # baseline vector carrying capacity
+    #K_s: 24995 # scaling factor for vector carrying capacity
+    #phi: -0.00035 # baseline bird net growth rate
+    #phi_s: -0.00962 # scaling factor for bird net growth rate
+    #omega: 0.01 # frequency of bird net growth rate
+    #delta_t: 160 # days between start of bird season and mosquito season
     nu_v: 0.10 # vector incubation rate
     nu_b: 0.20 # bird incubation rate
     m: 0.80 # fraction of birds surviving WNV infection
