@@ -1,0 +1,164 @@
+#------------------------------------------#
+# Vector Borne Disease Model Configuration #
+#------------------------------------------#
+
+PROJECT_ROOT: '.'
+LOGFILE_PATH: 'logs'
+MOSQUITOES_FILE_PATH: 'mosquitoes/mosq.csv'
+CARRYING_CAPACITY: 'mosquito-KK/Rio de Janeiro_aegypti_kappa_2000_2018.csv'
+HUMAN_POPULATION: 'Human-population/Municipalities_human_pop.csv'
+TEMPERATURE_FILE_PATH_YEAR: 'temperature/Consolidated-temp/'  # added temperature path automatic
+TEMPERATURE_FILE_PATH: 'temperature/Consolidated-temp/2000-2001-Rio.csv' # added temperature path
+INITIAL_STATES_FILE_PATH: 'initial_states_input/initial_states.yaml'
+PARAMETER_FIT_DIR: 'param_fit_output'
+OUTPUT_DIR: 'human_model_output'
+
+OUTPUT_TYPE: '.csv' # default is .parquet
+
+DURATION: 356  #356 #384 #356 #358 #170 #356 #6936 # number of days to run the model
+LAST_YEAR: 1 # This is the upper limit of the year until I would like to run the code
+YEAR: 0
+MUNICIPALITY: 'RiodeJaneiro'
+RESOLUTION: 1
+
+DENGUE:
+  PARAMETERS:
+    degrees_freedom: 7 #not used anymore
+    psi_h: 0.0000391
+    nu_h: 0.164 
+    nu_v: 0.0667 #25C values 
+    gamma_h: 0.167 
+    mu_v: 0.0332 #25C values 
+    mu_h: 0.0000391
+    sigma_h: 19
+    sigma_v: 0.5
+    y1: 0.03926239  
+    y2: 0.95980485 
+    y3: 0.06997692 
+    y4: 0.42970116 
+    y5: 0.48578761 
+    y6: 0.99226002 
+    y7: 0.44257916 
+    y8: 0.84893123 
+    y9: 0.42613096 
+    y10: 0.12228343 
+    y11: 0.03766206 
+    y12: 0.03926239 
+    intercept: 27.2958714
+    beta_h: 0.33
+    beta_v: 0.33
+    
+#     K: 292870.0294 # from Toronto 2018 season fitting
+#     K_s: 289323.6226
+#     r: -0.015161776
+#     r_s: -0.04379221728
+    
+#     K_2001:  34009072.07
+#     K_s_2001: 6882545.786
+#     r_2001: 0.032770139
+#     r_s_2001: -0.038322516
+    
+    alpha_h: 0.00011 #just a guess, this means they could be reinfected 25 years later 
+  FIT: FALSE
+  FIT_METHOD: 'nbinom' #can be pois, nbinom, norm
+  DISPERSION: 100 #1001
+  CALC_CI: False
+  FIT_PARAMS:
+    y1:
+        min: 0
+        max: 0.2
+        proflike: 0.3
+    y2:
+        min: 0
+        max: 1
+        proflike: 0.29
+    y3:
+        min: 0
+        max: 1
+        proflike: 0.299
+    y4:
+        min: 0
+        max: 1
+        proflike: 0.28
+    y5:
+        min: 0
+        max: 1
+        proflike: 0.285
+    y6:
+        min: 0
+        max: 1
+        proflike: 0.289
+    y7: 
+        min: 0
+        max: 1
+        proflike: 0.287
+    y8:
+        min: 0
+        max: 1
+        proflike: 0.288
+    y9:
+        min: 0
+        max: 1
+        proflike: 0.288
+    y10:
+        min: 0
+        max: 1
+        proflike: 0.284
+    y11:
+        min: 0
+        max: 1
+        proflike: 0.283
+    y12:
+        min: 0
+        max: 1
+        proflike: 0.282
+    intercept:
+        min: 0
+        max: 200
+        proflike: 3
+#     dispersion:
+#         min: 0.00001
+#         max: 10
+#         proflike: 3.9
+#data needs to be in exact formatting to compare to a given compartment
+  FIT_DATA: 
+    #PATH: ['fit_data/old/dengue_sim_data3.csv']
+    PATH: ['fit_data/old/input_rio_2000-2001.csv']
+    res: ['weekly'] #can be weekly or daily, regardless set resolution to 1
+    compartment: ['Dh']
+    
+WNV:
+  PARAMETERS:
+    mu_v: 0.06
+    mu_b: 0.004
+    gamma_b: 0.2 #guess for now
+    beta_v: 0.69
+    beta_b: 0.74
+    alpha: 0.44
+    eta: 0.003
+    K: 292870.0294 # from Toronto 2018 season fitting
+    K_s: 289323.6226
+    r: -0.015161776
+    r_s: -0.04379221728
+    rho: 0.003
+    rho_s: 0.001
+    theta: 0.05
+    nu_v: 0.10
+    nu_b: 0.20 #guess for now
+    m: 0.80 #guess for now
+  FIT: False
+  FIT_METHOD: 'pois' #can be pois, nbinom, normal
+  DISPERSION: 0.0001
+  CALC_CI: False
+  FIT_PARAMS:
+    nu_v:
+      min: 0.07
+      max: .14
+    Sv:
+      min: 5000
+      max: 30000
+#data needs to be in exact formatting to compare to a given compartment
+  FIT_DATA: 
+    PATH: ['fit_data/old/Toronto_totmosq_2004.csv']
+    res: ['daily'] #can be weekly or daily, regardless set resolution to 1
+    compartment: ['Sv']

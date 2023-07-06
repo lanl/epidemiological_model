@@ -1,0 +1,29 @@
+stages:
+  - test
+  - docs
+
+default:
+  image: gitlab.lanl.gov:5050/cimmid/disease_and_human_modeling/human_epi_models:latest
+  before_script:
+      - source ~/.bashrc
+
+test:
+  stage: test
+  script:
+    - cd Epi_SEIR
+    - pytest --junitxml=report.xml
+  artifacts:
+    when: always
+    reports:
+      junit: Epi_SEIR/report.xml
+
+docs:
+  stage: docs
+  script:
+    - cd Epi_SEIR/docs
+    - pip install sphinx-rtd-theme
+    - make clean
+    - make html
+  artifacts:
+    paths:
+      - Epi_SEIR/docs/_build/html

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>wnv module &mdash; Epi-SEIR  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="vbdm module" href="vbdm.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> Epi-SEIR
+            <img src="_static/logo.JPG" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Epi_SEIR</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="dengue.html">dengue module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fit.html">fit module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generate_inputs.html">generate_inputs module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generate_param_values.html">generate_param_values module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models_main.html">models_main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models_fit.html">models_fit module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models_params.html">models_params module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plotting.html">plotting module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="test_human_epi_model.html">test_human_epi_model module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utils.html">utils module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vbdm.html">vbdm module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">wnv module</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Epi-SEIR</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="modules.html">Epi_SEIR</a> &raquo;</li>
+      <li>wnv module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/wnv.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-wnv">
+<span id="wnv-module"></span><h1>wnv module<a class="headerlink" href="#module-wnv" title="Permalink to this headline"></a></h1>
+<p>West Nile Virus SEIR Model Class</p>
+<p>Contains class for West Nile Virus disease model. Inherits from
+FitModel and Vector Borne Disease Model class.</p>
+<blockquote>
+<div><p>Typical usage example:</p>
+<p>wnv = WNVSEIRModel(&lt;config_file_path&gt;)</p>
+</div></blockquote>
+<p>Class method param_dict allows you to change parameters values from configuration file inputs 
+by inputting a dictionary of different parameter values</p>
+<blockquote>
+<div><p>Typical usage example:</p>
+<p>wnv_param_dict = WNVSEIRModel.param_dict(&lt;config_file_path&gt;, &lt;parameter dictionary&gt;)</p>
+</div></blockquote>
+<dl class="py class">
+<dt class="sig sig-object py" id="wnv.WNVSEIRModel">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">wnv.</span></span><span class="sig-name descname"><span class="pre">WNVSEIRModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wnv.WNVSEIRModel" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="fit.html#fit.FitModel" title="fit.FitModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">fit.FitModel</span></code></a></p>
+<p>Models the spread of WNV.</p>
+<p>Inherits from the FitModel class. Specifies ODE system
+of equations.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="wnv.WNVSEIRModel.error_zero_constants">
+<span class="sig-name descname"><span class="pre">error_zero_constants</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wnv.WNVSEIRModel.error_zero_constants" title="Permalink to this definition"></a></dt>
+<dd><p>check if human population is non-zero.</p>
+<p>check if vector carrying capcity is non-zero.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wnv.WNVSEIRModel.error_zero_to_one_params">
+<span class="sig-name descname"><span class="pre">error_zero_to_one_params</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wnv.WNVSEIRModel.error_zero_to_one_params" title="Permalink to this definition"></a></dt>
+<dd><p>check if parameters that should be in [0,1] are</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wnv.WNVSEIRModel.model_func">
+<span class="sig-name descname"><span class="pre">model_func</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wnv.WNVSEIRModel.model_func" title="Permalink to this definition"></a></dt>
+<dd><p>Defines system of ODEs for dengue model</p>
+<dl>
+<dt>Initial State Names:</dt><dd><p>Sv: Susceptible vector population.</p>
+<p>Ev: Exposed vector population.</p>
+<p>Iv: Infected vector population.</p>
+<p>Nv: Vector population.</p>
+<p>Sb: Susceptible bird population.</p>
+<p>Eb: Exposed bird population.</p>
+<p>Ib: Infected bird population.</p>
+<p>Rb: Recovered bird population.</p>
+<p>Nb: Bird population.</p>
+<p>Ih: Infectious human population.</p>
+</dd>
+<dt>Parameters:</dt><dd><p>mu_v: Vector death rate.</p>
+<p>mu_b: Bird death/recovery rate.</p>
+<p>beta_b: Biting rate under frequency dependence.</p>
+<p>alpha_v: Probability of virus transmission to vector, per infectious bite.</p>
+<p>alpha_b: Probability of virus transmission to bird, per infectious bit.</p>
+<p>psi_v: Vector birth rate.</p>
+<p>K_v: Vector carrying capacity.</p>
+<p>r_v: Vector growth rate.</p>
+<p>lambda_v: vector force of infection.</p>
+<p>lambda_b: Bird force of infection.</p>
+<p>nu_v: Vector latent period.</p>
+<p>nu_b: Bird latent period.</p>
+<p>eta: Contact rate * probability of transmission to humans</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wnv.WNVSEIRModel.param_dict">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">param_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param_dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wnv.WNVSEIRModel.param_dict" title="Permalink to this definition"></a></dt>
+<dd><p>Inherit vbdm param_dict class method</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="vbdm.html" class="btn btn-neutral float-left" title="vbdm module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Los Alamos National Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

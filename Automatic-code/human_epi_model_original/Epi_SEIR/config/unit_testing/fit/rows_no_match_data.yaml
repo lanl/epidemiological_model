@@ -1,0 +1,76 @@
+#------------------------------------------#
+# Vector Borne Disease Model Configuration #
+#------------------------------------------#
+
+PROJECT_ROOT: '.'
+LOGFILE_PATH: 'logs'
+MOSQUITOES_FILE_PATH: 'mosquitoes/mosq.csv'
+INITIAL_STATES_FILE_PATH: 'initial_states_input/unit_testing/working_initial_states.yaml'
+OUTPUT_DIR: 'human_model_output'
+
+# Add unit test specification?
+OUTPUT_TYPE: '.csv' # default is .parquet
+
+DURATION: 200 # number of days to run the model
+RESOLUTION: 1 # how many points to run per day
+
+DENGUE:
+  PARAMETERS:
+    nu_h: 0.164
+    nu_v: 0.164 
+    gamma_h: 0.167 
+    mu_v: .0714 
+    beta_h: 0.33
+    beta_v: 0.33
+    a_v: 0.7
+    r_v: .2286
+    K_v: 4028296
+  FIT: True
+  FIT_METHOD: 'nbinom' #can be pois, nbinom, norm
+  DISPERSION: 0.0001
+  CALC_CI: False
+  FIT_PARAMS:
+    a_v:
+      min: 0
+      max: 1
+      proflike: 0.1
+    dispersion:
+      min: 0.00001
+      max: 100
+      proflike: .9
+  FIT_DATA: 
+    PATH: ['fit_data/old/rio_fit_data_2010.csv']
+    res: ['weekly']
+    compartment: ['Rh']
+    
+WNV:
+  PARAMETERS:
+    mu_v: 0.06
+    mu_b: 0.004
+    alpha_v: 0.69
+    alpha_b: 0.74
+    beta_b: 0.44
+    eta: 0.003
+    #K: 9596.401 # from Toronto 2004 season fitting
+    #K_s: 8946.468
+    #r: 0.00438 
+    #r_s: 0.00976
+    K_v: 15000
+    r_v: 0.2286
+    nu_v: 0.10
+    nu_b: 0.20 #guess for now
+  FIT: True
+  FIT_METHOD: 'pois' #can be pois, nbinom, normal
+  DISPERSION: 0.0001
+  CALC_CI: False
+  FIT_PARAMS:
+    nu_v:
+      min: 0.07
+      max: .14
+    Sv:
+      min: 5000
+      max: 30000
+  FIT_DATA: 
+    PATH: ['fit_data/old/Toronto_totmosq_2004.csv']
+    res: ['daily']
+    compartment: ['Sv']
