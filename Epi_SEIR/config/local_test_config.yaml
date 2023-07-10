@@ -15,7 +15,7 @@ OUTPUT_TYPE: '.csv' # default is .parquet
 
 #DURATION: 170 # number of days to run the model
 RESOLUTION: 1
-YEAR: 2008
+YEAR: 2017
 YEAR_POSITION: 0
 
 DENGUE:

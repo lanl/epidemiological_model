@@ -62,6 +62,9 @@ class VectorBorneDiseaseModel(ABC):
         self.LLM_params['start_date'] = [datetime.strptime(k, '%Y-%m-%d') for k in self.LLM_params['start_date']]
         self.LLM_params['end_date'] = [datetime.strptime(k, '%Y-%m-%d') for k in self.LLM_params['end_date']]
         
+        self.init_mosq = self.LLM_params['init_cond'][self.year]
+        self.init_birds = self.bird_params['init_cond'][self.year]
+        
         self.duration = (self.LLM_params['end_date'][self.year] - self.LLM_params['start_date'][self.year]).days
         
         self.logger.info(f"\n\nParameters for model: {self.params}\n")
@@ -92,6 +95,9 @@ class VectorBorneDiseaseModel(ABC):
         self.initial_states = dict(zip(self.initial_states.keys(),
                                        [list(self.initial_states.values())[i]['value']
                                        for i in range(len(self.initial_states.values()))]))
+        
+        self.initial_states['Sv'] = float(self.init_mosq)
+        self.initial_states['Sb'] = float(self.init_birds)*10000
 
         self.logger.info(f"\n\nInitial states for model: {self.initial_states}\n")
 
