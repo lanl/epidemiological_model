@@ -52,10 +52,10 @@ To create environment manually, run the following
 - Go to Docker Desktop GUI -> settings -> resources -> proxies.
 - Toggle the "Manual proxy configuration" switch
 - Enter "http://proxyout.lanl.gov:8080" for the first two boxes and "\*.lanl.gov" for the third box.
-- Build the image: `docker build -t gitlab.lanl.gov:5050/cimmid/disease_and_human_modeling/human_epi_models .`
+- Build the image: `docker build -t gitlab.lanl.gov:5050/epiearth/disease_and_human_modeling/human_epi_models .`
 - Toggle the "Manual proxy configuration" switch again
-- Push the image: `docker push gitlab.lanl.gov:5050/cimmid/disease_and_human_modeling/human_epi_models`
-- Verify that the image is now present at gitlab.lanl.gov/cimmid/disease_and_human_modeling/human_epi_models/container_registry.
+- Push the image: `docker push gitlab.lanl.gov:5050/epiearth/disease_and_human_modeling/human_epi_models`
+- Verify that the image is now present at gitlab.lanl.gov/epiearth/disease_and_human_modeling/human_epi_models/container_registry.
 #### Adding a package to the environment
 NOTE: There is probably a better way to do this, but this works for now.
 - Edit *Dockerfile* in the *human_epi_models* directory.

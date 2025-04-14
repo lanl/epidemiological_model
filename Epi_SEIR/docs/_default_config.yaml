@@ -2,10 +2,10 @@
 # Vector Borne Disease Model Configuration # (add more specific info in this later)
 #------------------------------------------#
 
-PROJECT_ROOT: '/Users/jkeithley/Documents/CIMMID/human/dengue_model/Epi_SEIR'
-LOGFILE_PATH: '/Users/jkeithley/Documents/CIMMID/human/dengue_model/Epi_SEIR/logs'
-MOSQUITOES_FILE_PATH: '/Users/jkeithley/Documents/CIMMID/human/dengue_model/Epi_SEIR/mosquitoes/mosq.csv'
-OUTPUT_DIR: '/Users/jkeithley/Documents/CIMMID/human/dengue_model/Epi_SEIR/human_model_output'
+PROJECT_ROOT: '/Users/jkeithley/Documents/EpiEarth/human/dengue_model/Epi_SEIR'
+LOGFILE_PATH: '/Users/jkeithley/Documents/EpiEarth/human/dengue_model/Epi_SEIR/logs'
+MOSQUITOES_FILE_PATH: '/Users/jkeithley/Documents/EpiEarth/human/dengue_model/Epi_SEIR/mosquitoes/mosq.csv'
+OUTPUT_DIR: '/Users/jkeithley/Documents/EpiEarth/human/dengue_model/Epi_SEIR/human_model_output'
 
 # Add unit test specification?
 OUTPUT_TYPE: 'test_err' # default is .parquet

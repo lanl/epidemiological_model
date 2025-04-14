@@ -35,7 +35,7 @@ def main():
     #                                                          'mosq.parquet'))
 
     # generate other initial states
-    #output_path = '/Users/jkeithley/Documents/CIMMID/human/dengue_model/epi_seir/initial_states_input'
+    #output_path = '/Users/jkeithley/Documents/EpiEarth/human/dengue_model/epi_seir/initial_states_input'
 
     #keys = ['Sh', 'Eh', 'Iha', 'Ihs', 'Rh', 'Ev', 'Iv']
     #arr = np.random.randint(10, 100, size=len(keys))

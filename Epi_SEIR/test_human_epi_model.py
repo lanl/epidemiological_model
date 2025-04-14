@@ -1,6 +1,6 @@
 """Unit Testing for Human Epi model code
 
-Contains unit tests for CIMMID Human Epi code.
+Contains unit tests for EpiEarth Human Epi code.
 
 usage: pytest
 

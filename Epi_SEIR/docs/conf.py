@@ -12,7 +12,7 @@
 #
 import os
 import sys
-# sys.path.insert(0, os.path.abspath('/Users/jkeithley/Documents/CIMMID/human/human_epi_models/Epi_SEIR'))
+# sys.path.insert(0, os.path.abspath('/Users/jkeithley/Documents/EpiEarth/human/human_epi_models/Epi_SEIR'))
 sys.path.insert(0, os.path.relpath('..', ))
 
 
